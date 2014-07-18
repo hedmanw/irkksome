@@ -1,5 +1,7 @@
 package se.alkohest.irkksome.model.api.local;
 
-public interface IrcUserDAOLocal {
+import se.alkohest.irkksome.model.entity.IrcUser;
 
+public interface IrcUserDAOLocal {
+    public IrcUser create(String name);
 }

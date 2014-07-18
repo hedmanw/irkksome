@@ -8,7 +8,7 @@ import se.alkohest.irkksome.model.impl.IrcUserEB;
 import se.alkohest.irkksome.orm.GenericDAO;
 
 public class IrcUserDAO extends GenericDAO<IrcUserEB, IrcUser> implements IrcUserDAOLocal {
-
+    @Override
     public IrcUser create(String name) {
         IrcUser ircUser = new IrcUserEB();
         ircUser.setName(name);
