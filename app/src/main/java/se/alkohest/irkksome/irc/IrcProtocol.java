@@ -88,8 +88,6 @@ public interface IrcProtocol {
      */
     public void invite(String nick, String channel);
 
-    public void addListener(IrcProtocolListener listener);
-
-    public void removeListener(IrcProtocolListener listener);
+    public void setListener(IrcProtocolListener listener);
 
 }
