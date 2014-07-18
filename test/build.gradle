@@ -1,12 +1,10 @@
-apply plugin: 'java'
-apply plugin: "groovy"
+evaluationDependsOn(':app')
 
-repositories {
-    mavenCentral()
-}
+apply plugin: 'java'
+apply plugin: 'groovy'
 
 dependencies {
+    compile project(':app')
     groovy "org.codehaus.groovy:groovy-all:1.8.6"
     testCompile "org.spockframework:spock-core:0.6-groovy-1.8"
 }
-
