@@ -2,29 +2,42 @@ package se.alkohest.irkksome.db;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 
-import se.alkohest.irkksome.orm.AnnotationStripper;
 import se.alkohest.irkksome.orm.ORMException;
 import se.alkohest.irkksome.orm.PersistenceContext;
 
 public class SQLitePersistenceContext implements PersistenceContext {
-    private DatabaseHelper databaseHelper;
+    private SQLiteAdapter database;
+
+    SQLitePersistenceContext() {
+
+    }
 
     public SQLitePersistenceContext(Context context) {
-        databaseHelper = new DatabaseHelper(context);
+        database = new SQLiteAdapter(context);
     }
 
     @Override
-    public long create(Object bean) throws ORMException {
-        String table = AnnotationStripper.getTable(bean);
-        ContentValues values = new ContentValues(); // get from fields not annotated with @Transient
-
-        SQLiteDatabase database = databaseHelper.getWritableDatabase();
-        long primaryKey = database.insert(table, null, values);
+    public long create(String table, ContentValues values) throws ORMException {
+        long primaryKey = database.insert(table, values);
         if (primaryKey == -1) {
             throw new ORMException("Could not perform CREATE.");
         }
         return primaryKey;
+    }
+
+    @Override
+    public ContentValues read(long id) {
+        return null;
+    }
+
+    @Override
+    public int update() throws ORMException {
+        return 0;
+    }
+
+    @Override
+    public int delete() throws ORMException {
+        return 0;
     }
 }
