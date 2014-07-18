@@ -1,8 +1,6 @@
 package se.alkohest.irkksome.irc;
 
 /**
- * Created by oed on 7/18/14.
- *
  * This interface is used to communicate with IRC.
  */
 public interface IrcProtocol {
