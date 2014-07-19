@@ -14,14 +14,15 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 
 public class ChatActivity extends Activity {
     private ServerManager serverManager;
-    private Server server;
+    private Server activeServer;
+    private IrcChannel activeChannel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         serverManager = new ServerManager();
-        server = serverManager.addServer("irc.chalmers.it");
+        activeServer = serverManager.addServer("irc.chalmers.it");
     }
 
     @Override
@@ -40,8 +41,9 @@ public class ChatActivity extends Activity {
     }
 
     public void sendMessage(View view) {
-        IrcChannel channel = server.joinChannel("#irkksome");
+        IrcChannel channel = activeServer.joinChannel("#saltholmen2.0");
         EditText editText = (EditText) findViewById(R.id.input_field);
-        server.sendMessage(channel, editText.getText().toString());
+        activeServer.sendMessage(channel, editText.getText().toString());
+        editText.getText().clear();
     }
 }
