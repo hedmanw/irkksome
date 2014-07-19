@@ -1,5 +1,7 @@
 package se.alkohest.irkksome.irc;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -47,6 +49,7 @@ public class NormalConnection implements Connection {
     @Override
     public void write(String s) throws IOException {
         checkReady();
+        Log.d("IRC:", s);
         output.write(s);
         output.flush();
     }

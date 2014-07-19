@@ -1,5 +1,7 @@
 package se.alkohest.irkksome.irc;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +34,7 @@ public class IrcProtocolAdapter implements IrcProtocol {
      */
     private void handleReply(String reply) {
         String[] parts = reply.split(BLANK, 3);
+        Log.d("IRC:", reply);
         // Too few parts means that reply is not a valid IRC string.
         if (parts.length < 2) return;
         handlePing(parts);
@@ -146,7 +149,7 @@ public class IrcProtocolAdapter implements IrcProtocol {
                     listener.serverDisconnected();
                 }
             }
-        });
+        }).start();
     }
 
     private void start() {

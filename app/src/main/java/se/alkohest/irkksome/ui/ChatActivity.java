@@ -4,16 +4,25 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import se.alkohest.irkksome.R;
+import android.widget.TextView;
 
-public class chatActivity extends Activity {
+import se.alkohest.irkksome.R;
+import se.alkohest.irkksome.model.api.Server;
+import se.alkohest.irkksome.model.api.ServerManager;
+
+public class ChatActivity extends Activity {
+    private ServerManager serverManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        TextView textView = (TextView) findViewById(R.id.stuff);
+        serverManager = new ServerManager();
+        Server server = serverManager.addServer("irc.chalmers.it");
+        final String name = server.joinChannel("#irkksome").getName();
+        textView.setText(name);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

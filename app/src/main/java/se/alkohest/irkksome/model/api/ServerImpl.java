@@ -5,6 +5,7 @@ import java.util.List;
 import se.alkohest.irkksome.irc.IrcProtocol;
 import se.alkohest.irkksome.irc.IrcProtocolFactory;
 import se.alkohest.irkksome.irc.IrcProtocolListener;
+import se.alkohest.irkksome.model.api.dao.IrcChannelDAO;
 import se.alkohest.irkksome.model.api.local.IrcChannelDAOLocal;
 import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
 import se.alkohest.irkksome.model.entity.IrcChannel;
@@ -14,12 +15,13 @@ import se.alkohest.irkksome.model.entity.IrcUser;
 public class ServerImpl implements Server, IrcProtocolListener {
     private IrcProtocol ircProtocol;
     private IrcServer ircServer;
-    private IrcChannelDAOLocal channelDAO;
+    private IrcChannelDAOLocal channelDAO = new IrcChannelDAO();
     private IrcServerDAOLocal serverDAO;
 
     public ServerImpl(IrcServer ircServer) {
         this.ircServer = ircServer;
         ircProtocol = IrcProtocolFactory.getIrcProtocol(ircServer.getUrl(), 6667);
+        ircProtocol.setListener(this);
         ircProtocol.connect("fest", "banned", "banned");
     }
 
