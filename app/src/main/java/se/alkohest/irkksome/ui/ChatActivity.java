@@ -17,10 +17,8 @@ public class ChatActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        TextView textView = (TextView) findViewById(R.id.stuff);
         serverManager = new ServerManager();
         Server server = serverManager.addServer("irc.chalmers.it");
-        textView.setText("Nu ska vi joina irkksome, små barn");
     }
 
     @Override
