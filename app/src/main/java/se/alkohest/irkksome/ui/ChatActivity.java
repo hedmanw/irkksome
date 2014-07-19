@@ -1,6 +1,8 @@
 package se.alkohest.irkksome.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,16 +36,33 @@ public class ChatActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                break;
+            case R.id.action_join_channel:
+                showJoinChannel();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void showJoinChannel() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final EditText popup = new EditText(this);
+        builder.setTitle("Join channel on " + activeServer.getBackingBean().getUrl());
+        builder.setView(popup);
+        builder.setPositiveButton(R.string.join_channel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                activeServer.joinChannel(popup.getText().toString());
+            }
+        });
+        builder.create().show();
+    }
+
     public void sendMessage(View view) {
-        IrcChannel channel = activeServer.joinChannel("#saltholmen2.0");
         EditText editText = (EditText) findViewById(R.id.input_field);
-        activeServer.sendMessage(channel, editText.getText().toString());
+//        activeServer.sendMessage(channel, editText.getText().toString());
         editText.getText().clear();
     }
 }

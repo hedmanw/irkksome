@@ -26,6 +26,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
+    public IrcServer getBackingBean() {
+        return ircServer;
+    }
+
+    @Override
     public IrcChannel joinChannel(String channelName) {
         ircProtocol.joinChannel(channelName);
         return channelDAO.create(channelName);
