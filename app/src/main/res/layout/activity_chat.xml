@@ -33,7 +33,7 @@
             android:imeOptions="actionDone"
             android:id="@+id/input_field"
             android:layout_gravity="center"
-            />
+            android:clickable="false" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -43,7 +43,8 @@
             android:paddingLeft="4dp"
             android:src="@drawable/send_now"
             android:background="@null"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="bottom"
+            android:onClick="sendMessage" />
     </LinearLayout>
 
 </LinearLayout>
