@@ -17,6 +17,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     private IrcServer ircServer;
     private IrcChannelDAOLocal channelDAO = new IrcChannelDAO();
     private IrcServerDAOLocal serverDAO;
+    private ServerCallback listener;
 
     public ServerImpl(IrcServer ircServer) {
         this.ircServer = ircServer;
@@ -28,6 +29,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public IrcServer getBackingBean() {
         return ircServer;
+    }
+
+    @Override
+    public void setListener(ServerCallback listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -50,7 +56,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void serverConnected(String server, String nick) {
-
+        listener.serverConnected();
     }
 
     @Override
@@ -105,7 +111,8 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void serverDisconnected() {
-
+        // TODO - this method should try to reconnect if its appropriate?
+        listener.serverDisconnected();
     }
 
     @Override

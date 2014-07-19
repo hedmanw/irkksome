@@ -14,4 +14,7 @@ public interface Server {
     public List<IrcUser> getUsers();
 
     public IrcServer getBackingBean();
+
+    public void setListener(ServerCallback listener);
+
 }
