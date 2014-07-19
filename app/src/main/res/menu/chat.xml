@@ -1,6 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="se.alkohest.irkksome.ui.ChatActivity" >
+    <item android:id="@+id/join_server"
+        android:title="@string/join_server"
+        android:showAsAction="always"/>
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
