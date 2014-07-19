@@ -20,8 +20,7 @@ public class ChatActivity extends Activity {
         TextView textView = (TextView) findViewById(R.id.stuff);
         serverManager = new ServerManager();
         Server server = serverManager.addServer("irc.chalmers.it");
-        final String name = server.joinChannel("#irkksome").getName();
-        textView.setText(name);
+        textView.setText("Nu ska vi joina irkksome, små barn");
     }
 
     @Override

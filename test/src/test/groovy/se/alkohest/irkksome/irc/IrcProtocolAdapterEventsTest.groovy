@@ -3,10 +3,13 @@ package se.alkohest.irkksome.irc
 import spock.lang.Specification
 
 class IrcProtocolAdapterEventsTest extends Specification {
+    Log mockLog = Mock(Log)
     IrcProtocolListener subscriber = Mock()
     IrcProtocolAdapter ipa = new IrcProtocolAdapter()
 
     def setup() {
+        mockLog.i(_) >> { args -> println args[0] }
+        ipa.log = mockLog
         ipa.setListener(subscriber)
     }
 

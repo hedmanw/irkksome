@@ -1,7 +1,5 @@
 package se.alkohest.irkksome.irc;
 
-import android.util.Log;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +9,6 @@ import java.util.List;
  * Created by oed on 7/18/14.
  */
 public class IrcProtocolAdapter implements IrcProtocol {
-
     private static final String BLANK = " ";
     private static final String COLON = ":";
     private static final String HASHTAG = "#";
@@ -22,6 +19,7 @@ public class IrcProtocolAdapter implements IrcProtocol {
     private Connection connection;
     private boolean running;
     private List<String> writeWaitList;
+    private Log log = Log.getInstance(getClass());
 
     public IrcProtocolAdapter(Connection connection) {
         this.connection = connection;
@@ -34,7 +32,7 @@ public class IrcProtocolAdapter implements IrcProtocol {
      */
     private void handleReply(String reply) {
         String[] parts = reply.split(BLANK, 3);
-        Log.d("IRC:", reply);
+        log.i(reply);
         // Too few parts means that reply is not a valid IRC string.
         if (parts.length < 2) return;
         handlePing(parts);
@@ -122,6 +120,7 @@ public class IrcProtocolAdapter implements IrcProtocol {
 
     private void write(String s) {
         if (connection.isConnected()) {
+            log.i(s);
             try {
                 connection.write(s + LINE_BREAK);
             } catch (IOException e) {

@@ -7,12 +7,15 @@ import spock.lang.Specification
  */
 class IrcProtocolAdapterTest extends Specification {
     String LINE_BREAK = "\r\n";
+    Log mockLog = Mock(Log)
     IrcProtocolAdapter ipa
     IrcProtocolListener subscriber = Mock(IrcProtocolListener)
     Connection connection = Mock(Connection)
 
     def setup() {
+        mockLog.i(_) >> { args -> println args[0] }
         ipa = new IrcProtocolAdapter(connection);
+        ipa.log = mockLog
         ipa.setListener(subscriber)
         connection.isConnected() >> true
     }
