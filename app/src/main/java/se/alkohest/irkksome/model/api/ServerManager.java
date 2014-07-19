@@ -19,10 +19,12 @@ public class ServerManager {
         servers = new ArrayList<>();
     }
 
-    public void addServer(String host) {
-        Server server = new Server(serverDAOLocal.create(host));
+    public IrcServer addServer(String host) {
+        final IrcServer ircServer = serverDAOLocal.create(host);
+        Server server = new Server(ircServer);
         IrcProtocol ircProtocol = IrcProtocolFactory.getIrcProtocol(host, 6667);
         ircProtocol.connect("fest", "banned", "banned");
+        return ircServer;
     }
 
     public static class Server implements IrcProtocolListener {

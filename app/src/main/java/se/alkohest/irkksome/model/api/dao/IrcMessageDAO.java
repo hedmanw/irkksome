@@ -17,8 +17,10 @@ public class IrcMessageDAO extends GenericDAO<IrcMessageEB, IrcMessage> implemen
         ircMessage.setAuthor(author);
         ircMessage.setMessage(message);
         ircMessage.setTimestamp(timestamp);
-        return null;
+        return ircMessage;
     }
+
+
 
     @Override
     protected ContentValues createContentValues(IrcMessage beanEntity) {
