@@ -19,8 +19,9 @@ public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implemen
     }
 
     @Override
-    public IrcChannel create() {
+    public IrcChannel create(String name) {
         IrcChannel ircChannel = new IrcChannelEB();
+        ircChannel.setName(name);
         ircChannel.setMessages(new ArrayList<IrcMessage>());
         ircChannel.setUsers(new HashMap<IrcUser, Short>());
         return ircChannel;

@@ -12,6 +12,7 @@ public class IrcChannelEB extends AbstractBean implements IrcChannel {
     private String topic;
     private Map<IrcUser, Short> users;
     private List<IrcMessage> messages;
+    private String name;
 
     @Override
     public String getTopic() {
@@ -21,6 +22,16 @@ public class IrcChannelEB extends AbstractBean implements IrcChannel {
     @Override
     public void setTopic(String topic) {
         this.topic = topic;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override

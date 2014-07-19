@@ -3,6 +3,7 @@ package se.alkohest.irkksome.model.api.dao;
 import android.content.ContentValues;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
 import se.alkohest.irkksome.model.entity.IrcChannel;

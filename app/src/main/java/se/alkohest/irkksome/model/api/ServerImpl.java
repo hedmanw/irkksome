@@ -5,11 +5,17 @@ import java.util.List;
 import se.alkohest.irkksome.irc.IrcProtocol;
 import se.alkohest.irkksome.irc.IrcProtocolFactory;
 import se.alkohest.irkksome.irc.IrcProtocolListener;
+import se.alkohest.irkksome.model.api.local.IrcChannelDAOLocal;
+import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
+import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
+import se.alkohest.irkksome.model.entity.IrcUser;
 
 public class ServerImpl implements Server, IrcProtocolListener {
     private IrcProtocol ircProtocol;
     private IrcServer ircServer;
+    private IrcChannelDAOLocal channelDAO;
+    private IrcServerDAOLocal serverDAO;
 
     public ServerImpl(IrcServer ircServer) {
         this.ircServer = ircServer;
@@ -18,9 +24,22 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
-    public void joinChannel(String channelName) {
+    public IrcChannel joinChannel(String channelName) {
         ircProtocol.joinChannel(channelName);
+        return channelDAO.create(channelName);
     }
+
+    @Override
+    public void sendMessage(IrcChannel channel, String message) {
+        ircProtocol.sendChannelMessage(channel.getName(), message);
+    }
+
+    @Override
+    public List<IrcUser> getUsers() {
+        return null;
+    }
+
+//    ---------------------------------------------------------
 
     @Override
     public void serverConnected(String server, String nick) {
