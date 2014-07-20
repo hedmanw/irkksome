@@ -58,7 +58,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
         IrcMessage ircMessage = messageDAO.create(ircServer.getSelf(), message, new Date());
 
         channelDAO.addMessage(channel, ircMessage);
-        listener.messageRecived();
+        listener.messageReceived();
     }
 
     @Override
@@ -118,7 +118,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
         IrcMessage ircMessage = messageDAO.create(ircUser, message, new Date());
 
         channelDAO.addMessage(ircChannel, ircMessage);
-        listener.messageRecived();
+        listener.messageReceived();
     }
 
     @Override

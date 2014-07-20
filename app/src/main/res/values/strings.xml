@@ -8,5 +8,8 @@
     <string name="send_message">send message</string>
     <string name="join_server">Join server</string>
     <string name="join_channel">Join channel</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_hostname">Hostname</string>
+    <string name="hint_connect">Connect</string>
 
 </resources>

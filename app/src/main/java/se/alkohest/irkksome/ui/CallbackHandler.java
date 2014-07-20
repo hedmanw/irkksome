@@ -1,8 +1,9 @@
 package se.alkohest.irkksome.ui;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.ServerCallback;
@@ -33,17 +34,22 @@ public class CallbackHandler implements ServerCallback{
     }
 
     @Override
-    public void channelJoined(IrcChannel channel) {
-        arrayAdapter = new ArrayAdapter<IrcMessage>(
-                context,
-                android.R.layout.simple_list_item_1,
-                channel.getMessages()
-        );
+    public void channelJoined(final IrcChannel channel) {
+        arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, channel.getMessages());
+        final FragmentManager fragmentManager = context.getFragmentManager();
+        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ((ListView) context.findViewById(R.id.listView)).setAdapter(arrayAdapter);
+                context.setTitle(channel.getName());
+
+                ChannelFragment channelFragment = ChannelFragment.newInstance("arbitrary", "stuff");
+                fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.fragment_container));
+                fragmentTransaction.add(R.id.fragment_container, channelFragment);
+                fragmentTransaction.commit();
+
+                channelFragment.setArrayAdapter(arrayAdapter);
             }
         });
     }
@@ -59,7 +65,7 @@ public class CallbackHandler implements ServerCallback{
     }
 
     @Override
-    public void messageRecived() {
+    public void messageReceived() {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
