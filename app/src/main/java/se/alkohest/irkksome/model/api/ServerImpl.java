@@ -58,6 +58,13 @@ public class ServerImpl implements Server, IrcProtocolListener {
     public void leaveChannel(IrcChannel channel) {
         ircProtocol.partChannel(channel.getName());
         serverDAO.removeChannel(ircServer, channel);
+        List<IrcChannel> channels = ircServer.getConnectedChannels();
+        if (channels.size() != 0) {
+            activeChannel = channels.get(channels.size() - 1);
+            listener.setActiveChannel(activeChannel);
+        } else {
+            // TODO - some other fucking callback
+        }
     }
 
     @Override
@@ -125,7 +132,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     public void userJoined(String channelName, String nick) {
         IrcChannel channel = serverDAO.getChannel(ircServer, channelName);
         if (userDAO.compare(ircServer.getSelf(), nick)) {
-            listener.channelJoined(channel);
+            listener.setActiveChannel(channel);
             activeChannel = channel;
         } else {
             IrcUser user = serverDAO.getUser(ircServer, nick);

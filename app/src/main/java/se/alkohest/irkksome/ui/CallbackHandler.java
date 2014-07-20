@@ -42,7 +42,7 @@ public class CallbackHandler implements ServerCallback {
     }
 
     @Override
-    public void channelJoined(final IrcChannel channel) {
+    public void setActiveChannel(final IrcChannel channel) {
         arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, channel.getMessages());
         final FragmentManager fragmentManager = context.getFragmentManager();
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -5,7 +5,6 @@ import se.alkohest.irkksome.model.api.dao.IrcChannelDAO
 import se.alkohest.irkksome.model.api.dao.IrcMessageDAO
 import se.alkohest.irkksome.model.api.dao.IrcServerDAO
 import se.alkohest.irkksome.model.api.dao.IrcUserDAO
-import se.alkohest.irkksome.model.entity.IrcChannel
 import spock.lang.Specification
 
 public class ServerImplTest extends Specification {
@@ -97,7 +96,7 @@ public class ServerImplTest extends Specification {
         then:
         1 * server.listener.userJoinedChannel(serverDAO.getChannel(server.ircServer, "#fest"),
                                             userDAO.create("pelle"))
-        1 * server.listener.channelJoined(serverDAO.getChannel(server.ircServer, "#fest"))
+        1 * server.listener.setActiveChannel(serverDAO.getChannel(server.ircServer, "#fest"))
         server.activeChannel == serverDAO.getChannel(server.ircServer, "#fest")
     }
 

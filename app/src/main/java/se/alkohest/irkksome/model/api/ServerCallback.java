@@ -14,7 +14,7 @@ public interface ServerCallback {
 
     public void serverDisconnected();
 
-    public void channelJoined(IrcChannel channel);
+    public void setActiveChannel(IrcChannel channel);
 
     public void channelJoinFailed();
 
