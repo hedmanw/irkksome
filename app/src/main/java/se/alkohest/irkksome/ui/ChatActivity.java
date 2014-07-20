@@ -25,6 +25,7 @@ public class ChatActivity extends Activity {
         setContentView(R.layout.activity_chat);
         serverManager = new ServerManager();
         activeServer = serverManager.addServer("irc.chalmers.it");
+        activeServer.setListener(new CallbackHandler(this));
     }
 
     @Override

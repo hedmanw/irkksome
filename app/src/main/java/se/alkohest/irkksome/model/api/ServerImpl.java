@@ -82,7 +82,6 @@ public class ServerImpl implements Server, IrcProtocolListener {
             IrcUser user = serverDAO.getUser(ircServer, nick);
             listener.userJoinedChannel(channel, user);
         }
-
     }
 
     @Override
