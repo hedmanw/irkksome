@@ -16,18 +16,24 @@ import se.alkohest.irkksome.model.entity.IrcUser;
 /**
  * Created by oed on 7/20/14.
  */
-public class CallbackHandler implements ServerCallback{
-
+public class CallbackHandler implements ServerCallback {
+    private ConnectionListAdapter connectionListAdapter;
     private ArrayAdapter<IrcMessage> arrayAdapter;
     private Activity context;
 
     public CallbackHandler(Activity context) {
         this.context = context;
+        connectionListAdapter = ConnectionListAdapter.getInstance();
     }
 
     @Override
     public void serverConnected() {
-
+        context.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                context.setTitle("Connected as fuck");
+            }
+        });
     }
 
     @Override
@@ -47,11 +53,12 @@ public class CallbackHandler implements ServerCallback{
                 context.setTitle(channel.getName());
 
                 ChannelFragment channelFragment = ChannelFragment.newInstance("arbitrary", "stuff");
-                fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.fragment_container));
-                fragmentTransaction.add(R.id.fragment_container, channelFragment);
+                fragmentTransaction.replace(R.id.fragment_container, channelFragment);
                 fragmentTransaction.commit();
 
                 channelFragment.setArrayAdapter(arrayAdapter);
+
+                connectionListAdapter.notifyDataSetChanged();
             }
         });
     }

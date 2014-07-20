@@ -16,10 +16,15 @@ public class ServerManager {
         servers = new ArrayList<>();
     }
 
-    public Server addServer(String host) {
+    public Server addServer(String host, String nickname) {
         final IrcServer ircServer = serverDAO.create(host);
-        Server server = new ServerImpl(ircServer);
+        Server server = new ServerImpl(ircServer, nickname);
+        servers.add(server);
         return server;
+    }
+
+    public List<Server> getServers() {
+        return servers;
     }
 
     public void shutDownServer(/* Argument? */) {

@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.irc.Log;
@@ -20,12 +22,14 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
     private static final Log LOG = Log.getInstance(ChatActivity.class);
     private ServerManager serverManager;
     private Server activeServer;
+    private ExpandableListView connectionsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_drawers);
         serverManager = new ServerManager();
+        ConnectionListAdapter.setInstance(this, serverManager.getServers());
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -33,6 +37,10 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
         ServerConnectFragment connectFragment = ServerConnectFragment.newInstance();
         fragmentTransaction.add(R.id.fragment_container, connectFragment);
         fragmentTransaction.commit();
+
+        connectionsList = (ExpandableListView) findViewById(R.id.left_drawer_list);
+        BaseExpandableListAdapter listAdapter = ConnectionListAdapter.getInstance();
+        connectionsList.setAdapter(listAdapter);
     }
 
     @Override
@@ -78,8 +86,9 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
     public void onFragmentInteraction(Bundle bundle) {
         String hostName = bundle.getString(ServerConnectFragment.ARG_HOSTNAME);
         String nickname = bundle.getString(ServerConnectFragment.ARG_NICKNAME);
-        LOG.i("Host: " + hostName + " Nickname: " + nickname);
-        activeServer = serverManager.addServer(hostName);
+        activeServer = serverManager.addServer(hostName, nickname);
         activeServer.setListener(new CallbackHandler(this));
+        ConnectionListAdapter.getInstance().notifyDataSetChanged();
+        connectionsList.expandGroup(serverManager.getServers().indexOf(activeServer));
     }
 }

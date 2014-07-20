@@ -32,11 +32,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     private IrcChannel activeChannel;
 
-    public ServerImpl(IrcServer ircServer) {
+    public ServerImpl(IrcServer ircServer, String nickname) {
         this.ircServer = ircServer;
         ircProtocol = IrcProtocolFactory.getIrcProtocol(ircServer.getUrl(), 6667);
         ircProtocol.setListener(this);
-        ircProtocol.connect("fest", "banned", "banned");
+        ircProtocol.connect(nickname, "banned", "banned");
     }
 
     @Override
