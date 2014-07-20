@@ -12,4 +12,12 @@ public interface IrcServer extends BeanEntity {
     public String getUrl();
 
     public void setUrl(String string);
+
+    public void setSelf(IrcUser user);
+
+    public IrcUser getSelf();
+
+    public List<IrcUser> getKnownUsers();
+
+    public void setKnownUsers(List<IrcUser> users);
 }

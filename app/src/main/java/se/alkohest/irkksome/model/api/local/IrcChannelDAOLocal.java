@@ -7,4 +7,6 @@ public interface IrcChannelDAOLocal {
     public IrcChannel create(String name);
 
     public void addMessage(IrcChannel channel, IrcMessage message);
+
+    public boolean compare(IrcChannel c, String channelName);
 }

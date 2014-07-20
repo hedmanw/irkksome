@@ -12,4 +12,16 @@ public class IrcUserDAOTest extends Specification {
         then:
         ircUser.name == "LarsUrban"
     }
+
+    def "Compare user"() {
+        when:
+        def ircUser = ircUserDAO.create(nick1)
+
+        then:
+        ircUserDAO.compare(ircUser, nick2)
+
+        where:
+        nick1 << ["lostOne", "FeSt"]
+        nick2 << ["lostOne", "fest"]
+    }
 }

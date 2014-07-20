@@ -6,8 +6,11 @@ import se.alkohest.irkksome.irc.IrcProtocol;
 import se.alkohest.irkksome.irc.IrcProtocolFactory;
 import se.alkohest.irkksome.irc.IrcProtocolListener;
 import se.alkohest.irkksome.model.api.dao.IrcChannelDAO;
+import se.alkohest.irkksome.model.api.dao.IrcServerDAO;
+import se.alkohest.irkksome.model.api.dao.IrcUserDAO;
 import se.alkohest.irkksome.model.api.local.IrcChannelDAOLocal;
 import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
+import se.alkohest.irkksome.model.api.local.IrcUserDAOLocal;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
@@ -16,7 +19,8 @@ public class ServerImpl implements Server, IrcProtocolListener {
     private IrcProtocol ircProtocol;
     private IrcServer ircServer;
     private IrcChannelDAOLocal channelDAO = new IrcChannelDAO();
-    private IrcServerDAOLocal serverDAO;
+    private IrcServerDAOLocal serverDAO = new IrcServerDAO();
+    private IrcUserDAOLocal userDAO = new IrcUserDAO();
     private ServerCallback listener;
 
     public ServerImpl(IrcServer ircServer) {
@@ -37,9 +41,8 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
-    public IrcChannel joinChannel(String channelName) {
+    public void joinChannel(String channelName) {
         ircProtocol.joinChannel(channelName);
-        return channelDAO.create(channelName);
     }
 
     @Override
@@ -56,6 +59,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void serverConnected(String server, String nick) {
+        this.ircServer.setSelf(userDAO.create(nick));
         listener.serverConnected();
     }
 
@@ -71,6 +75,13 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void userJoined(String channelName, String nick) {
+        IrcChannel channel = serverDAO.getChannel(ircServer, channelName);
+        if (userDAO.compare(ircServer.getSelf(), nick)) {
+            listener.channelJoined(channel);
+        } else {
+            IrcUser user = serverDAO.getUser(ircServer, nick);
+            listener.userJoinedChannel(channel, user);
+        }
 
     }
 

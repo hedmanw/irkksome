@@ -16,6 +16,11 @@ public class IrcUserDAO extends GenericDAO<IrcUserEB, IrcUser> implements IrcUse
     }
 
     @Override
+    public boolean compare(IrcUser user, String nick) {
+        return user.getName().toLowerCase().equals(nick.toLowerCase());
+    }
+
+    @Override
     protected ContentValues createContentValues(IrcUser bean) {
         return null;
     }

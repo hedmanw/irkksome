@@ -31,4 +31,9 @@ public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implemen
     public void addMessage(IrcChannel channel, IrcMessage message) {
         channel.getMessages().add(message);
     }
+
+    @Override
+    public boolean compare(IrcChannel c, String channelName) {
+        return c.getName().toLowerCase().equals(channelName.toLowerCase());
+    }
 }

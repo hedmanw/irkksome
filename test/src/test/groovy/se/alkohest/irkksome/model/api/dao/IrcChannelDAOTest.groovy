@@ -27,4 +27,16 @@ public class IrcChannelDAOTest extends Specification {
         ircChannel.messages.size() == 1
         ircChannel.messages.get(0) == message
     }
+
+    def "Compare user"() {
+        when:
+        def ircChannel = ircChannelDAO.create(channel1)
+
+        then:
+        ircChannelDAO.compare(ircChannel, channel2)
+
+        where:
+        channel1 << ["#IrCsEx-asp", "#fest"]
+        channel2 << ["#ircsex-asp", "#fest"]
+    }
 }

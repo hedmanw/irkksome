@@ -23,4 +23,16 @@ public class IrcServerEBTest extends Specification {
         server.connectedChannels
         server.connectedChannels.size() == 2
     }
+
+    def "getSetKnownUsers"() {
+        when:
+        def server = new IrcServerEB()
+        server.knownUsers = new ArrayList<>()
+        server.knownUsers.add(new IrcUserEB())
+        server.knownUsers.add(new IrcUserEB())
+
+        then:
+        server.knownUsers
+        server.knownUsers.size() == 2
+    }
 }
