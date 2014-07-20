@@ -12,5 +12,6 @@
     <string name="hint_hostname">Hostname</string>
     <string name="hint_connect">Connect</string>
     <string name="leave_channel">Leave channel</string>
+    <string name="change_nick">Change nick</string>
 
 </resources>

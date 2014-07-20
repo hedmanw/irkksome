@@ -62,8 +62,25 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
                 activeServer.leaveChannel(activeServer.getActiveChannel());
                 ConnectionListAdapter.getInstance().notifyDataSetChanged();
                 break;
+            case R.id.action_change_nick:
+                showNickChangeDialog();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showNickChangeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final EditText popup = new EditText(this);
+        builder.setTitle("Change nick on " + activeServer.getBackingBean().getUrl());
+        builder.setView(popup);
+        builder.setPositiveButton(R.string.change_nick, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                activeServer.changeNick(popup.getText().toString());
+            }
+        });
+        builder.create().show();
     }
 
     private void showJoinChannel() {

@@ -9,7 +9,7 @@ import spock.lang.Specification
 
 public class ServerImplTest extends Specification {
     def backingServer = new IrcServerDAO().create("localhost")
-    def server = new ServerImpl(backingServer)
+    def server = new ServerImpl(backingServer, "fest")
     def serverDAO = new IrcServerDAO()
     def channelDAO = new IrcChannelDAO()
     def messageDAO = new IrcMessageDAO()
@@ -34,6 +34,14 @@ public class ServerImplTest extends Specification {
 
         then:
         1 * server.ircProtocol.joinChannel("#asdf")
+    }
+
+    def "change nick"() {
+        when:
+        server.changeNick("fest")
+
+        then:
+        server.ircProtocol.setNick("fest")
     }
 
     def "leave channel"() {

@@ -7,6 +7,9 @@
     <item android:id="@+id/action_leave_channel"
         android:title="@string/leave_channel"
         android:showAsAction="never"/>
+    <item android:id="@+id/action_change_nick"
+        android:title="@string/change_nick"
+        android:showAsAction="never"/>
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"

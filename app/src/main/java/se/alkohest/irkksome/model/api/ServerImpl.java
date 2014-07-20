@@ -55,6 +55,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
+    public void changeNick(String nick) {
+        ircProtocol.setNick(nick);
+    }
+
+    @Override
     public void leaveChannel(IrcChannel channel) {
         ircProtocol.partChannel(channel.getName());
         serverDAO.removeChannel(ircServer, channel);
