@@ -13,9 +13,6 @@ buildscript {
     }
 }
 
-evaluationDependsOn(':app')
-evaluationDependsOn(':test')
-
 allprojects {
     repositories {
         jcenter()
