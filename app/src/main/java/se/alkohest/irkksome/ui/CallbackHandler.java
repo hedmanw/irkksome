@@ -5,6 +5,8 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.widget.ArrayAdapter;
 
+import java.util.List;
+
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.ServerCallback;
 import se.alkohest.irkksome.model.entity.IrcChannel;
@@ -72,5 +74,20 @@ public class CallbackHandler implements ServerCallback{
                 arrayAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public void nickChanged(String oldNick, IrcUser user) {
+
+    }
+
+    @Override
+    public void userLeftChannel(IrcChannel channel, IrcUser user) {
+
+    }
+
+    @Override
+    public void userQuit(IrcUser user, List<IrcChannel> channels) {
+
     }
 }

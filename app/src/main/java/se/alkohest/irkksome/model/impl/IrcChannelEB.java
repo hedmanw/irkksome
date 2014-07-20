@@ -10,7 +10,7 @@ import se.alkohest.irkksome.orm.AbstractBean;
 
 public class IrcChannelEB extends AbstractBean implements IrcChannel {
     private String topic;
-    private Map<IrcUser, Short> users;
+    private Map<IrcUser, String> users;
     private List<IrcMessage> messages;
     private String name;
 
@@ -35,12 +35,12 @@ public class IrcChannelEB extends AbstractBean implements IrcChannel {
     }
 
     @Override
-    public Map<IrcUser, Short> getUsers() {
+    public Map<IrcUser, String> getUsers() {
         return users;
     }
 
     @Override
-    public void setUsers(Map<IrcUser, Short> users) {
+    public void setUsers(Map<IrcUser, String> users) {
         this.users = users;
     }
 

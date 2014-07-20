@@ -1,11 +1,13 @@
 package se.alkohest.irkksome.model.api;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import se.alkohest.irkksome.irc.IrcProtocol;
 import se.alkohest.irkksome.irc.IrcProtocolFactory;
 import se.alkohest.irkksome.irc.IrcProtocolListener;
+import se.alkohest.irkksome.irc.IrcProtocolStrings;
 import se.alkohest.irkksome.model.api.dao.IrcChannelDAO;
 import se.alkohest.irkksome.model.api.dao.IrcMessageDAO;
 import se.alkohest.irkksome.model.api.dao.IrcServerDAO;
@@ -53,6 +55,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
+    public void leaveChannel(IrcChannel channel) {
+        ircProtocol.partChannel(channel.getName());
+    }
+
+    @Override
     public void sendMessage(IrcChannel channel, String message) {
         ircProtocol.sendChannelMessage(channel.getName(), message);
         IrcMessage ircMessage = messageDAO.create(ircServer.getSelf(), message, new Date());
@@ -62,7 +69,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
-    public List<IrcUser> getUsers() {
+    public java.util.Set<IrcUser> getUsers() {
         return ircServer.getKnownUsers();
     }
 
@@ -75,18 +82,42 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void serverConnected(String server, String nick) {
-        this.ircServer.setSelf(userDAO.create(nick));
+        ircServer.setSelf(userDAO.create(nick));
         listener.serverConnected();
     }
 
     @Override
     public void nickChanged(String oldNick, String newNick) {
-
+        if (userDAO.compare(ircServer.getSelf(), oldNick)) {
+            ircServer.getSelf().setName(newNick);
+        } else {
+            IrcUser user = serverDAO.getUser(ircServer, oldNick);
+            user.setName(newNick);
+            listener.nickChanged(oldNick, user);
+        }
     }
 
     @Override
     public void usersInChannel(String channelName, List<String> users) {
+        IrcChannel channel = serverDAO.getChannel(ircServer, channelName);
+        for (String u : users) {
+            String flag = "";
+            if (hasFlag(u)) {
+                flag = String.valueOf(u.charAt(0));
+                u = u.substring(1);
+            }
+            IrcUser user = serverDAO.getUser(ircServer, u);
+            channelDAO.addUser(channel, user, flag);
+            serverDAO.addUser(ircServer, user);
+        }
+    }
 
+    private boolean hasFlag(String user) {
+        return user.startsWith(IrcProtocolStrings.FLAG_HALFOP) ||
+                user.startsWith(IrcProtocolStrings.FLAG_OP) ||
+                user.startsWith(IrcProtocolStrings.FLAG_OWNER) ||
+                user.startsWith(IrcProtocolStrings.FLAG_SUPEROP) ||
+                user.startsWith(IrcProtocolStrings.FLAG_VOICE);
     }
 
     @Override
@@ -103,12 +134,24 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void userParted(String channelName, String nick) {
-
+        IrcChannel channel = serverDAO.getChannel(ircServer, channelName);
+        IrcUser user = serverDAO.getUser(ircServer, nick);
+        channelDAO.removeUser(channel, user);
+        listener.userLeftChannel(channel, user);
     }
 
     @Override
     public void userQuit(String nick, String quitMessage) {
-
+        IrcUser user = serverDAO.getUser(ircServer, nick);
+        serverDAO.removeUser(ircServer, user);
+        List<IrcChannel> channels = new ArrayList<>();
+        for (IrcChannel c : ircServer.getConnectedChannels()) {
+            String flag = channelDAO.removeUser(c, user);
+            if (flag != null) {
+                channels.add(c);
+            }
+        }
+        listener.userQuit(user, channels);
     }
 
     @Override

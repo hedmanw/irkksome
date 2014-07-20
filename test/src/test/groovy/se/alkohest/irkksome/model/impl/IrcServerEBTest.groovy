@@ -1,8 +1,11 @@
 package se.alkohest.irkksome.model.impl
 
+import se.alkohest.irkksome.model.api.dao.IrcUserDAO
 import spock.lang.Specification
 
 public class IrcServerEBTest extends Specification {
+    def userDAO = new IrcUserDAO()
+
     def "getSetUrl"() {
         when:
         def server = new IrcServerEB()
@@ -28,8 +31,8 @@ public class IrcServerEBTest extends Specification {
         when:
         def server = new IrcServerEB()
         server.knownUsers = new ArrayList<>()
-        server.knownUsers.add(new IrcUserEB())
-        server.knownUsers.add(new IrcUserEB())
+        server.knownUsers.add(userDAO.create("fest"))
+        server.knownUsers.add(userDAO.create("test"))
 
         then:
         server.knownUsers

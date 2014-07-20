@@ -3,6 +3,7 @@ package se.alkohest.irkksome.model.api.dao;
 import android.content.ContentValues;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import se.alkohest.irkksome.model.api.local.IrcChannelDAOLocal;
 import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
@@ -21,9 +22,14 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB, IrcServer> implements 
     public IrcServer create(String host) {
         IrcServer ircServer = new IrcServerEB();
         ircServer.setConnectedChannels(new ArrayList<IrcChannel>());
-        ircServer.setKnownUsers(new ArrayList<IrcUser>());
+        ircServer.setKnownUsers(new HashSet<IrcUser>());
         ircServer.setUrl(host);
         return ircServer;
+    }
+
+    @Override
+    public void addUser(IrcServer ircServer, IrcUser user) {
+        ircServer.getKnownUsers().add(user);
     }
 
     @Override
@@ -53,5 +59,10 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB, IrcServer> implements 
     @Override
     protected ContentValues createContentValues(IrcServer beanEntity) {
         return null;
+    }
+
+    @Override
+    public void removeUser(IrcServer ircServer, IrcUser user) {
+        ircServer.getKnownUsers().remove(user);
     }
 }

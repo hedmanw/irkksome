@@ -1,6 +1,7 @@
 package se.alkohest.irkksome.model.entity;
 
 import java.util.List;
+import java.util.Set;
 
 import se.alkohest.irkksome.orm.BeanEntity;
 
@@ -17,7 +18,7 @@ public interface IrcServer extends BeanEntity {
 
     public IrcUser getSelf();
 
-    public List<IrcUser> getKnownUsers();
+    public Set<IrcUser> getKnownUsers();
 
-    public void setKnownUsers(List<IrcUser> users);
+    public void setKnownUsers(Set<IrcUser> users);
 }

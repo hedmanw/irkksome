@@ -40,4 +40,10 @@ public class IrcProtocolStrings {
     public static final String ERR_INVITEONLYCHAN = "473";
     public static final String ERR_BANNEDFROMCHAN = "474";
 
+    // Flags
+    public static final String FLAG_OWNER = "~";
+    public static final String FLAG_SUPEROP = "&";
+    public static final String FLAG_OP = "@";
+    public static final String FLAG_HALFOP = "%";
+    public static final String FLAG_VOICE = "+";
 }

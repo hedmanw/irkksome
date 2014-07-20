@@ -1,6 +1,7 @@
 package se.alkohest.irkksome.model.impl;
 
 import java.util.List;
+import java.util.Set;
 
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
@@ -10,7 +11,7 @@ import se.alkohest.irkksome.orm.AbstractBean;
 public class IrcServerEB extends AbstractBean implements IrcServer {
     private String url;
     private List<IrcChannel> connectedChannels;
-    private List<IrcUser> knownUsers;
+    private Set<IrcUser> knownUsers;
     private IrcUser self;
 
     @Override
@@ -34,12 +35,12 @@ public class IrcServerEB extends AbstractBean implements IrcServer {
     }
 
     @Override
-    public List<IrcUser> getKnownUsers() {
+    public Set<IrcUser> getKnownUsers() {
         return knownUsers;
     }
 
     @Override
-    public void setKnownUsers(List<IrcUser> users) {
+    public void setKnownUsers(Set<IrcUser> users) {
         knownUsers = users;
     }
 

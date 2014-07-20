@@ -23,7 +23,7 @@ public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implemen
         IrcChannel ircChannel = new IrcChannelEB();
         ircChannel.setName(name);
         ircChannel.setMessages(new ArrayList<IrcMessage>());
-        ircChannel.setUsers(new HashMap<IrcUser, Short>());
+        ircChannel.setUsers(new HashMap<IrcUser, String>());
         return ircChannel;
     }
 
@@ -35,5 +35,15 @@ public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implemen
     @Override
     public boolean compare(IrcChannel c, String channelName) {
         return c.getName().toLowerCase().equals(channelName.toLowerCase());
+    }
+
+    @Override
+    public void addUser(IrcChannel channel, IrcUser user, String flag) {
+        channel.getUsers().put(user, flag);
+    }
+
+    @Override
+    public String removeUser(IrcChannel channel, IrcUser user) {
+        return channel.getUsers().remove(user);
     }
 }
