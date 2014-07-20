@@ -40,4 +40,9 @@ public class IrcMessageEB extends AbstractBean implements IrcMessage {
     public void setAuthor(IrcUser author) {
         this.author = author;
     }
+
+    @Override
+    public String toString() {
+        return author.getName() + ": " + message;
+    }
 }

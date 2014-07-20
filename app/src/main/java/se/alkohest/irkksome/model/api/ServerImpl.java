@@ -1,17 +1,21 @@
 package se.alkohest.irkksome.model.api;
 
+import java.util.Date;
 import java.util.List;
 
 import se.alkohest.irkksome.irc.IrcProtocol;
 import se.alkohest.irkksome.irc.IrcProtocolFactory;
 import se.alkohest.irkksome.irc.IrcProtocolListener;
 import se.alkohest.irkksome.model.api.dao.IrcChannelDAO;
+import se.alkohest.irkksome.model.api.dao.IrcMessageDAO;
 import se.alkohest.irkksome.model.api.dao.IrcServerDAO;
 import se.alkohest.irkksome.model.api.dao.IrcUserDAO;
 import se.alkohest.irkksome.model.api.local.IrcChannelDAOLocal;
+import se.alkohest.irkksome.model.api.local.IrcMessageDAOLocal;
 import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
 import se.alkohest.irkksome.model.api.local.IrcUserDAOLocal;
 import se.alkohest.irkksome.model.entity.IrcChannel;
+import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
 
@@ -19,9 +23,12 @@ public class ServerImpl implements Server, IrcProtocolListener {
     private IrcProtocol ircProtocol;
     private IrcServer ircServer;
     private IrcChannelDAOLocal channelDAO = new IrcChannelDAO();
+    private IrcMessageDAOLocal messageDAO = new IrcMessageDAO();
     private IrcServerDAOLocal serverDAO = new IrcServerDAO();
     private IrcUserDAOLocal userDAO = new IrcUserDAO();
     private ServerCallback listener;
+
+    private IrcChannel activeChannel;
 
     public ServerImpl(IrcServer ircServer) {
         this.ircServer = ircServer;
@@ -48,11 +55,20 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public void sendMessage(IrcChannel channel, String message) {
         ircProtocol.sendChannelMessage(channel.getName(), message);
+        IrcMessage ircMessage = messageDAO.create(ircServer.getSelf(), message, new Date());
+
+        channelDAO.addMessage(channel, ircMessage);
+        listener.messageRecived();
     }
 
     @Override
     public List<IrcUser> getUsers() {
-        return null;
+        return ircServer.getKnownUsers();
+    }
+
+    @Override
+    public IrcChannel getActiveChannel() {
+        return activeChannel;
     }
 
 //    ---------------------------------------------------------
@@ -78,6 +94,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
         IrcChannel channel = serverDAO.getChannel(ircServer, channelName);
         if (userDAO.compare(ircServer.getSelf(), nick)) {
             listener.channelJoined(channel);
+            activeChannel = channel;
         } else {
             IrcUser user = serverDAO.getUser(ircServer, nick);
             listener.userJoinedChannel(channel, user);
@@ -96,7 +113,12 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void channelMessageReceived(String channel, String user, String message) {
+        IrcChannel ircChannel = serverDAO.getChannel(ircServer, channel);
+        IrcUser ircUser = serverDAO.getUser(ircServer, user);
+        IrcMessage ircMessage = messageDAO.create(ircUser, message, new Date());
 
+        channelDAO.addMessage(ircChannel, ircMessage);
+        listener.messageRecived();
     }
 
     @Override

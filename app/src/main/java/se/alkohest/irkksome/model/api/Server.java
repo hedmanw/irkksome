@@ -17,4 +17,5 @@ public interface Server {
 
     public void setListener(ServerCallback listener);
 
+    public IrcChannel getActiveChannel();
 }

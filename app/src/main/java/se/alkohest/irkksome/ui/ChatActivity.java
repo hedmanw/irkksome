@@ -17,7 +17,6 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 public class ChatActivity extends Activity {
     private ServerManager serverManager;
     private Server activeServer;
-    private IrcChannel activeChannel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +62,7 @@ public class ChatActivity extends Activity {
 
     public void sendMessage(View view) {
         EditText editText = (EditText) findViewById(R.id.input_field);
-//        activeServer.sendMessage(channel, editText.getText().toString());
+        activeServer.sendMessage(activeServer.getActiveChannel(), editText.getText().toString());
         editText.getText().clear();
     }
 }

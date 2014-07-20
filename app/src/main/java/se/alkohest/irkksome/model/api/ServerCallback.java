@@ -17,4 +17,6 @@ public interface ServerCallback {
     public void channelJoinFailed();
 
     public void userJoinedChannel(IrcChannel channel, IrcUser user);
+
+    public void messageRecived();
 }
