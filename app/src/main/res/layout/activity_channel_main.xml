@@ -1,0 +1,85 @@
+<android.support.v4.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+            android:id="@+id/channel_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="280dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:orientation="vertical"
+            android:id="@+id/left_drawer"
+            android:background="#EEE">
+        <LinearLayout
+                android:id="@+id/channel_search_drawer_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:onClick="leftDrawerSearch">
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=" Search channels"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textSize="16sp"
+                    android:enabled="false"/>
+            <View
+                    android:layout_height="3px"
+                    android:layout_width="fill_parent"/>
+        </LinearLayout>
+        <ListView
+                android:id="@+id/left_drawer_list"
+                android:layout_width="280dp"
+                android:layout_height="match_parent"
+                android:choiceMode="singleChoice"
+                android:divider="#DCDCDC"
+                android:dividerHeight="1dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="280dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:orientation="vertical"
+            android:id="@+id/right_drawer"
+            android:background="#EEE">
+
+        <LinearLayout
+                android:id="@+id/user_search_drawer_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:onClick="rightDrawerSearch">
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=" Search user"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textSize="16sp"
+                    android:enabled="false"/>
+            <View
+                    android:layout_height="3px"
+                    android:layout_width="fill_parent"/>
+        </LinearLayout>
+        <ListView
+                android:id="@+id/right_drawer_list"
+                android:layout_width="280dp"
+                android:layout_height="match_parent"
+                android:choiceMode="singleChoice"
+                android:dividerHeight="1dp"/>
+    </LinearLayout>
+</android.support.v4.widget.DrawerLayout>
