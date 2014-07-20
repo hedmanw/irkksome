@@ -58,6 +58,10 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
             case R.id.action_join_channel:
                 showJoinChannel();
                 break;
+            case R.id.action_leave_channel:
+                activeServer.leaveChannel(activeServer.getActiveChannel());
+                ConnectionListAdapter.getInstance().notifyDataSetChanged();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

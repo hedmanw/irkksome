@@ -62,6 +62,11 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB, IrcServer> implements 
     }
 
     @Override
+    public void removeChannel(IrcServer ircServer, IrcChannel channel) {
+        ircServer.getConnectedChannels().remove(channel);
+    }
+
+    @Override
     public void removeUser(IrcServer ircServer, IrcUser user) {
         ircServer.getKnownUsers().remove(user);
     }

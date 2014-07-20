@@ -16,4 +16,6 @@ public interface IrcServerDAOLocal {
     public void addUser(IrcServer ircServer, IrcUser user);
 
     public void removeUser(IrcServer ircServer, IrcUser user);
+
+    public void removeChannel(IrcServer ircServer, IrcChannel channel);
 }

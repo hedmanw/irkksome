@@ -4,6 +4,9 @@
     <item android:id="@+id/action_join_channel"
         android:title="@string/join_channel"
         android:showAsAction="never"/>
+    <item android:id="@+id/action_leave_channel"
+        android:title="@string/leave_channel"
+        android:showAsAction="never"/>
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
