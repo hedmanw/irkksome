@@ -49,7 +49,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void joinChannel(String channelName) {
-        ircProtocol.joinChannel(channelName);
+        ircProtocol.joinChannel((channelName.charAt(0) == '#' ? "" : "#") + channelName);
     }
 
     @Override
