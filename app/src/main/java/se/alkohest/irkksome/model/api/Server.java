@@ -26,4 +26,6 @@ public interface Server {
     public void disconnect();
 
     public void showServer();
+
+    public void setDropListener(ServerDropAcidListener listener);
 }

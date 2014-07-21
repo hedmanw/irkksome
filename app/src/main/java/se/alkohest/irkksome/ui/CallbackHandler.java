@@ -102,11 +102,6 @@ public class CallbackHandler implements ServerCallback {
     }
 
     @Override
-    public void channelJoinFailed() {
-
-    }
-
-    @Override
     public void userJoinedChannel(IrcChannel channel, IrcUser user) {
 
     }

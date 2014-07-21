@@ -21,7 +21,6 @@ import se.alkohest.irkksome.model.api.ServerManager;
 public class ChatActivity extends Activity implements ServerConnectFragment.OnFragmentInteractionListener {
     private static final Log LOG = Log.getInstance(ChatActivity.class);
     private ServerManager serverManager;
-    private Server activeServer;
     private ExpandableListView connectionsList;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
@@ -55,10 +54,10 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPos, int childPos, long id) {
                 drawerLayout.closeDrawer(leftDrawer);
                 final Server selectedServer = listAdapter.getGroup(groupPos);
-                if (selectedServer != activeServer) {
-                    activeServer = selectedServer;
+                if (selectedServer != serverManager.getActiveServer()) {
+                    serverManager.setActiveServer(selectedServer);
                 }
-                activeServer.setActiveChannel(listAdapter.getChild(groupPos, childPos));
+                serverManager.getActiveServer().setActiveChannel(listAdapter.getChild(groupPos, childPos));
                 return true;
             }
         });
@@ -67,10 +66,10 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPos, long id) {
                 drawerLayout.closeDrawer(leftDrawer);
                 final Server selectedServer = listAdapter.getGroup(groupPos);
-                if (selectedServer != activeServer) {
-                    activeServer = selectedServer;
+                if (selectedServer != serverManager.getActiveServer()) {
+                    serverManager.setActiveServer(selectedServer);
                 }
-                activeServer.showServer();
+                serverManager.getActiveServer().showServer();
                 return true;
             }
         });
@@ -105,13 +104,13 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
             case R.id.action_settings:
                 break;
             case R.id.action_join_channel:
-                ChatActivityStatic.showJoinChannelDialog(this, activeServer);
+                ChatActivityStatic.showJoinChannelDialog(this, serverManager.getActiveServer());
                 break;
             case R.id.action_leave_channel:
-                activeServer.leaveChannel(activeServer.getActiveChannel());
+                serverManager.getActiveServer().leaveChannel(serverManager.getActiveServer().getActiveChannel());
                 break;
             case R.id.action_change_nick:
-                ChatActivityStatic.showNickChangeDialog(this, activeServer);
+                ChatActivityStatic.showNickChangeDialog(this, serverManager.getActiveServer());
                 break;
         }
         return true;
@@ -119,7 +118,7 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
 
     public void sendMessage(View view) {
         EditText editText = (EditText) findViewById(R.id.input_field);
-        activeServer.sendMessage(activeServer.getActiveChannel(), editText.getText().toString());
+        serverManager.getActiveServer().sendMessage(serverManager.getActiveServer().getActiveChannel(), editText.getText().toString());
         editText.getText().clear();
     }
 
@@ -127,9 +126,9 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
     public void onFragmentInteraction(Bundle bundle) {
         String hostName = bundle.getString(ServerConnectFragment.ARG_HOSTNAME);
         String nickname = bundle.getString(ServerConnectFragment.ARG_NICKNAME);
-        activeServer = serverManager.addServer(hostName, nickname);
-        activeServer.setListener(new CallbackHandler(this));
+        serverManager.setActiveServer(serverManager.addServer(hostName, nickname));
+        serverManager.getActiveServer().setListener(new CallbackHandler(this));
         ConnectionListAdapter.getInstance().notifyDataSetChanged();
-        connectionsList.expandGroup(serverManager.getServers().indexOf(activeServer));
+        connectionsList.expandGroup(serverManager.getServers().indexOf(serverManager.getActiveServer()));
     }
 }

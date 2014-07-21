@@ -31,6 +31,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     private ServerCallback listener;
 
     private IrcChannel activeChannel;
+    private ServerDropAcidListener dropListener;
 
     public ServerImpl(IrcServer ircServer, String nickname) {
         this.ircServer = ircServer;
@@ -63,6 +64,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
     public void disconnect() {
         // TODO - fix custom message
         ircProtocol.disconnect("irkksome dissconect yolo!");
+    }
+
+    @Override
+    public void setDropListener(ServerDropAcidListener listener) {
+        dropListener = listener;
     }
 
     @Override
@@ -227,6 +233,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     public void serverDisconnected() {
         // TODO - this method should try to reconnect if its appropriate?
         listener.serverDisconnected();
+        dropListener.dropServer(this);
     }
 
     @Override
