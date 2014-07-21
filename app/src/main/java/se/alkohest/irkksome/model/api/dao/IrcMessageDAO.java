@@ -20,7 +20,10 @@ public class IrcMessageDAO extends GenericDAO<IrcMessageEB, IrcMessage> implemen
         return ircMessage;
     }
 
+    @Override
+    public void findById(long id) {
 
+    }
 
     @Override
     protected ContentValues createContentValues(IrcMessage beanEntity) {

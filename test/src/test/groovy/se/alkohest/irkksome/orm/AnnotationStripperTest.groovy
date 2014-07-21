@@ -22,10 +22,20 @@ public class AnnotationStripperTest extends Specification{
     }
 
     def "Gets all fields"() {
+        when:
+        def heads = AnnotationStripper.getColumnHeads(FuckYouGradle.class)
 
+        then:
+        heads[0] == "id"
+        heads[1] == "string"
+        heads[2] == "count"
     }
 
     def "Respects transient fields"() {
+        when:
+        def heads = AnnotationStripper.getColumnHeads(GradleSucks.class)
 
+        then:
+        !heads.contains("transientString")
     }
 }

@@ -28,6 +28,11 @@ public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implemen
     }
 
     @Override
+    public void findById(long id) {
+
+    }
+
+    @Override
     public void addMessage(IrcChannel channel, IrcMessage message) {
         channel.getMessages().add(message);
     }

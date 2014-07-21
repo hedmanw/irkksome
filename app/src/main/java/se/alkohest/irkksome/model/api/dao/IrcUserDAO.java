@@ -19,6 +19,11 @@ public class IrcUserDAO extends GenericDAO<IrcUserEB, IrcUser> implements IrcUse
         return ircUser;
     }
 
+    @Override
+    public void findById(long id) {
+
+    }
+
     public List<IrcUser> getAllPersisted() {
         Cursor cursor = getAll(IrcUserEB.class);
         cursor.moveToFirst();

@@ -18,16 +18,17 @@ public abstract class GenericDAO<E extends AbstractBean, I extends BeanEntity> {
 
     protected Cursor getAll(Class<E> beanEntity) {
         String table = AnnotationStripper.getTable(beanEntity);
-        return persistenceContext.read(table, queryProjection());
+        return persistenceContext.read(table, queryProjection(beanEntity));
+    }
+
+    protected String[] queryProjection(Class<E> beanEntity) {
+        return null;
     }
 
     protected void makeTransient(I beanEntity) throws ORMException {
         persistenceContext.delete();
     }
 
-//    public abstract void findById(long id);
+    public abstract void findById(long id);
     protected abstract ContentValues createContentValues(I beanEntity);
-    protected String[] queryProjection() {
-        return new String[] { "id", "name" };
-    }
 }

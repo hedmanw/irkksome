@@ -28,6 +28,11 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB, IrcServer> implements 
     }
 
     @Override
+    public void findById(long id) {
+
+    }
+
+    @Override
     public void addUser(IrcServer ircServer, IrcUser user) {
         ircServer.getKnownUsers().add(user);
     }
