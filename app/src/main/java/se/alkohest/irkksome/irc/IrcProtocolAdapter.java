@@ -3,17 +3,39 @@ package se.alkohest.irkksome.irc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by oed on 7/18/14.
  */
 public class IrcProtocolAdapter implements IrcProtocol {
     private static final String BLANK = " ";
+    private static final String EMPTY = "";
     private static final String COLON = ":";
     private static final String HASHTAG = "#";
     private static final String BANG = "!";
     private static final String LINE_BREAK = "\r\n";
+
+    private static Set<String> errorType1 = new HashSet<String>() {{
+        add(IrcProtocolStrings.ERR_NOSUCHNICK);
+        add(IrcProtocolStrings.ERR_NOSUCHSERVER);
+        add(IrcProtocolStrings.ERR_NOSUCHCHANNEL);
+        add(IrcProtocolStrings.ERR_CANNOTSENDTOCHAN);
+        add(IrcProtocolStrings.ERR_TOOMANYCHANNELS);
+        add(IrcProtocolStrings.ERR_ERRONEUSNICKNAME);
+        add(IrcProtocolStrings.ERR_NICKNAMEINUSE);
+        add(IrcProtocolStrings.ERR_USERONCHANNEL);
+        add(IrcProtocolStrings.ERR_CHANNELISFULL);
+        add(IrcProtocolStrings.ERR_INVITEONLYCHAN);
+        add(IrcProtocolStrings.ERR_BANNEDFROMCHAN);
+        add(IrcProtocolStrings.ERR_BADCHANNELKEY);
+    }};
+    private static Set<String> errorType2 = new HashSet<String>() {{
+        add(IrcProtocolStrings.ERR_PASSWDMISMATCH);
+        add(IrcProtocolStrings.ERR_YOUREBANNEDCREEP);
+    }};
 
     private IrcProtocolListener listener;
     private Connection connection;
@@ -97,11 +119,21 @@ public class IrcProtocolAdapter implements IrcProtocol {
                 try {
                     int errorCode = Integer.parseInt(parts[1]);
                     if (errorCode >= 400 && errorCode <= 599) {
-                        listener.ircError(parts[1], parts[2]);
+                        handleError(parts);
                     }
                 } catch (NumberFormatException e) {}
                 break;
         }
+    }
+
+    private void handleError(String[] parts) {
+        String message = parts[2];
+        if (errorType1.contains(parts[1])) {
+            message = parts[2].split(BLANK, 2)[1].replace(COLON, EMPTY);
+        } else if (errorType2.contains(parts[1])) {
+            message = parts[2].replace(COLON, EMPTY);
+        }
+        listener.ircError(parts[1], message);
     }
 
     private void handlePing(String[] parts) {

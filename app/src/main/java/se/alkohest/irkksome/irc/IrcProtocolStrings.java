@@ -31,14 +31,18 @@ public class IrcProtocolStrings {
     // Numeric errors
     public static final String ERR_NOSUCHNICK = "401";
     public static final String ERR_NOSUCHSERVER = "402";
+    public static final String ERR_NOSUCHCHANNEL = "403";
+    public static final String ERR_CANNOTSENDTOCHAN = "404";
     public static final String ERR_TOOMANYCHANNELS = "405";
     public static final String ERR_ERRONEUSNICKNAME = "432";
     public static final String ERR_NICKNAMEINUSE = "433";
     public static final String ERR_USERONCHANNEL = "443";
     public static final String ERR_PASSWDMISMATCH = "464";
+    public static final String ERR_YOUREBANNEDCREEP = "465";
     public static final String ERR_CHANNELISFULL = "471";
     public static final String ERR_INVITEONLYCHAN = "473";
     public static final String ERR_BANNEDFROMCHAN = "474";
+    public static final String ERR_BADCHANNELKEY = "475";
 
     // Flags
     public static final String FLAG_OWNER = "~";

@@ -171,4 +171,18 @@ class IrcProtocolAdapterEventsTest extends Specification {
         server << ["irc.chalmers.it", "irc.hahah.com", "irc.sex.se"]
         nick << ["tord", "hestman", "OXi"]
     }
+
+    def "test error"() {
+        when:
+        def command = ":irc.chalmers.it ";
+        ipa.handleReply(command + code + " " + msg1)
+
+        then:
+        1 * subscriber.ircError(code, msg2)
+
+        where:
+        code << ["433", "465"]
+        msg1 << ["fest :nick already in use", ":your fucking banned"]
+        msg2 << ["nick already in use", "your fucking banned"]
+    }
 }
