@@ -68,7 +68,7 @@ public class ServerImplTest extends Specification {
         server.serverConnected()
 
         then:
-        1 * server.listener.serverRegistered(server.ircServer)
+        0 * server.listener._
     }
 
     def "server Registered"() {
@@ -77,6 +77,7 @@ public class ServerImplTest extends Specification {
 
         then:
         server.ircServer.getSelf().name == "fest"
+        1 * server.listener.showServerInfo(server.ircServer)
     }
 
     def "nick changed"() {
@@ -117,6 +118,7 @@ public class ServerImplTest extends Specification {
 
     def "user parted"() {
         when:
+        server.backingBean.setSelf(userDAO.create("erland"));
         server.userParted("#fest", "palle")
 
         then:
@@ -147,5 +149,13 @@ public class ServerImplTest extends Specification {
         then:
         1 * server.listener.messageReceived()
         serverDAO.getChannel(server.ircServer, "#fest").messages.size() == 1
+    }
+
+    def "show server"() {
+        when:
+        server.showServer()
+
+        then:
+        1 * server.listener.showServerInfo(server.ircServer)
     }
 }

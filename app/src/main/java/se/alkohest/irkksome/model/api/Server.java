@@ -24,4 +24,6 @@ public interface Server {
     public void changeNick(String nick);
 
     public void disconnect();
+
+    public void showServer();
 }

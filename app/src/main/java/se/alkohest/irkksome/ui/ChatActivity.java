@@ -67,6 +67,18 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
                 return true;
             }
         });
+        connectionsList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPos, long id) {
+                drawerLayout.closeDrawer(drawerList);
+                final Server selectedServer = listAdapter.getGroup(groupPos);
+                if (selectedServer != activeServer) {
+                    activeServer = selectedServer;
+                }
+                activeServer.showServer();
+                return true;
+            }
+        });
     }
 
     @Override
