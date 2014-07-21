@@ -3,7 +3,6 @@ package se.alkohest.irkksome.ui;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -90,11 +89,9 @@ public class CallbackHandler implements ServerCallback {
             public void run() {
                 context.setTitle(channel.getName());
 
-                ChannelFragment channelFragment = ChannelFragment.newInstance("arbitrary", "stuff");
+                ChannelFragment channelFragment = ChannelFragment.newInstance(arrayAdapter);
                 fragmentTransaction.replace(R.id.fragment_container, channelFragment);
                 fragmentTransaction.commit();
-
-                channelFragment.setArrayAdapter(arrayAdapter);
 
                 connectionListAdapter.notifyDataSetChanged();
             }
