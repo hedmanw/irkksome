@@ -32,11 +32,13 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
         serverManager = new ServerManager();
         ConnectionListAdapter.setInstance(this, serverManager.getServers());
 
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        ServerConnectFragment connectFragment = ServerConnectFragment.newInstance();
-        fragmentTransaction.add(R.id.fragment_container, connectFragment);
-        fragmentTransaction.commit();
+        if (savedInstanceState == null) {
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            ServerConnectFragment connectFragment = ServerConnectFragment.newInstance();
+            fragmentTransaction.add(R.id.fragment_container, connectFragment);
+            fragmentTransaction.commit();
+        }
 
         ChatActivityStatic.onCreate(this);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
