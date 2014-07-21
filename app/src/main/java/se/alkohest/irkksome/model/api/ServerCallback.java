@@ -28,4 +28,6 @@ public interface ServerCallback {
     public void userLeftChannel(IrcChannel channel, IrcUser user);
 
     public void userQuit(IrcUser user, List<IrcChannel> channels);
+
+    public void error(String message);
 }

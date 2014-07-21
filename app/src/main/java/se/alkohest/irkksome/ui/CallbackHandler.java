@@ -3,7 +3,10 @@ package se.alkohest.irkksome.ui;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -49,6 +52,18 @@ public class CallbackHandler implements ServerCallback {
     @Override
     public void serverDisconnected() {
 
+    }
+
+    @Override
+    public void error(final String message) {
+        context.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                toast.show();
+            }
+        });
     }
 
     @Override

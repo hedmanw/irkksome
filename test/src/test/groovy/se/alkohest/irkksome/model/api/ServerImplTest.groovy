@@ -158,4 +158,12 @@ public class ServerImplTest extends Specification {
         then:
         1 * server.listener.showServerInfo(server.ircServer)
     }
+
+    def "error"() {
+        when:
+        server.ircError("433", "nick already in use")
+
+        then:
+        1 * server.listener.error("nick already in use")
+    }
 }

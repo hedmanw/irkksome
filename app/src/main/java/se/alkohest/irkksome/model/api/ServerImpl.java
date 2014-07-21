@@ -231,6 +231,6 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void ircError(String errorCode, String message) {
-
+        listener.error(message);
     }
 }
