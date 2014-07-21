@@ -5,7 +5,7 @@
     <string name="title_activity_chat">irkksome</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="send_message">send message</string>
+    <string name="send_message">Send message</string>
     <string name="join_server">Join server</string>
     <string name="join_channel">Join channel</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
