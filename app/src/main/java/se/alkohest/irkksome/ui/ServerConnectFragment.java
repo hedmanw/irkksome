@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.IdRes;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -12,27 +14,12 @@ import android.widget.TextView;
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.irc.Log;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ServerConnectFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ServerConnectFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
 public class ServerConnectFragment extends Fragment {
     public static final String ARG_HOSTNAME = "hostname";
     public static final String ARG_NICKNAME = "nickname";
 
     private OnFragmentInteractionListener listener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment ServerConnectFragment.
-     */
     public static ServerConnectFragment newInstance() {
         ServerConnectFragment fragment = new ServerConnectFragment();
         Bundle args = new Bundle();
@@ -46,15 +33,19 @@ public class ServerConnectFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
+        setHasOptionsMenu(true);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.findItem(R.id.action_join_channel).setEnabled(false);
+        menu.findItem(R.id.action_leave_channel).setEnabled(false);
+        menu.findItem(R.id.action_change_nick).setEnabled(false);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_server_connect, container, false);
         inflatedView.findViewById(R.id.server_connect_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +56,6 @@ public class ServerConnectFragment extends Fragment {
         return inflatedView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void connectPressed() {
         Log.getInstance(getClass()).i("Pressed button!");
         if (listener != null) {

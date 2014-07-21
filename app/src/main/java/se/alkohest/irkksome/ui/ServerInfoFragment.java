@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
-import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.entity.IrcServer;
 
 public class ServerInfoFragment extends Fragment {
@@ -27,7 +26,6 @@ public class ServerInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
