@@ -153,6 +153,13 @@ public class ServerImpl implements Server, IrcProtocolListener {
             channelDAO.addUser(channel, user, flag);
             serverDAO.addUser(ircServer, user);
         }
+        checkUserUpdate(channel);
+    }
+
+    private void checkUserUpdate(IrcChannel channel) {
+        if (activeChannel.equals(channel)) {
+            listener.updateUserList();
+        }
     }
 
     private boolean hasFlag(String user) {
@@ -171,8 +178,10 @@ public class ServerImpl implements Server, IrcProtocolListener {
             activeChannel = channel;
         } else {
             IrcUser user = serverDAO.getUser(ircServer, nick);
+            channelDAO.addUser(channel, user, "");
             listener.userJoinedChannel(channel, user);
         }
+        checkUserUpdate(channel);
     }
 
     @Override
@@ -182,6 +191,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
             IrcUser user = serverDAO.getUser(ircServer, nick);
             channelDAO.removeUser(channel, user);
             listener.userLeftChannel(channel, user);
+            checkUserUpdate(channel);
         }
     }
 

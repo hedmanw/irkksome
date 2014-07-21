@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.view.Gravity;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import se.alkohest.irkksome.model.entity.IrcUser;
 
 public class CallbackHandler implements ServerCallback {
     private final ConnectionListAdapter connectionListAdapter;
+    private UserAdapter userAdapter;
     private final Activity context;
     private final FragmentManager fragmentManager;
 
@@ -74,6 +77,7 @@ public class CallbackHandler implements ServerCallback {
 
     @Override
     public void setActiveChannel(final IrcChannel channel) {
+        userAdapter = new UserAdapter(channel.getUsers());
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         context.runOnUiThread(new Runnable() {
@@ -85,6 +89,8 @@ public class CallbackHandler implements ServerCallback {
                 fragmentTransaction.replace(R.id.fragment_container, channelFragment);
                 fragmentTransaction.commit();
 
+                ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
+
                 connectionListAdapter.notifyDataSetChanged();
             }
         });
@@ -92,7 +98,7 @@ public class CallbackHandler implements ServerCallback {
 
     @Override
     public void userJoinedChannel(IrcChannel channel, IrcUser user) {
-
+        updateUserList();
     }
 
     @Override
@@ -107,16 +113,25 @@ public class CallbackHandler implements ServerCallback {
 
     @Override
     public void nickChanged(String oldNick, IrcUser user) {
-
+        updateUserList();
     }
 
     @Override
     public void userLeftChannel(IrcChannel channel, IrcUser user) {
-
     }
 
     @Override
     public void userQuit(IrcUser user, List<IrcChannel> channels) {
-
     }
+
+    @Override
+    public void updateUserList() {
+        context.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                userAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
 }
