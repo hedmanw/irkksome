@@ -65,10 +65,17 @@ public class ServerImplTest extends Specification {
 
     def "server connected"() {
         when:
-        server.serverConnected("cool_server", "fest")
+        server.serverConnected()
 
         then:
         1 * server.listener.serverConnected(server.ircServer)
+    }
+
+    def "server Registered"() {
+        when:
+        server.serverRegistered("irc.chalmers.it", "fest")
+
+        then:
         server.ircServer.getSelf().name == "fest"
     }
 

@@ -94,9 +94,13 @@ public class ServerImpl implements Server, IrcProtocolListener {
 //    ---------------------------------------------------------
 
     @Override
-    public void serverConnected(String server, String nick) {
-        ircServer.setSelf(userDAO.create(nick));
+    public void serverConnected() {
         listener.serverConnected(ircServer);
+    }
+
+    @Override
+    public void serverRegistered(String server, String nick) {
+        ircServer.setSelf(userDAO.create(nick));
     }
 
     @Override

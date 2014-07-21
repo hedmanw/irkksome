@@ -45,6 +45,16 @@ public class NormalConnection implements Connection {
     }
 
     @Override
+    public void close() {
+        try {
+            input.close();
+            output.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void write(String s) throws IOException {
         checkReady();
         output.write(s);

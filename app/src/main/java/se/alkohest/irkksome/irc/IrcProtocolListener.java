@@ -11,7 +11,15 @@ public interface IrcProtocolListener {
     /**
      * Called when connection to the server has been established.
      */
-    public void serverConnected(String server, String nick);
+    public void serverConnected();
+
+    /**
+     * Called when the user has been registered with the server.
+     *
+     * @param server - the hostname of the server
+     * @param nick - the registered nick
+     */
+    public void serverRegistered(String server, String nick);
 
     /**
      * Called when a user changed nick.

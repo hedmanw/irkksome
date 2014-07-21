@@ -14,4 +14,6 @@ public interface Connection {
     public String readLine() throws IOException;
 
     public void write(String s) throws IOException;
+
+    public void close();
 }

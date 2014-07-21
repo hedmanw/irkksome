@@ -62,7 +62,7 @@ public class IrcProtocolAdapter implements IrcProtocol {
                         parts[2].substring(parts[2].indexOf(COLON) + 1));
                 break;
             case IrcProtocolStrings.RPL_WELCOME:
-                listener.serverConnected(
+                listener.serverRegistered(
                         parts[0].substring(1),
                         parts[2].substring(0, parts[2].indexOf(BLANK)));
                 break;
@@ -195,7 +195,7 @@ public class IrcProtocolAdapter implements IrcProtocol {
     public void disconnect(String message) {
         running = false;
         write(IrcProtocolStrings.QUIT + BLANK + COLON + message);
-        // TODO - close connection?
+        connection.close();
         listener.serverDisconnected();
 
     }

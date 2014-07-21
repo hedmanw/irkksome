@@ -165,7 +165,7 @@ class IrcProtocolAdapterEventsTest extends Specification {
         ipa.handleReply(":" + server + " 001 " + nick + command)
 
         then:
-        1 * subscriber.serverConnected(server, nick)
+        1 * subscriber.serverRegistered(server, nick)
 
         where:
         server << ["irc.chalmers.it", "irc.hahah.com", "irc.sex.se"]
