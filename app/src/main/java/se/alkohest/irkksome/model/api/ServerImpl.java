@@ -157,10 +157,12 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void userParted(String channelName, String nick) {
-        IrcChannel channel = serverDAO.getChannel(ircServer, channelName);
-        IrcUser user = serverDAO.getUser(ircServer, nick);
-        channelDAO.removeUser(channel, user);
-        listener.userLeftChannel(channel, user);
+        if (!userDAO.compare(ircServer.getSelf(), nick)) {
+            IrcChannel channel = serverDAO.getChannel(ircServer, channelName);
+            IrcUser user = serverDAO.getUser(ircServer, nick);
+            channelDAO.removeUser(channel, user);
+            listener.userLeftChannel(channel, user);
+        }
     }
 
     @Override
