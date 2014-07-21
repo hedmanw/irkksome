@@ -90,7 +90,6 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
                 break;
             case R.id.action_leave_channel:
                 activeServer.leaveChannel(activeServer.getActiveChannel());
-                ConnectionListAdapter.getInstance().notifyDataSetChanged();
                 break;
             case R.id.action_change_nick:
                 showNickChangeDialog();

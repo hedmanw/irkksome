@@ -1,6 +1,5 @@
 package se.alkohest.irkksome.ui;
 
-import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
@@ -14,7 +13,12 @@ import android.widget.TextView;
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.entity.IrcChannel;
+import se.alkohest.irkksome.model.entity.IrcServer;
 
+/**
+ * Look into optimizing the getChild and getGroup calls.
+ * They get called a lot, so they could benefit from some sort of caching.
+ */
 public class ConnectionListAdapter extends BaseExpandableListAdapter {
     private static ConnectionListAdapter INSTANCE;
     private Context context;
@@ -36,7 +40,8 @@ public class ConnectionListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public IrcChannel getChild(int groupPosition, int childPosition) {
-        return servers.get(groupPosition).getBackingBean().getConnectedChannels().get(childPosition);
+        final IrcServer backingBean = getGroup(groupPosition).getBackingBean();
+        return backingBean.getConnectedChannels().get(childPosition);
     }
 
     @Override
@@ -61,7 +66,8 @@ public class ConnectionListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return servers.get(groupPosition).getBackingBean().getConnectedChannels().size();
+        final IrcServer backingBean = getGroup(groupPosition).getBackingBean();
+        return backingBean.getConnectedChannels().size();
     }
 
     @Override

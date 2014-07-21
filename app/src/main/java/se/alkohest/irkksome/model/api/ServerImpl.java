@@ -74,6 +74,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
             activeChannel = channels.get(channels.size() - 1);
             listener.setActiveChannel(activeChannel);
         } else {
+            activeChannel = null;
             listener.serverConnected(ircServer);
         }
     }

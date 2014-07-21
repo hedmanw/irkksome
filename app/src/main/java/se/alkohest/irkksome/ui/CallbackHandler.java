@@ -40,6 +40,8 @@ public class CallbackHandler implements ServerCallback {
                 ServerInfoFragment serverInfoFragment = ServerInfoFragment.getInstance(server);
                 fragmentTransaction.replace(R.id.fragment_container, serverInfoFragment);
                 fragmentTransaction.commit();
+
+                connectionListAdapter.notifyDataSetChanged();
             }
         });
     }
