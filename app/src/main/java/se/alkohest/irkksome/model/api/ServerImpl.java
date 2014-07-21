@@ -157,7 +157,8 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     private void checkUserUpdate(IrcChannel channel) {
-        if (activeChannel.equals(channel)) {
+        if (activeChannel == null ||
+                channel.equals(activeChannel)) {
             listener.updateUserList();
         }
     }

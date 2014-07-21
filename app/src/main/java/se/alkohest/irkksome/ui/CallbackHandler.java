@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.view.Gravity;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -30,6 +29,7 @@ public class CallbackHandler implements ServerCallback {
 
     @Override
     public void showServerInfo(final IrcServer server) {
+        userAdapter = new UserSetAdapter(server.getKnownUsers());
         context.runOnUiThread(new Runnable() {
             final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -40,6 +40,7 @@ public class CallbackHandler implements ServerCallback {
                 fragmentTransaction.commit();
 
                 connectionListAdapter.notifyDataSetChanged();
+                ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
             }
         });
     }
@@ -77,7 +78,7 @@ public class CallbackHandler implements ServerCallback {
 
     @Override
     public void setActiveChannel(final IrcChannel channel) {
-        userAdapter = new UserAdapter(channel.getUsers());
+        userAdapter = new UserMapAdapter(channel.getUsers());
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         context.runOnUiThread(new Runnable() {
