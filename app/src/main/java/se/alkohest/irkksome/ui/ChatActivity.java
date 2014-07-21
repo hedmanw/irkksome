@@ -5,7 +5,10 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +26,8 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
     private ServerManager serverManager;
     private Server activeServer;
     private ExpandableListView connectionsList;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,27 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
         connectionsList = (ExpandableListView) findViewById(R.id.left_drawer_list);
         BaseExpandableListAdapter listAdapter = ConnectionListAdapter.getInstance();
         connectionsList.setAdapter(listAdapter);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
+
+        // Set the drawer toggle as the DrawerListener
+        drawerLayout.setDrawerListener(drawerToggle);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -51,6 +77,10 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         int id = item.getItemId();
         switch (id) {
             case R.id.action_settings:
@@ -66,7 +96,7 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
                 showNickChangeDialog();
                 break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     private void showNickChangeDialog() {

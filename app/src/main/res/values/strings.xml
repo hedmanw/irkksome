@@ -14,5 +14,7 @@
     <string name="leave_channel">Leave channel</string>
     <string name="change_nick">Change nick</string>
     <string name="hint_nickname">Nickname</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="drawer_open">Open navigation drawer</string>
 
 </resources>
