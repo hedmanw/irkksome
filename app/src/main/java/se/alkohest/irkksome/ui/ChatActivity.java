@@ -52,6 +52,7 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
         getActionBar().setHomeButtonEnabled(true);
 
         connectionsList = (ExpandableListView) findViewById(R.id.left_drawer_list);
+        connectionsList.setEmptyView(findViewById(android.R.id.empty));
         final ConnectionListAdapter listAdapter = ConnectionListAdapter.getInstance();
         connectionsList.setAdapter(listAdapter);
         connectionsList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
