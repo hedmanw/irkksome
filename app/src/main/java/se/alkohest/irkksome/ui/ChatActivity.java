@@ -20,7 +20,7 @@ import se.alkohest.irkksome.model.api.ServerManager;
 
 public class ChatActivity extends Activity implements ServerConnectFragment.OnFragmentInteractionListener {
     private static final Log LOG = Log.getInstance(ChatActivity.class);
-    private ServerManager serverManager;
+    private static ServerManager serverManager = ServerManager.INSTANCE;
     private ExpandableListView connectionsList;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
@@ -29,7 +29,6 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_drawers);
-        serverManager = new ServerManager();
         ConnectionListAdapter.setInstance(this, serverManager.getServers());
 
         if (savedInstanceState == null) {
@@ -38,6 +37,10 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
             ServerConnectFragment connectFragment = ServerConnectFragment.newInstance();
             fragmentTransaction.add(R.id.fragment_container, connectFragment);
             fragmentTransaction.commit();
+        }
+        else {
+            // This might require us to loop through all servers and set new CallbackHandlers
+            serverManager.getActiveServer().setListener(new CallbackHandler(this));
         }
 
         ChatActivityStatic.onCreate(this);

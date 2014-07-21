@@ -1,7 +1,7 @@
 package se.alkohest.irkksome.ui;
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,11 +13,11 @@ import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcServer;
 
 public class ServerInfoFragment extends Fragment {
-    private IrcServer ircServer;
+    private static IrcServer ircServer;
 
     public static ServerInfoFragment getInstance(IrcServer ircServer) {
         final ServerInfoFragment serverInfoFragment = new ServerInfoFragment();
-        serverInfoFragment.ircServer = ircServer;
+        ServerInfoFragment.ircServer = ircServer;
         return serverInfoFragment;
     }
 
@@ -29,6 +29,7 @@ public class ServerInfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        getActivity().setTitle(ircServer.getUrl());
     }
 
     @Override

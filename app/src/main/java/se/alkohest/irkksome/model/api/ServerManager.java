@@ -8,11 +8,12 @@ import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
 import se.alkohest.irkksome.model.entity.IrcServer;
 
 public class ServerManager implements ServerDropAcidListener {
+    public static final ServerManager INSTANCE = new ServerManager();
     private IrcServerDAOLocal serverDAO;
     private List<Server> servers;
     private Server activeServer;
 
-    public ServerManager() {
+    protected ServerManager() {
         serverDAO = new IrcServerDAO();
         servers = new ArrayList<>();
     }

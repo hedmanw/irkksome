@@ -1,5 +1,6 @@
 package se.alkohest.irkksome.ui;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,14 +10,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import se.alkohest.irkksome.R;
+import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 
 public class ChannelFragment extends Fragment {
-    private ArrayAdapter<IrcMessage> arrayAdapter;
+    private static ArrayAdapter<IrcMessage> arrayAdapter;
+    private static IrcChannel ircChannel;
 
-    public static ChannelFragment newInstance(ArrayAdapter<IrcMessage> arrayAdapter) {
+    public static ChannelFragment newInstance(IrcChannel ircChannel) {
         ChannelFragment fragment = new ChannelFragment();
-        fragment.arrayAdapter = arrayAdapter;
+        ChannelFragment.ircChannel = ircChannel;
         return fragment;
     }
     public ChannelFragment() {
@@ -26,6 +29,13 @@ public class ChannelFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().setTitle(ircChannel.getName());
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        ChannelFragment.arrayAdapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, ircChannel.getMessages());
     }
 
     @Override
@@ -36,4 +46,7 @@ public class ChannelFragment extends Fragment {
         return inflatedView;
     }
 
+    public static ArrayAdapter<IrcMessage> getAdapter() {
+        return arrayAdapter;
+    }
 }
