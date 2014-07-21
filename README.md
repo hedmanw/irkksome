@@ -13,12 +13,15 @@ for 21st century devices is obvious.
  
 ##Product vision
 For IRC users who are using their Android phones to connect to IRC,
-the ircSEX messenger is the client that will revolutionize the way we
+irkksome is the client that will revolutionize the way we
 communicate on mobile devices. Drawing upon modern messaging platforms
-and idioms, with our product, we show that IRC can be more than a terminal
-or look like a hacker chat. The world of IRC clients for Android is in dire
-need for change - and we’re here to do it!
+and idioms, with our product, we show that an IRC-client can be more than a 
+terminal or look like a hacker chat. The world of IRC clients for Android 
+are in need for change - and we’re determined to do that!
+
+`Coming soon: support for screen via irssi-proxy`
 
 ##Specifics
-- Android SDK - API 19
-- Groovy
+- Android SDK - API 20
+- Groovy 1.8.6
+- Spock 0.6-groovy-1.8
