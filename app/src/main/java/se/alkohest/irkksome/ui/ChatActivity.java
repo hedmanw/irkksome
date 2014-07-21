@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.db.SQLitePersistenceContext;
@@ -51,7 +52,6 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.setDrawerListener(drawerToggle);
         final View leftDrawer = findViewById(R.id.left_drawer);
-        final View rightDrawer = findViewById(R.id.right_drawer);
 
         connectionsList = (ExpandableListView) findViewById(R.id.left_drawer_list);
         connectionsList.setEmptyView(findViewById(android.R.id.empty));
@@ -128,6 +128,12 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
         EditText editText = (EditText) findViewById(R.id.input_field);
         serverManager.getActiveServer().sendMessage(serverManager.getActiveServer().getActiveChannel(), editText.getText().toString());
         editText.getText().clear();
+    }
+
+    public void startQuery(View view) {
+        String nick = (String) ((TextView) view.findViewById(R.id.nick)).getText();
+        serverManager.getActiveServer().startQuery(nick);
+        drawerLayout.closeDrawer(findViewById(R.id.right_drawer));
     }
 
     @Override

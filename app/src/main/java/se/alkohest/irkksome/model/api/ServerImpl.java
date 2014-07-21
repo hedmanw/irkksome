@@ -73,7 +73,9 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void leaveChannel(IrcChannel channel) {
-        ircProtocol.partChannel(channel.getName());
+        if(channel.getName().charAt(0) == '#') {
+            ircProtocol.partChannel(channel.getName());
+        }
         serverDAO.removeChannel(ircServer, channel);
         List<IrcChannel> channels = ircServer.getConnectedChannels();
         if (channels.size() != 0) {
@@ -109,6 +111,15 @@ public class ServerImpl implements Server, IrcProtocolListener {
         if (activeChannel != ircChannel) {
             userJoined(ircChannel.getName(), ircServer.getSelf().getName());
         }
+    }
+
+    @Override
+    public void startQuery(String nick) {
+        IrcUser user = serverDAO.getUser(ircServer, nick);
+        IrcChannel query = serverDAO.getChannel(ircServer, nick);
+        channelDAO.addUser(query, user, "");
+        listener.setActiveChannel(query);
+        activeChannel = query;
     }
 
     @Override
@@ -212,7 +223,12 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void channelMessageReceived(String channel, String user, String message) {
-        IrcChannel ircChannel = serverDAO.getChannel(ircServer, channel);
+        IrcChannel ircChannel;
+        if (ircServer.getSelf().getName().equals(channel)) {
+            ircChannel = serverDAO.getChannel(ircServer, user);
+        } else {
+            ircChannel = serverDAO.getChannel(ircServer, channel);
+        }
         IrcUser ircUser = serverDAO.getUser(ircServer, user);
         IrcMessage ircMessage = messageDAO.create(ircUser, message, new Date());
 

@@ -28,4 +28,6 @@ public interface Server {
     public void showServer();
 
     public void setDropListener(ServerDropAcidListener listener);
+
+    public void startQuery(String nick);
 }

@@ -63,7 +63,8 @@ public class UserMapAdapter extends UserAdapter {
         }
 
         IrcUser key = list.get(position);
-        ((TextView) result.findViewById(R.id.nick)).setText(map.get(key) + key.getName());
+        ((TextView) result.findViewById(R.id.flag)).setText(map.get(key));
+        ((TextView) result.findViewById(R.id.nick)).setText(key.getName());
 
         return result;
     }
