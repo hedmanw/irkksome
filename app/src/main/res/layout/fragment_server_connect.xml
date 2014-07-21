@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/server_connect_host"
         android:hint="@string/hint_hostname"
-        android:text="irc.chalmers.it"/>
+        android:inputType="textUri" />
 
     <EditText
         android:layout_width="match_parent"
