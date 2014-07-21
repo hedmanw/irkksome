@@ -232,5 +232,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public void ircError(String errorCode, String message) {
         listener.error(message);
+        if ((errorCode.equals(IrcProtocolStrings.ERR_NICKNAMEINUSE) ||
+                errorCode.equals(IrcProtocolStrings.ERR_YOUREBANNEDCREEP) ||
+                errorCode.equals(IrcProtocolStrings.ERR_ERRONEUSNICKNAME)) &&
+                                        ircServer.getSelf() == null) {
+            disconnect();
+        }
     }
 }

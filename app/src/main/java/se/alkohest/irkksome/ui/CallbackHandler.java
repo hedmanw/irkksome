@@ -51,6 +51,20 @@ public class CallbackHandler implements ServerCallback {
 
     @Override
     public void serverDisconnected() {
+        // TODO - should go to another connected server if present
+        // TODO - should not create a new serverConnectFragment
+        context.runOnUiThread(new Runnable() {
+            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            @Override
+            public void run() {
+                ServerConnectFragment serverConnectFragment = ServerConnectFragment.newInstance();
+                fragmentTransaction.replace(R.id.fragment_container, serverConnectFragment);
+                fragmentTransaction.commit();
+
+                connectionListAdapter.notifyDataSetChanged();
+            }
+        });
 
     }
 
