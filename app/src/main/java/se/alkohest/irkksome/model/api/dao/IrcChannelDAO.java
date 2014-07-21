@@ -1,6 +1,7 @@
 package se.alkohest.irkksome.model.api.dao;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +31,11 @@ public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implemen
     @Override
     public void findById(long id) {
 
+    }
+
+    @Override
+    protected IrcChannel initFromCursor(Cursor cursor) {
+        return null;
     }
 
     @Override

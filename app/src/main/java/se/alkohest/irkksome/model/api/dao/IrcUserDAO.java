@@ -3,7 +3,6 @@ package se.alkohest.irkksome.model.api.dao;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import se.alkohest.irkksome.model.api.local.IrcUserDAOLocal;
@@ -24,17 +23,14 @@ public class IrcUserDAO extends GenericDAO<IrcUserEB, IrcUser> implements IrcUse
 
     }
 
+    @Override
+    protected IrcUser initFromCursor(Cursor cursor) {
+        IrcUser ircUser = create(cursor.getString(1));
+        return ircUser;
+    }
+
     public List<IrcUser> getAllPersisted() {
-        Cursor cursor = getAll(IrcUserEB.class);
-        cursor.moveToFirst();
-        List<IrcUser> allUsers = new ArrayList<>(cursor.getCount());
-        while (cursor.moveToNext()) {
-            IrcUser ircUser = create(cursor.getString(1));
-            ircUser.setId(cursor.getLong(0));
-            allUsers.add(ircUser);
-        }
-        cursor.close();
-        return allUsers;
+        return getAll(IrcUserEB.class);
     }
 
     @Override

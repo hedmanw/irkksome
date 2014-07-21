@@ -38,7 +38,7 @@ public class SQLitePersistenceContext implements PersistenceContext {
     }
 
     @Override
-    public int delete() throws ORMException {
+    public int delete(long id) throws ORMException {
         return 0;
     }
 }

@@ -1,6 +1,7 @@
 package se.alkohest.irkksome.model.api.dao;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import java.util.Date;
 
@@ -23,6 +24,11 @@ public class IrcMessageDAO extends GenericDAO<IrcMessageEB, IrcMessage> implemen
     @Override
     public void findById(long id) {
 
+    }
+
+    @Override
+    protected IrcMessage initFromCursor(Cursor cursor) {
+        return null;
     }
 
     @Override

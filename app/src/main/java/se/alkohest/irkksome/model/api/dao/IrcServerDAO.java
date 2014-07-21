@@ -1,6 +1,7 @@
 package se.alkohest.irkksome.model.api.dao;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,6 +31,11 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB, IrcServer> implements 
     @Override
     public void findById(long id) {
 
+    }
+
+    @Override
+    protected IrcServer initFromCursor(Cursor cursor) {
+        return null;
     }
 
     @Override

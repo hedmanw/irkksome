@@ -3,6 +3,9 @@ package se.alkohest.irkksome.orm;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class GenericDAO<E extends AbstractBean, I extends BeanEntity> {
     public static PersistenceContext persistenceContext;
 
@@ -16,19 +19,29 @@ public abstract class GenericDAO<E extends AbstractBean, I extends BeanEntity> {
         }
     }
 
-    protected Cursor getAll(Class<E> beanEntity) {
+    protected List<I> getAll(Class<E> beanEntity) {
         String table = AnnotationStripper.getTable(beanEntity);
-        return persistenceContext.read(table, queryProjection(beanEntity));
+        Cursor cursor = persistenceContext.read(table, queryProjection(beanEntity));
+        cursor.moveToFirst();
+        List<I> allUsers = new ArrayList<>(cursor.getCount());
+        while (cursor.moveToNext()) {
+            final I bean = initFromCursor(cursor);
+            bean.setId(cursor.getLong(0));
+            allUsers.add(bean);
+        }
+        cursor.close();
+        return allUsers;
     }
 
     protected String[] queryProjection(Class<E> beanEntity) {
-        return null;
+        return AnnotationStripper.getColumnHeads(beanEntity);
     }
 
     protected void makeTransient(I beanEntity) throws ORMException {
-        persistenceContext.delete();
+        persistenceContext.delete(beanEntity.getId());
     }
 
     public abstract void findById(long id);
     protected abstract ContentValues createContentValues(I beanEntity);
+    protected abstract I initFromCursor(Cursor cursor);
 }
