@@ -75,7 +75,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
             listener.setActiveChannel(activeChannel);
         } else {
             activeChannel = null;
-            listener.serverConnected(ircServer);
+            listener.serverRegistered(ircServer);
         }
     }
 
@@ -102,12 +102,12 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void serverConnected() {
-        listener.serverConnected(ircServer);
     }
 
     @Override
     public void serverRegistered(String server, String nick) {
         ircServer.setSelf(userDAO.create(nick));
+        listener.serverRegistered(ircServer);
     }
 
     @Override

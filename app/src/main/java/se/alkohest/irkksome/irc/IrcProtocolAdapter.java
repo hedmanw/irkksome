@@ -142,6 +142,7 @@ public class IrcProtocolAdapter implements IrcProtocol {
                     for (String s : writeWaitList) {
                         write(s);
                     }
+                    listener.serverConnected();
                     start();
                 } catch (IOException e) {
                     e.printStackTrace();

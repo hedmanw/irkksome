@@ -30,7 +30,7 @@ public class CallbackHandler implements ServerCallback {
     }
 
     @Override
-    public void serverConnected(final IrcServer server) {
+    public void serverRegistered(final IrcServer server) {
         context.runOnUiThread(new Runnable() {
             final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 

@@ -68,7 +68,7 @@ public class ServerImplTest extends Specification {
         server.serverConnected()
 
         then:
-        1 * server.listener.serverConnected(server.ircServer)
+        1 * server.listener.serverRegistered(server.ircServer)
     }
 
     def "server Registered"() {

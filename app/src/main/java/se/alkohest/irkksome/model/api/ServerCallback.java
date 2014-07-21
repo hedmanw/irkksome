@@ -11,7 +11,7 @@ import se.alkohest.irkksome.model.entity.IrcUser;
  */
 public interface ServerCallback {
 
-    public void serverConnected(IrcServer server);
+    public void serverRegistered(IrcServer server);
 
     public void serverDisconnected();
 
