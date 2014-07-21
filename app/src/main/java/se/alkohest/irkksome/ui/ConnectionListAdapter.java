@@ -58,7 +58,7 @@ public class ConnectionListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.list_item, null);
         }
 
-        TextView txtListChild = (TextView) convertView.findViewById(R.id.lblListItem);
+        TextView txtListChild = (TextView) convertView.findViewById(R.id.drawer_label_channel);
 
         txtListChild.setText(channel.getName());
         return convertView;
@@ -93,7 +93,7 @@ public class ConnectionListAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.list_group, null);
         }
 
-        TextView lblListHeader = (TextView) convertView.findViewById(R.id.lblListHeader);
+        TextView lblListHeader = (TextView) convertView.findViewById(R.id.drawer_label_server);
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(server.getBackingBean().getUrl());
 

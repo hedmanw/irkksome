@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,18 +44,24 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
         fragmentTransaction.add(R.id.fragment_container, connectFragment);
         fragmentTransaction.commit();
 
-        connectionsList = (ExpandableListView) findViewById(R.id.left_drawer_list);
-        BaseExpandableListAdapter listAdapter = ConnectionListAdapter.getInstance();
-        connectionsList.setAdapter(listAdapter);
-
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final View drawerList = findViewById(R.id.left_drawer);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
-
-        // Set the drawer toggle as the DrawerListener
         drawerLayout.setDrawerListener(drawerToggle);
-
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setHomeButtonEnabled(true);
+
+        connectionsList = (ExpandableListView) findViewById(R.id.left_drawer_list);
+        final ConnectionListAdapter listAdapter = ConnectionListAdapter.getInstance();
+        connectionsList.setAdapter(listAdapter);
+        connectionsList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPos, int childPos, long id) {
+                drawerLayout.closeDrawer(drawerList);
+                activeServer.setActiveChannel(listAdapter.getChild(groupPos, childPos));
+                return true;
+            }
+        });
     }
 
     @Override
