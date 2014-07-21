@@ -59,6 +59,10 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPos, int childPos, long id) {
                 drawerLayout.closeDrawer(drawerList);
+                final Server selectedServer = listAdapter.getGroup(groupPos);
+                if (selectedServer != activeServer) {
+                    activeServer = selectedServer;
+                }
                 activeServer.setActiveChannel(listAdapter.getChild(groupPos, childPos));
                 return true;
             }
