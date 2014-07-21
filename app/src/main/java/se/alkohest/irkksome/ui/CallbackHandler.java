@@ -11,27 +11,35 @@ import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.ServerCallback;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
+import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
 
 /**
  * Created by oed on 7/20/14.
  */
 public class CallbackHandler implements ServerCallback {
-    private ConnectionListAdapter connectionListAdapter;
+    private final ConnectionListAdapter connectionListAdapter;
     private ArrayAdapter<IrcMessage> arrayAdapter;
-    private Activity context;
+    private final Activity context;
+    private final FragmentManager fragmentManager;
 
     public CallbackHandler(Activity context) {
         this.context = context;
+        fragmentManager = context.getFragmentManager();
         connectionListAdapter = ConnectionListAdapter.getInstance();
     }
 
     @Override
-    public void serverConnected() {
+    public void serverConnected(final IrcServer server) {
         context.runOnUiThread(new Runnable() {
+            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
             @Override
             public void run() {
-                context.setTitle("Connected as fuck");
+                context.setTitle(server.getUrl());
+                ServerInfoFragment serverInfoFragment = ServerInfoFragment.getInstance(server);
+                fragmentTransaction.replace(R.id.fragment_container, serverInfoFragment);
+                fragmentTransaction.commit();
             }
         });
     }
@@ -44,7 +52,6 @@ public class CallbackHandler implements ServerCallback {
     @Override
     public void setActiveChannel(final IrcChannel channel) {
         arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, channel.getMessages());
-        final FragmentManager fragmentManager = context.getFragmentManager();
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         context.runOnUiThread(new Runnable() {

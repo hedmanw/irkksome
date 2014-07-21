@@ -3,6 +3,7 @@ package se.alkohest.irkksome.model.api;
 import java.util.List;
 
 import se.alkohest.irkksome.model.entity.IrcChannel;
+import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
 
 /**
@@ -10,7 +11,7 @@ import se.alkohest.irkksome.model.entity.IrcUser;
  */
 public interface ServerCallback {
 
-    public void serverConnected();
+    public void serverConnected(IrcServer server);
 
     public void serverDisconnected();
 

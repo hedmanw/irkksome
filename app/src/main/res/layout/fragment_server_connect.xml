@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/server_connect_nickname"
-        android:hint="Nickname"
+        android:hint="@string/hint_nickname"
         android:text="fest"/>
 
     <Button

@@ -68,7 +68,7 @@ public class ServerImplTest extends Specification {
         server.serverConnected("cool_server", "fest")
 
         then:
-        1 * server.listener.serverConnected()
+        1 * server.listener.serverConnected(server.ircServer)
         server.ircServer.getSelf().name == "fest"
     }
 
