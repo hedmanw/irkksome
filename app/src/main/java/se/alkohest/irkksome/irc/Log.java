@@ -5,7 +5,7 @@ public class Log {
 
     Log(Class logOwner) {
         String className = logOwner.getName();
-        tag = className;
+        tag = className.substring(className.lastIndexOf('.') + 1);
     }
 
     public void e(String message) {
