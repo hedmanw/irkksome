@@ -14,11 +14,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // By reflection or some other cool shit, find all our EBs to be persisted and make SQL Create statements for them
+        final String sql =
+                "CREATE TABLE t_user(" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "name TEXT NOT NULL" +
+                ");";
+        db.execSQL(sql);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Same same
+        // Alter table statements
     }
 }

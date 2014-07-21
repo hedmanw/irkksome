@@ -2,6 +2,7 @@ package se.alkohest.irkksome.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 
 import se.alkohest.irkksome.orm.ORMException;
 import se.alkohest.irkksome.orm.PersistenceContext;
@@ -27,8 +28,8 @@ public class SQLitePersistenceContext implements PersistenceContext {
     }
 
     @Override
-    public ContentValues read(long id) {
-        return null;
+    public Cursor read(String table, String[] projection) {
+        return database.read(table, projection, null, null, null);
     }
 
     @Override

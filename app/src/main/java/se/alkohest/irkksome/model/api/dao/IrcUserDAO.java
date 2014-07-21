@@ -1,6 +1,10 @@
 package se.alkohest.irkksome.model.api.dao;
 
 import android.content.ContentValues;
+import android.database.Cursor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import se.alkohest.irkksome.model.api.local.IrcUserDAOLocal;
 import se.alkohest.irkksome.model.entity.IrcUser;
@@ -15,6 +19,19 @@ public class IrcUserDAO extends GenericDAO<IrcUserEB, IrcUser> implements IrcUse
         return ircUser;
     }
 
+    public List<IrcUser> getAllPersisted() {
+        Cursor cursor = getAll(IrcUserEB.class);
+        cursor.moveToFirst();
+        List<IrcUser> allUsers = new ArrayList<>(cursor.getCount());
+        while (cursor.moveToNext()) {
+            IrcUser ircUser = create(cursor.getString(1));
+            ircUser.setId(cursor.getLong(0));
+            allUsers.add(ircUser);
+        }
+        cursor.close();
+        return allUsers;
+    }
+
     @Override
     public boolean compare(IrcUser user, String nick) {
         return user.getName().toLowerCase().equals(nick.toLowerCase());
@@ -22,6 +39,8 @@ public class IrcUserDAO extends GenericDAO<IrcUserEB, IrcUser> implements IrcUse
 
     @Override
     protected ContentValues createContentValues(IrcUser bean) {
-        return null;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", bean.getName());
+        return contentValues;
     }
 }

@@ -1,7 +1,7 @@
 package se.alkohest.irkksome.orm
 
-import se.alkohest.irkksome.orm.sillygradle.FuckYouGradle
-import se.alkohest.irkksome.orm.sillygradle.GradleSucks
+import se.alkohest.irkksome.model.impl.FuckYouGradle
+import se.alkohest.irkksome.model.impl.GradleSucks
 import spock.lang.Specification
 
 public class AnnotationStripperTest extends Specification{

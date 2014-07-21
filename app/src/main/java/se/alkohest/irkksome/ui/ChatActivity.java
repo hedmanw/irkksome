@@ -14,9 +14,11 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 
 import se.alkohest.irkksome.R;
+import se.alkohest.irkksome.db.SQLitePersistenceContext;
 import se.alkohest.irkksome.irc.Log;
 import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.api.ServerManager;
+import se.alkohest.irkksome.orm.GenericDAO;
 
 public class ChatActivity extends Activity implements ServerConnectFragment.OnFragmentInteractionListener {
     private static final Log LOG = Log.getInstance(ChatActivity.class);
@@ -28,6 +30,7 @@ public class ChatActivity extends Activity implements ServerConnectFragment.OnFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GenericDAO.persistenceContext = new SQLitePersistenceContext(this);
         setContentView(R.layout.activity_main_drawers);
         ConnectionListAdapter.setInstance(this, serverManager.getServers());
 

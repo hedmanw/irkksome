@@ -2,7 +2,9 @@ package se.alkohest.irkksome.model.impl;
 
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
+import se.alkohest.irkksome.orm.Table;
 
+@Table("t_user")
 public class IrcUserEB extends AbstractBean implements IrcUser {
     private String name;
 
