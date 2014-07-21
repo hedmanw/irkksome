@@ -27,8 +27,8 @@ public class ServerManager {
         return servers;
     }
 
-    public void shutDownServer(/* Argument? */) {
-        // Mappa IrcServer -> Server?
+    public void shutDownServer(Server server) {
+        server.disconnect();
     }
 
 }

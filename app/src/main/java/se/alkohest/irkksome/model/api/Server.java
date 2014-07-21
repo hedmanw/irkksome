@@ -20,4 +20,6 @@ public interface Server {
     public IrcChannel getActiveChannel();
 
     public void changeNick(String nick);
+
+    public void disconnect();
 }
