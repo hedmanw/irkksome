@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
-import se.alkohest.irkksome.irc.Log;
 
 public class ServerConnectFragment extends Fragment {
     public static final String ARG_HOSTNAME = "hostname";
@@ -57,7 +56,10 @@ public class ServerConnectFragment extends Fragment {
     }
 
     public void connectPressed() {
-        Log.getInstance(getClass()).i("Pressed button!");
+        View connectButton = getView().findViewById(R.id.server_connect_button);
+        connectButton.setVisibility(View.GONE);
+        View progressBar = getView().findViewById(R.id.server_connect_progressbar);
+        progressBar.setVisibility(View.VISIBLE);
         if (listener != null) {
             Bundle bundle = new Bundle();
             bundle.putString(ARG_HOSTNAME, getOptionValue(R.id.server_connect_host));
