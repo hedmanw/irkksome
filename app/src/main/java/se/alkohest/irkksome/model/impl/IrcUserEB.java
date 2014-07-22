@@ -1,7 +1,10 @@
 package se.alkohest.irkksome.model.impl;
 
+import android.content.ContentValues;
+
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
+import se.alkohest.irkksome.orm.BeanEntity;
 import se.alkohest.irkksome.orm.Table;
 
 @Table("t_user")
@@ -25,13 +28,18 @@ public class IrcUserEB extends AbstractBean implements IrcUser {
 
         IrcUserEB ircUserEB = (IrcUserEB) o;
 
-        if (!name.equals(ircUserEB.name)) return false;
-
-        return true;
+        return name.equals(ircUserEB.name);
     }
 
     @Override
     public int hashCode() {
         return name.hashCode();
+    }
+
+    @Override
+    public ContentValues createRow(BeanEntity beanEntity) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", name);
+        return contentValues;
     }
 }

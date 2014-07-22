@@ -15,11 +15,6 @@ import se.alkohest.irkksome.orm.GenericDAO;
 
 public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implements IrcChannelDAOLocal {
     @Override
-    protected ContentValues createContentValues(IrcChannel beanEntity) {
-        return null;
-    }
-
-    @Override
     public IrcChannel create(String name) {
         IrcChannel ircChannel = new IrcChannelEB();
         ircChannel.setName(name);

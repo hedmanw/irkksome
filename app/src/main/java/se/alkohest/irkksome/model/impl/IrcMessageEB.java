@@ -1,10 +1,13 @@
 package se.alkohest.irkksome.model.impl;
 
+import android.content.ContentValues;
+
 import java.util.Date;
 
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
+import se.alkohest.irkksome.orm.BeanEntity;
 
 public class IrcMessageEB extends AbstractBean implements IrcMessage {
     private String message;
@@ -44,5 +47,10 @@ public class IrcMessageEB extends AbstractBean implements IrcMessage {
     @Override
     public String toString() {
         return author.getName() + ": " + message;
+    }
+
+    @Override
+    public ContentValues createRow(BeanEntity beanEntity) {
+        return null;
     }
 }

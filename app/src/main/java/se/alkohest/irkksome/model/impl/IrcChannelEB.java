@@ -1,5 +1,7 @@
 package se.alkohest.irkksome.model.impl;
 
+import android.content.ContentValues;
+
 import java.util.List;
 import java.util.Map;
 
@@ -7,9 +9,14 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
+import se.alkohest.irkksome.orm.BeanEntity;
+import se.alkohest.irkksome.orm.Table;
+import se.alkohest.irkksome.orm.Transient;
 
+@Table("t_channel")
 public class IrcChannelEB extends AbstractBean implements IrcChannel {
     private String topic;
+    @Transient
     private Map<IrcUser, String> users;
     private List<IrcMessage> messages;
     private String name;
@@ -52,5 +59,13 @@ public class IrcChannelEB extends AbstractBean implements IrcChannel {
     @Override
     public void setMessages(List<IrcMessage> messages) {
         this.messages = messages;
+    }
+
+    @Override
+    public ContentValues createRow(BeanEntity beanEntity) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("topic", topic);
+        contentValues.put("name", name);
+        return contentValues;
     }
 }

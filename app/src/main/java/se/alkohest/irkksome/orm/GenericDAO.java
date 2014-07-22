@@ -1,6 +1,5 @@
 package se.alkohest.irkksome.orm;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ public abstract class GenericDAO<E extends AbstractBean, I extends BeanEntity> {
     public void makePersistent(I beanEntity) {
         String table = AnnotationStripper.getTable(beanEntity);
         try {
-            long pk = persistenceContext.create(table, createContentValues(beanEntity));
+            long pk = persistenceContext.create(table, beanEntity.createRow(beanEntity));
             beanEntity.setId(pk);
         } catch (ORMException e) {
             e.printStackTrace();
@@ -42,6 +41,5 @@ public abstract class GenericDAO<E extends AbstractBean, I extends BeanEntity> {
     }
 
     public abstract void findById(long id);
-    protected abstract ContentValues createContentValues(I beanEntity);
     protected abstract I initFromCursor(Cursor cursor);
 }

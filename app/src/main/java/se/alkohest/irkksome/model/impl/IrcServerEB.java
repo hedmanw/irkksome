@@ -1,5 +1,7 @@
 package se.alkohest.irkksome.model.impl;
 
+import android.content.ContentValues;
+
 import java.util.List;
 import java.util.Set;
 
@@ -7,6 +9,7 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
+import se.alkohest.irkksome.orm.BeanEntity;
 
 public class IrcServerEB extends AbstractBean implements IrcServer {
     private String url;
@@ -52,5 +55,10 @@ public class IrcServerEB extends AbstractBean implements IrcServer {
     @Override
     public void setConnectedChannels(List<IrcChannel> connectedChannels) {
         this.connectedChannels = connectedChannels;
+    }
+
+    @Override
+    public ContentValues createRow(BeanEntity beanEntity) {
+        return null;
     }
 }

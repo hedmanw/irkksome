@@ -30,9 +30,4 @@ public class IrcMessageDAO extends GenericDAO<IrcMessageEB, IrcMessage> implemen
     protected IrcMessage initFromCursor(Cursor cursor) {
         return null;
     }
-
-    @Override
-    protected ContentValues createContentValues(IrcMessage beanEntity) {
-        return null;
-    }
 }
