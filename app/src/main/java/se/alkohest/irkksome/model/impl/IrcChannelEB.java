@@ -9,7 +9,6 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
-import se.alkohest.irkksome.orm.BeanEntity;
 import se.alkohest.irkksome.orm.OneToMany;
 import se.alkohest.irkksome.orm.Table;
 import se.alkohest.irkksome.orm.Transient;
@@ -64,7 +63,7 @@ public class IrcChannelEB extends AbstractBean implements IrcChannel {
     }
 
     @Override
-    public ContentValues createRow(BeanEntity beanEntity) {
+    public ContentValues createRow(long dependentPK) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("topic", topic);
         contentValues.put("name", name);

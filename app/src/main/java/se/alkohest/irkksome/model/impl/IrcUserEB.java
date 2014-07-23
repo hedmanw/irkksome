@@ -4,7 +4,6 @@ import android.content.ContentValues;
 
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
-import se.alkohest.irkksome.orm.BeanEntity;
 import se.alkohest.irkksome.orm.Table;
 
 @Table("t_user")
@@ -37,7 +36,7 @@ public class IrcUserEB extends AbstractBean implements IrcUser {
     }
 
     @Override
-    public ContentValues createRow(BeanEntity beanEntity) {
+    public ContentValues createRow(long dependentPK) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
         return contentValues;

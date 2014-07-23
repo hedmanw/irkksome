@@ -11,7 +11,7 @@ public abstract class GenericDAO<E extends AbstractBean, I extends BeanEntity> {
     public void makePersistent(I beanEntity) {
         String table = AnnotationStripper.getTable(beanEntity);
         try {
-            long pk = persistenceContext.create(table, beanEntity.createRow(beanEntity));
+            long pk = persistenceContext.create(table, beanEntity.createRow(-1));
             beanEntity.setId(pk);
             // now when we have PK, serialize the graph of all OneToMany fields of I passing the pk somehow
         } catch (ORMException e) {

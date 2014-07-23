@@ -5,5 +5,5 @@ import android.content.ContentValues;
 public interface BeanEntity {
     public long getId();
     public void setId(long id);
-    public ContentValues createRow(BeanEntity beanEntity);
+    public ContentValues createRow(long dependentPK);
 }
