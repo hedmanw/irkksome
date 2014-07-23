@@ -10,6 +10,7 @@ import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
 import se.alkohest.irkksome.orm.BeanEntity;
+import se.alkohest.irkksome.orm.OneToMany;
 import se.alkohest.irkksome.orm.Table;
 import se.alkohest.irkksome.orm.Transient;
 
@@ -18,6 +19,7 @@ public class IrcChannelEB extends AbstractBean implements IrcChannel {
     private String topic;
     @Transient
     private Map<IrcUser, String> users;
+    @OneToMany
     private List<IrcMessage> messages;
     private String name;
 
