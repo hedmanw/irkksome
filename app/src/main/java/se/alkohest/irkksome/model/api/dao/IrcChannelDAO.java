@@ -1,12 +1,12 @@
 package se.alkohest.irkksome.model.api.dao;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import se.alkohest.irkksome.model.api.local.IrcChannelDAOLocal;
+import se.alkohest.irkksome.model.api.local.IrcMessageDAOLocal;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcUser;
@@ -14,6 +14,8 @@ import se.alkohest.irkksome.model.impl.IrcChannelEB;
 import se.alkohest.irkksome.orm.GenericDAO;
 
 public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implements IrcChannelDAOLocal {
+    private IrcMessageDAOLocal messageDAO = new IrcMessageDAO();
+
     @Override
     public IrcChannel create(String name) {
         IrcChannel ircChannel = new IrcChannelEB();
@@ -51,5 +53,11 @@ public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implemen
     @Override
     public String removeUser(IrcChannel channel, IrcUser user) {
         return channel.getUsers().remove(user);
+    }
+
+    @Override
+    public void makePersistent(IrcChannel beanEntity) {
+        super.makePersistent(beanEntity);
+        messageDAO.makeAllPersistent(beanEntity.getMessages(), beanEntity.getId());
     }
 }

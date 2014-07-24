@@ -65,6 +65,7 @@ public class IrcChannelEB extends AbstractBean implements IrcChannel {
     @Override
     public ContentValues createRow(long dependentPK) {
         ContentValues contentValues = new ContentValues();
+        contentValues.put("server_id", dependentPK);
         contentValues.put("topic", topic);
         contentValues.put("name", name);
         return contentValues;

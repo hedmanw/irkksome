@@ -9,7 +9,9 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
+import se.alkohest.irkksome.orm.Table;
 
+@Table("t_server")
 public class IrcServerEB extends AbstractBean implements IrcServer {
     private String url;
     private List<IrcChannel> connectedChannels;
@@ -58,6 +60,9 @@ public class IrcServerEB extends AbstractBean implements IrcServer {
 
     @Override
     public ContentValues createRow(long dependentPK) {
-        return null;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("host", url);
+        contentValues.put("self", self.getName());
+        return contentValues;
     }
 }

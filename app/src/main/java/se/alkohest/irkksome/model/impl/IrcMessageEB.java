@@ -7,7 +7,9 @@ import java.util.Date;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
+import se.alkohest.irkksome.orm.Table;
 
+@Table("t_message")
 public class IrcMessageEB extends AbstractBean implements IrcMessage {
     private String message;
     private Date timestamp;
@@ -51,7 +53,7 @@ public class IrcMessageEB extends AbstractBean implements IrcMessage {
     @Override
     public ContentValues createRow(long dependentPK) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("channel", dependentPK);
+        contentValues.put("channel_id", dependentPK);
         contentValues.put("message", message);
 //        contentValues.put("timestamp", ); TODO: serialize/deserialize somehow (check SQLite)
         contentValues.put("author", author.getName());

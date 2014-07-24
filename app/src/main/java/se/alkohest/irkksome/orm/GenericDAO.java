@@ -9,15 +9,23 @@ public abstract class GenericDAO<E extends AbstractBean, I extends BeanEntity> {
     public static PersistenceContext persistenceContext;
 
     public void makePersistent(I beanEntity) {
-        String table = AnnotationStripper.getTable(beanEntity);
-        try {
-            long pk = persistenceContext.create(table, beanEntity.createRow(-1));
-            beanEntity.setId(pk);
-            Class<? extends BeanEntity> oneToManyDependent = AnnotationStripper.getOneToMany(beanEntity);
+        persist(beanEntity, -1);
+    }
 
+    public void makePersistent(I beanEntity, long dependentPK) {
+        persist(beanEntity, dependentPK);
+    }
+
+    public static <T extends BeanEntity> long persist(T beanEntity, long dependentPK) {
+        String table = AnnotationStripper.getTable(beanEntity);
+        long pk = 0;
+        try {
+            pk = persistenceContext.create(table, beanEntity.createRow(dependentPK));
+            beanEntity.setId(pk);
         } catch (ORMException e) {
             e.printStackTrace();
         }
+        return pk;
     }
 
     protected List<I> getAll(Class<E> beanEntity) {

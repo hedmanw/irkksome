@@ -34,13 +34,13 @@ public class AnnotationStripper {
     }
 
     @SuppressWarnings("unchecked")
-    public static Class<? extends BeanEntity> getOneToMany(BeanEntity bean) {
+    public static Class<? extends AbstractBean> getOneToMany(BeanEntity bean) {
         Field[] fields = bean.getClass().getDeclaredFields();
         for (Field field : fields) {
             final OneToMany oneToMany = field.getAnnotation(OneToMany.class);
             if (oneToMany != null) {
                 ParameterizedType genericType = (ParameterizedType) field.getGenericType();
-                return (Class<? extends BeanEntity>) genericType.getActualTypeArguments()[0];
+                return (Class<? extends AbstractBean>) genericType.getActualTypeArguments()[0];
             }
         }
         return null;

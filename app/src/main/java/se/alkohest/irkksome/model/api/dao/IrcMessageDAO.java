@@ -1,9 +1,9 @@
 package se.alkohest.irkksome.model.api.dao;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.Date;
+import java.util.List;
 
 import se.alkohest.irkksome.model.api.local.IrcMessageDAOLocal;
 import se.alkohest.irkksome.model.entity.IrcMessage;
@@ -29,5 +29,12 @@ public class IrcMessageDAO extends GenericDAO<IrcMessageEB, IrcMessage> implemen
     @Override
     protected IrcMessage initFromCursor(Cursor cursor) {
         return null;
+    }
+
+    @Override
+    public void makeAllPersistent(List<IrcMessage> messages, long channelPK) {
+        for (IrcMessage message : messages) {
+            makePersistent(message, channelPK);
+        }
     }
 }
