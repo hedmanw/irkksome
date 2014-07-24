@@ -1,6 +1,7 @@
 package se.alkohest.irkksome.orm
 
 import se.alkohest.irkksome.model.impl.FuckYouGradle
+import se.alkohest.irkksome.model.impl.GradleIsPrettyWorthless
 import se.alkohest.irkksome.model.impl.GradleSucks
 import spock.lang.Specification
 
@@ -37,5 +38,13 @@ public class AnnotationStripperTest extends Specification{
 
         then:
         !heads.contains("transientString")
+    }
+
+    def "Finds oneToMany field"() {
+        when:
+        def oneToMany = AnnotationStripper.getOneToMany(new GradleIsPrettyWorthless())
+
+        then:
+        oneToMany == FuckYouGradle.class
     }
 }

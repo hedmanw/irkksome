@@ -1,6 +1,7 @@
 package se.alkohest.irkksome.orm;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 
 public class AnnotationStripper {
     public static String getTable(BeanEntity bean) {
@@ -30,5 +31,18 @@ public class AnnotationStripper {
             }
         }
         return fieldNames;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static Class<? extends BeanEntity> getOneToMany(BeanEntity bean) {
+        Field[] fields = bean.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            final OneToMany oneToMany = field.getAnnotation(OneToMany.class);
+            if (oneToMany != null) {
+                ParameterizedType genericType = (ParameterizedType) field.getGenericType();
+                return (Class<? extends BeanEntity>) genericType.getActualTypeArguments()[0];
+            }
+        }
+        return null;
     }
 }
