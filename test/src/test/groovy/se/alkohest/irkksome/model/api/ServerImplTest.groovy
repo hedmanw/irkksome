@@ -18,6 +18,7 @@ public class ServerImplTest extends Specification {
     def setup() {
         server.ircProtocol = Mock(IrcProtocol)
         server.listener = Mock(ServerCallback)
+        server.dropListener = Mock(ServerDropAcidListener)
     }
 
     def "prepends hash on channel name"() {
@@ -144,6 +145,7 @@ public class ServerImplTest extends Specification {
 
     def "channel message received"() {
         when:
+        server.backingBean.setSelf(userDAO.create("erland"));
         server.channelMessageReceived("#fest", "lars", "lalalala")
 
         then:
