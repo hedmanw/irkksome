@@ -19,7 +19,7 @@ and idioms, with our product, we show that an IRC-client can be more than a
 terminal or look like a hacker chat. The world of IRC clients for Android 
 are in need for change - and we’re determined to do that!
 
-`Coming soon: support for screen via irssi-proxy`
+`Coming soon: support for irssi-proxy through ssh, with backlog`
 
 ##Specifics
 - Android SDK - API 20
