@@ -14,4 +14,6 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         android:showAsAction="never" />
+    <item android:actionLayout="@layout/actionbar_highlight_button"
+        android:showAsAction="always" />
 </menu>

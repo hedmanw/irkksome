@@ -12,10 +12,12 @@ public class ServerManager implements ServerDropAcidListener {
     private IrcServerDAOLocal serverDAO;
     private List<Server> servers;
     private Server activeServer;
+    private UnreadStack unreadStack;
 
     protected ServerManager() {
         serverDAO = new IrcServerDAO();
         servers = new ArrayList<>();
+        unreadStack = new UnreadStack();
     }
 
     public Server addServer(String host, String nickname) {
@@ -34,12 +36,30 @@ public class ServerManager implements ServerDropAcidListener {
         this.activeServer = activeServer;
     }
 
+    public void setActiveServer(IrcServer server) {
+        for (Server s : servers) {
+            if (s.getBackingBean() == server) {
+                this.activeServer = s;
+                break;
+            }
+        }
+    }
+
     public List<Server> getServers() {
         return servers;
     }
 
     public void shutDownServer(Server server) {
         server.disconnect();
+    }
+
+    public UnreadStack getUnreadStack() {
+        return unreadStack;
+    }
+
+    @Override
+    public void addUnread(UnreadEntity entity, boolean isHilight) {
+        unreadStack.push(entity, isHilight);
     }
 
     @Override

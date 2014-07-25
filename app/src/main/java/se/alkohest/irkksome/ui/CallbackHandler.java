@@ -4,13 +4,17 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.view.Gravity;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Stack;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.ServerCallback;
+import se.alkohest.irkksome.model.api.UnreadStack;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
@@ -20,11 +24,13 @@ public class CallbackHandler implements ServerCallback {
     private UserAdapter userAdapter;
     private final Activity context;
     private final FragmentManager fragmentManager;
+    private UnreadStack unreadStack;
 
-    public CallbackHandler(Activity context) {
+    public CallbackHandler(Activity context, UnreadStack unreadStack) {
         this.context = context;
         fragmentManager = context.getFragmentManager();
         connectionListAdapter = ConnectionListAdapter.getInstance();
+        this.unreadStack = unreadStack;
     }
 
     @Override
@@ -72,6 +78,26 @@ public class CallbackHandler implements ServerCallback {
                 Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                 toast.show();
+            }
+        });
+    }
+
+    @Override
+    public void updateHilights() {
+        context.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                TextView number = (TextView) context.findViewById(R.id.actionbar_notifcation_textview);
+                if (unreadStack.getHilightCount() > 0) {
+                    number.setText(unreadStack.getHilightCount() + "");
+                    ((LinearLayout) number.getParent()).setBackground(context.getResources().getDrawable(R.drawable.highlightbadge_background_highlight));
+                } else if (unreadStack.getMessageCount() > 0) {
+                    number.setText(unreadStack.getMessageCount() + "");
+                    ((LinearLayout) number.getParent()).setBackground(context.getResources().getDrawable(R.drawable.highlightbadge_background));
+                } else {
+                    number.setText("0");
+                    ((LinearLayout) number.getParent()).setBackground(context.getResources().getDrawable(R.drawable.highlightbadge_background_disabled));
+                }
             }
         });
     }

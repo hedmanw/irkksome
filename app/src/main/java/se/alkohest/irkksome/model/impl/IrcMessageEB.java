@@ -16,6 +16,7 @@ public class IrcMessageEB extends AbstractBean implements IrcMessage {
     @Transient
     private Date timestamp;
     private IrcUser author;
+    private boolean hilight;
 
     @Override
     public String getMessage() {
@@ -45,6 +46,16 @@ public class IrcMessageEB extends AbstractBean implements IrcMessage {
     @Override
     public void setAuthor(IrcUser author) {
         this.author = author;
+    }
+
+    @Override
+    public boolean isHilight() {
+        return hilight;
+    }
+
+    @Override
+    public void setHilight(boolean hilight) {
+        this.hilight = hilight;
     }
 
     @Override

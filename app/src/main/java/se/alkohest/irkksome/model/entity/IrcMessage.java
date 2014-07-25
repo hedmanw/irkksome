@@ -16,4 +16,8 @@ public interface IrcMessage extends BeanEntity {
     public IrcUser getAuthor();
 
     public void setAuthor(IrcUser author);
+
+    public boolean isHilight();
+
+    public void setHilight(boolean hilight);
 }

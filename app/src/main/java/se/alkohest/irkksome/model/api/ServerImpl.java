@@ -24,6 +24,7 @@ import se.alkohest.irkksome.model.entity.IrcUser;
 public class ServerImpl implements Server, IrcProtocolListener {
     private IrcProtocol ircProtocol;
     private IrcServer ircServer;
+    private HilightHelper hilightHelper;
     private IrcChannelDAOLocal channelDAO = new IrcChannelDAO();
     private IrcMessageDAOLocal messageDAO = new IrcMessageDAO();
     private IrcServerDAOLocal serverDAO = new IrcServerDAO();
@@ -38,6 +39,9 @@ public class ServerImpl implements Server, IrcProtocolListener {
         ircProtocol = IrcProtocolFactory.getIrcProtocol(ircServer.getUrl(), 6667);
         ircProtocol.setListener(this);
         ircProtocol.connect(nickname, "banned", "banned");
+        hilightHelper = new HilightHelper();
+        // TODO - fix dynamic hilights
+        hilightHelper.addHilight(nickname);
     }
 
     @Override
@@ -109,7 +113,9 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public void setActiveChannel(IrcChannel ircChannel) {
         if (activeChannel != ircChannel) {
-            userJoined(ircChannel.getName(), ircServer.getSelf().getName());
+            listener.setActiveChannel(ircChannel);
+            listener.updateHilights();
+            activeChannel = ircChannel;
         }
     }
 
@@ -223,14 +229,22 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void channelMessageReceived(String channel, String user, String message) {
+        IrcUser ircUser = serverDAO.getUser(ircServer, user);
+        IrcMessage ircMessage = messageDAO.create(ircUser, message, new Date());
         IrcChannel ircChannel;
         if (ircServer.getSelf().getName().equals(channel)) {
             ircChannel = serverDAO.getChannel(ircServer, user);
+            ircMessage.setHilight(true);
         } else {
             ircChannel = serverDAO.getChannel(ircServer, channel);
+            ircMessage.setHilight(hilightHelper.checkMessage(message));
         }
-        IrcUser ircUser = serverDAO.getUser(ircServer, user);
-        IrcMessage ircMessage = messageDAO.create(ircUser, message, new Date());
+
+        if (!ircChannel.equals(activeChannel)) {
+            UnreadEntity entity = new UnreadEntity(ircChannel, ircServer);
+            dropListener.addUnread(entity, ircMessage.isHilight());
+            listener.updateHilights();
+        }
 
         channelDAO.addMessage(ircChannel, ircMessage);
         listener.messageReceived();

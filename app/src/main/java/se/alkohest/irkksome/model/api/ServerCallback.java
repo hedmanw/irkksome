@@ -30,4 +30,6 @@ public interface ServerCallback {
     public void error(String message);
 
     public void updateUserList();
+
+    public void updateHilights();
 }
