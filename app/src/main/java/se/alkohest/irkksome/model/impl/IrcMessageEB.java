@@ -8,10 +8,12 @@ import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
 import se.alkohest.irkksome.orm.Table;
+import se.alkohest.irkksome.orm.Transient;
 
 @Table("t_message")
 public class IrcMessageEB extends AbstractBean implements IrcMessage {
     private String message;
+    @Transient
     private Date timestamp;
     private IrcUser author;
 

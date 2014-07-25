@@ -4,21 +4,26 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import se.alkohest.irkksome.irc.Log;
+import se.alkohest.irkksome.model.impl.IrcChannelEB;
+import se.alkohest.irkksome.model.impl.IrcMessageEB;
+import se.alkohest.irkksome.model.impl.IrcServerEB;
+import se.alkohest.irkksome.model.impl.IrcUserEB;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "irkksome.db";
     private static final int DATABASE_VERSION = 1;
-
+    public static final Log log = Log.getInstance(SQLiteOpenHelper.class);
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        log.i("Init DBHelper");
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        final String sql =
-                "CREATE TABLE t_user(" +
-                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "name TEXT NOT NULL" +
-                ");";
+        log.i("DB ONCREATE");
+        final String sql = SQLMapper.getFullCreateStatement(new Class[] {IrcServerEB.class, IrcChannelEB.class, IrcMessageEB.class, IrcUserEB.class});
+        log.i(sql);
         db.execSQL(sql);
     }
 
