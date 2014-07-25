@@ -9,11 +9,13 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
+import se.alkohest.irkksome.orm.OneToMany;
 import se.alkohest.irkksome.orm.Table;
 
 @Table("t_server")
 public class IrcServerEB extends AbstractBean implements IrcServer {
     private String url;
+    @OneToMany
     private List<IrcChannel> connectedChannels;
     private Set<IrcUser> knownUsers;
     private IrcUser self;

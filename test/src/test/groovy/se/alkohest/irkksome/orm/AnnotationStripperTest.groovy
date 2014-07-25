@@ -22,7 +22,7 @@ public class AnnotationStripperTest extends Specification{
         AnnotationStripper.getTable(notAnnotatedClass) == null
     }
 
-    def "Gets all fields"() {
+    def "Gets all regular fields"() {
         when:
         def heads = AnnotationStripper.getColumnHeads(FuckYouGradle.class)
 
@@ -30,6 +30,15 @@ public class AnnotationStripperTest extends Specification{
         heads[0] == "id"
         heads[1] == "string"
         heads[2] == "count"
+    }
+
+    def "Does not include with OneToMany"() {
+        when:
+        def head = AnnotationStripper.getColumnHeads(GradleIsPrettyWorthless.class)
+
+        then:
+        head[0] == "id"
+        head[1] == "someRelation"
     }
 
     def "Respects transient fields"() {

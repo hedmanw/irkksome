@@ -1,6 +1,5 @@
 package se.alkohest.irkksome.model.api.dao;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
@@ -75,5 +74,11 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB, IrcServer> implements 
     @Override
     public void removeUser(IrcServer ircServer, IrcUser user) {
         ircServer.getKnownUsers().remove(user);
+    }
+
+    @Override
+    public void makePersistent(IrcServer beanEntity) {
+        super.makePersistent(beanEntity);
+        channelDAO.makeAllPersistent(beanEntity.getConnectedChannels(), beanEntity.getId());
     }
 }

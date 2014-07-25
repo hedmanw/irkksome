@@ -4,6 +4,7 @@ import android.database.Cursor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import se.alkohest.irkksome.model.api.local.IrcChannelDAOLocal;
 import se.alkohest.irkksome.model.api.local.IrcMessageDAOLocal;
@@ -53,6 +54,13 @@ public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implemen
     @Override
     public String removeUser(IrcChannel channel, IrcUser user) {
         return channel.getUsers().remove(user);
+    }
+
+    @Override
+    public void makeAllPersistent(List<IrcChannel> channels, long serverPK) {
+        for (IrcChannel channel : channels) {
+            makePersistent(channel, serverPK);
+        }
     }
 
     @Override

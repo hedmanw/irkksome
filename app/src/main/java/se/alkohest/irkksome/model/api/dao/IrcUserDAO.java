@@ -1,6 +1,5 @@
 package se.alkohest.irkksome.model.api.dao;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.List;

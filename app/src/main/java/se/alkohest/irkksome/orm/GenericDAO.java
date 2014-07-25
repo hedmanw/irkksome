@@ -30,7 +30,7 @@ public abstract class GenericDAO<E extends AbstractBean, I extends BeanEntity> {
 
     protected List<I> getAll(Class<E> beanEntity) {
         String table = AnnotationStripper.getTable(beanEntity);
-        Cursor cursor = persistenceContext.read(table, queryProjection(beanEntity));
+        Cursor cursor = persistenceContext.read(table, null);
         cursor.moveToFirst();
         List<I> allUsers = new ArrayList<>(cursor.getCount());
         while (cursor.moveToNext()) {
