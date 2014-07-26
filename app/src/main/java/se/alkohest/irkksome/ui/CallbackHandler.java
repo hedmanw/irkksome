@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
-import java.util.Stack;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.ServerCallback;

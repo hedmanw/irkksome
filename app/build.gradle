@@ -25,5 +25,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'net.schmizz:sshj:0.10.0'
     compile 'com.android.support:support-v4:20.0.0'
 }
