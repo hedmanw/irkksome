@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
-import java.util.Stack;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.ServerCallback;
@@ -34,14 +33,14 @@ public class CallbackHandler implements ServerCallback {
     }
 
     @Override
-    public void showServerInfo(final IrcServer server) {
+    public void showServerInfo(final IrcServer server, final String motd) {
         userAdapter = new UserSetAdapter(server.getKnownUsers());
         context.runOnUiThread(new Runnable() {
             final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
             @Override
             public void run() {
-                ServerInfoFragment serverInfoFragment = ServerInfoFragment.getInstance(server);
+                ServerInfoFragment serverInfoFragment = ServerInfoFragment.getInstance(server, motd);
                 fragmentTransaction.replace(R.id.fragment_container, serverInfoFragment);
                 fragmentTransaction.commit();
 

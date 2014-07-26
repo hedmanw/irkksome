@@ -41,6 +41,7 @@ public class IrcProtocolAdapter implements IrcProtocol {
     private Connection connection;
     private boolean running;
     private List<String> writeWaitList;
+    private StringBuilder motdBuilder;
     private Log log = Log.getInstance(getClass());
 
     public IrcProtocolAdapter(Connection connection) {
@@ -115,6 +116,14 @@ public class IrcProtocolAdapter implements IrcProtocol {
                         parts[2].substring(parts[2].indexOf(HASHTAG), colonIndex - 1),
                         Arrays.asList(parts[2].substring(colonIndex + 1).split(BLANK)));
                 break;
+            case IrcProtocolStrings.RPL_MOTDSTART:
+                motdBuilder = new StringBuilder();
+                break;
+            case IrcProtocolStrings.RPL_MOTD:
+                motdBuilder.append(parts[2].substring(parts[2].indexOf(COLON) + 3) + '\n');
+                break;
+            case IrcProtocolStrings.RPL_ENDOFMOTD:
+                listener.motdReceived(motdBuilder.toString());
             default:
                 try {
                     int errorCode = Integer.parseInt(parts[1]);

@@ -30,6 +30,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     private IrcServerDAOLocal serverDAO = new IrcServerDAO();
     private IrcUserDAOLocal userDAO = new IrcUserDAO();
     private ServerCallback listener;
+    private String motd = "";
 
     private IrcChannel activeChannel;
     private ServerDropAcidListener dropListener;
@@ -65,6 +66,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
+    public String getMotd() {
+        return motd;
+    }
+
+    @Override
     public void disconnect() {
         // TODO - fix custom message
         ircProtocol.disconnect("irkksome dissconect yolo!");
@@ -87,7 +93,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
             listener.setActiveChannel(activeChannel);
         } else {
             activeChannel = null;
-            listener.showServerInfo(ircServer);
+            listener.showServerInfo(ircServer, motd);
         }
     }
 
@@ -130,7 +136,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void showServer() {
-        listener.showServerInfo(ircServer);
+        listener.showServerInfo(ircServer, motd);
         activeChannel = null;
     }
 
@@ -143,7 +149,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public void serverRegistered(String server, String nick) {
         ircServer.setSelf(userDAO.create(nick));
-        listener.showServerInfo(ircServer);
+        listener.showServerInfo(ircServer, motd);
     }
 
     @Override
@@ -268,6 +274,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public void channelListResponse(String name, String topic, String users) {
 
+    }
+
+    @Override
+    public void motdReceived(String motd) {
+        this.motd = motd;
     }
 
     @Override

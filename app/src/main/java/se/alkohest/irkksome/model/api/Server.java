@@ -30,4 +30,6 @@ public interface Server {
     public void setDropListener(ServerDropAcidListener listener);
 
     public void startQuery(String nick);
+
+    public String getMotd();
 }
