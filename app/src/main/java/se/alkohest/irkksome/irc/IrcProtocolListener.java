@@ -108,4 +108,9 @@ public interface IrcProtocolListener {
      */
     public void ircError(String errorCode, String message);
 
+    /**
+     * This is sent when a motd is received.
+     * @param motd - the message of the day
+     */
+    public void motdReceived(String motd);
 }

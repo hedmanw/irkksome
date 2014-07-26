@@ -78,7 +78,7 @@ public class ServerImplTest extends Specification {
 
         then:
         server.ircServer.getSelf().name == "fest"
-        1 * server.listener.showServerInfo(server.ircServer)
+        1 * server.listener.showServerInfo(server.ircServer, motd)
     }
 
     def "nick changed"() {
@@ -158,7 +158,7 @@ public class ServerImplTest extends Specification {
         server.showServer()
 
         then:
-        1 * server.listener.showServerInfo(server.ircServer)
+        1 * server.listener.showServerInfo(server.ircServer, motd)
     }
 
     def "error"() {

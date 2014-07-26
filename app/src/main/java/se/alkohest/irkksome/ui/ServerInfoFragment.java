@@ -14,10 +14,12 @@ import se.alkohest.irkksome.model.entity.IrcServer;
 
 public class ServerInfoFragment extends Fragment {
     private static IrcServer ircServer;
+    private static String motd;
 
-    public static ServerInfoFragment getInstance(IrcServer ircServer) {
+    public static ServerInfoFragment getInstance(IrcServer ircServer, String motd) {
         final ServerInfoFragment serverInfoFragment = new ServerInfoFragment();
         ServerInfoFragment.ircServer = ircServer;
+        ServerInfoFragment.motd = motd;
         return serverInfoFragment;
     }
 
@@ -44,8 +46,10 @@ public class ServerInfoFragment extends Fragment {
         if (ircServer != null) {
             TextView hostname = (TextView) inflatedView.findViewById(R.id.server_info_hostname);
             TextView nickname = (TextView) inflatedView.findViewById(R.id.server_info_nickname);
+            TextView motdView = (TextView) inflatedView.findViewById(R.id.server_motd);
             hostname.setText("Host: " + ircServer.getUrl());
             nickname.setText("Nick: " + ircServer.getSelf().getName());
+            motdView.setText("Message of the day:\n" + motd);
         }
         return inflatedView;
     }

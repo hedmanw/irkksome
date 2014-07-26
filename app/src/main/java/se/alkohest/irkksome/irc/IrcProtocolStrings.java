@@ -27,6 +27,9 @@ public class IrcProtocolStrings {
     public static final String RPL_WHOISCHANNELS = "319";
     public static final String RPL_LIST = "322";
     public static final String RPL_NAMREPLY = "353";
+    public static final String RPL_MOTDSTART = "375";
+    public static final String RPL_MOTD= "372";
+    public static final String RPL_ENDOFMOTD= "376";
 
     // Numeric errors
     public static final String ERR_NOSUCHNICK = "401";
