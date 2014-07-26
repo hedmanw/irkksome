@@ -16,7 +16,7 @@ import se.alkohest.irkksome.orm.Transient;
 @Table("t_server")
 public class IrcServerEB extends AbstractBean implements IrcServer {
     private String url;
-    @OneToMany
+    @OneToMany(IrcChannelEB.class)
     private List<IrcChannel> connectedChannels;
     @Transient
     private Set<IrcUser> knownUsers;

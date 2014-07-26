@@ -52,11 +52,10 @@ public class SQLMapper {
             if (annotations.length == 0) {
                 columns.add(getCreateForColumn(field.getName(), getSQLType(field.getType())));
             }
-            final OneToMany isOneToMany = field.getAnnotation(OneToMany.class);
-            if (isOneToMany != null) {
-                ParameterizedType genericType = (ParameterizedType) field.getGenericType();
-                SqlCreateStatement manyStatement = getCreateStatement((Class<? extends BeanEntity>) genericType.getActualTypeArguments()[0]);
-                manyStatement.addColumn(getCreateForColumn(field.getName() + "_id", getSQLType(long.class)));
+            final OneToMany oneToMany = field.getAnnotation(OneToMany.class);
+            if (oneToMany != null) {
+                SqlCreateStatement manyStatement = getCreateStatement(oneToMany.value());
+                manyStatement.addColumn(getCreateForColumn(tableName.substring(2) + "_id", getSQLType(long.class)));
             }
         }
 

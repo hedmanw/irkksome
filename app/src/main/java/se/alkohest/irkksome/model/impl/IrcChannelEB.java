@@ -18,7 +18,7 @@ public class IrcChannelEB extends AbstractBean implements IrcChannel {
     private String topic;
     @Transient
     private Map<IrcUser, String> users;
-    @OneToMany
+    @OneToMany(IrcMessageEB.class)
     private List<IrcMessage> messages;
     private String name;
 

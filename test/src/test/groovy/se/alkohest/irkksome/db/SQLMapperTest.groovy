@@ -18,6 +18,6 @@ public class SQLMapperTest extends Specification {
         println createStatement
 
         then:
-        createStatement
+        createStatement == "CREATE TABLE t_channel(id INTEGER PRIMARY KEY AUTOINCREMENT, topic TEXT NOT NULL, name TEXT NOT NULL, server_id INTEGER NOT NULL);CREATE TABLE t_server(id INTEGER PRIMARY KEY AUTOINCREMENT, url TEXT NOT NULL, self INTEGER NOT NULL);CREATE TABLE t_user(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL);CREATE TABLE t_message(id INTEGER PRIMARY KEY AUTOINCREMENT, message TEXT NOT NULL, author INTEGER NOT NULL, hilight INTEGER NOT NULL, channel_id INTEGER NOT NULL);"
     }
 }
