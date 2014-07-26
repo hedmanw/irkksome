@@ -18,4 +18,6 @@ public interface IrcChannelDAOLocal {
     public String removeUser(IrcChannel channel, IrcUser user);
 
     public void makeAllPersistent(List<IrcChannel> channels, long serverPK);
+
+    public List<IrcChannel> findChannelsByServer(long serverId);
 }

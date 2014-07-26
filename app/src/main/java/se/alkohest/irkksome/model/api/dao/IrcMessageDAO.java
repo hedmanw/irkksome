@@ -29,7 +29,7 @@ public class IrcMessageDAO extends GenericDAO<IrcMessageEB, IrcMessage> implemen
     }
 
     @Override
-    protected IrcMessage initFromCursor(Cursor cursor) {
+    protected IrcMessage initFromCursor(Cursor cursor, long pk) {
         IrcMessage message = create(userDAO.findById(cursor.getLong(2)), cursor.getString(1), new Date());
         return message;
     }
@@ -39,6 +39,11 @@ public class IrcMessageDAO extends GenericDAO<IrcMessageEB, IrcMessage> implemen
         for (IrcMessage message : messages) {
             makePersistent(message, channelPK);
         }
+    }
+
+    @Override
+    public List<IrcMessage> findMessagesByChannel(long channelPK) {
+        return getAll(IrcMessageEB.class, "channel_id=?", channelPK);
     }
 
     @Override

@@ -33,8 +33,13 @@ public class SQLitePersistenceContext implements PersistenceContext {
     }
 
     @Override
+    public Cursor read(String table, String where, long id) {
+        return database.read(table, null, where, new String[] {String.valueOf(id)}, null);
+    }
+
+    @Override
     public Cursor findById(String table, long id) {
-        return database.read(table, null, "id=?", new String[] {String.valueOf(id)}, null);
+        return read(table, "id=?", id);
     }
 
     @Override

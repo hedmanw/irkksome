@@ -9,4 +9,5 @@ import se.alkohest.irkksome.model.entity.IrcUser;
 public interface IrcMessageDAOLocal {
     public IrcMessage create(IrcUser author, String message, Date timestamp);
     public void makeAllPersistent(List<IrcMessage> messages, long channelPK);
+    public List<IrcMessage> findMessagesByChannel(long channelPK);
 }

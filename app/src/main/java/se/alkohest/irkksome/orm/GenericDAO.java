@@ -35,15 +35,26 @@ public abstract class GenericDAO<E extends AbstractBean, I extends BeanEntity> {
     protected List<I> getAll(Class<E> beanEntity) {
         String table = AnnotationStripper.getTable(beanEntity);
         Cursor cursor = persistenceContext.read(table, null);
+        return initAll(cursor);
+    }
+
+    protected List<I> getAll(Class<E> beanEntity, String where, long id) {
+        String table = AnnotationStripper.getTable(beanEntity);
+        Cursor cursor = persistenceContext.read(table, where, id);
+        return initAll(cursor);
+    }
+
+    private List<I> initAll(Cursor cursor) {
         cursor.moveToFirst();
-        List<I> allUsers = new ArrayList<>(cursor.getCount());
+        List<I> allEntities = new ArrayList<>(cursor.getCount());
         while (cursor.moveToNext()) {
-            final I bean = initFromCursor(cursor);
-            bean.setId(cursor.getLong(0));
-            allUsers.add(bean);
+            final long pk = cursor.getLong(0);
+            final I bean = initFromCursor(cursor, pk);
+            bean.setId(pk);
+            allEntities.add(bean);
         }
         cursor.close();
-        return allUsers;
+        return allEntities;
     }
 
     protected String[] queryProjection(Class<E> beanEntity) {
@@ -55,10 +66,10 @@ public abstract class GenericDAO<E extends AbstractBean, I extends BeanEntity> {
     }
 
     protected I findById(Class<E> beanClass, long id) {
-        return initFromCursor(persistenceContext.findById(AnnotationStripper.getTable(beanClass), id));
+        return initFromCursor(persistenceContext.findById(AnnotationStripper.getTable(beanClass), id), );
     }
 
     public abstract I findById(long id);
 
-    protected abstract I initFromCursor(Cursor cursor);
+    protected abstract I initFromCursor(Cursor cursor, long pk);
 }

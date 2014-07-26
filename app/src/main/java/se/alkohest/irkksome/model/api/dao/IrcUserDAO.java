@@ -23,7 +23,7 @@ public class IrcUserDAO extends GenericDAO<IrcUserEB, IrcUser> implements IrcUse
     }
 
     @Override
-    protected IrcUser initFromCursor(Cursor cursor) {
+    protected IrcUser initFromCursor(Cursor cursor, long pk) {
         IrcUser ircUser = create(cursor.getString(1));
         return ircUser;
     }

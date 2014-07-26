@@ -32,8 +32,9 @@ public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implemen
     }
 
     @Override
-    protected IrcChannel initFromCursor(Cursor cursor) {
+    protected IrcChannel initFromCursor(Cursor cursor, long pk) {
         IrcChannel channel = create(cursor.getString(2));
+        channel.getMessages().addAll(messageDAO.findMessagesByChannel(pk));
         return channel;
     }
 
@@ -62,6 +63,11 @@ public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implemen
         for (IrcChannel channel : channels) {
             makePersistent(channel, serverPK);
         }
+    }
+
+    @Override
+    public List<IrcChannel> findChannelsByServer(long serverId) {
+        return getAll(IrcChannelEB.class, "server_id=?", serverId);
     }
 
     @Override
