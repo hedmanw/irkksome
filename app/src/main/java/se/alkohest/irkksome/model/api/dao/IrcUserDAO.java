@@ -18,8 +18,8 @@ public class IrcUserDAO extends GenericDAO<IrcUserEB, IrcUser> implements IrcUse
     }
 
     @Override
-    public void findById(long id) {
-
+    public IrcUser findById(long id) {
+        return findById(IrcUserEB.class, id);
     }
 
     @Override

@@ -27,13 +27,14 @@ public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implemen
     }
 
     @Override
-    public void findById(long id) {
-
+    public IrcChannel findById(long id) {
+        return findById(IrcChannelEB.class, id);
     }
 
     @Override
     protected IrcChannel initFromCursor(Cursor cursor) {
-        return null;
+        IrcChannel channel = create(cursor.getString(2));
+        return channel;
     }
 
     @Override

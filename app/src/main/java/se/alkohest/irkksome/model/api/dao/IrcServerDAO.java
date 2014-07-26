@@ -27,13 +27,15 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB, IrcServer> implements 
     }
 
     @Override
-    public void findById(long id) {
-
+    public IrcServer findById(long id) {
+        return findById(IrcServerEB.class, id);
     }
 
     @Override
     protected IrcServer initFromCursor(Cursor cursor) {
-        return null;
+        IrcServer ircServer = create(cursor.getString(1));
+        ircServer.setSelf(userDAO.findById(cursor.getLong(2)));
+        return ircServer;
     }
 
     @Override
