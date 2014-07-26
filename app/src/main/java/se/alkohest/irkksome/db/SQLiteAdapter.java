@@ -24,4 +24,9 @@ public class SQLiteAdapter {
         queryBuilder.setTables(table);
         return queryBuilder.query(database, projection, selection, selectionArgs, null, null, sortOrder);
     }
+
+    public int delete(String table, String where, String[] whereArgs) {
+        SQLiteDatabase database = databaseHelper.getWritableDatabase();
+        return database.delete(table, where, whereArgs);
+    }
 }

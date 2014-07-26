@@ -62,7 +62,8 @@ public abstract class GenericDAO<E extends AbstractBean, I extends BeanEntity> {
     }
 
     protected void makeTransient(I beanEntity) throws ORMException {
-        persistenceContext.delete(beanEntity.getId());
+        String table = AnnotationStripper.getTable(beanEntity);
+        persistenceContext.delete(table, beanEntity.getId());
     }
 
     protected I findById(Class<E> beanClass, long id) {

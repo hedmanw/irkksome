@@ -9,6 +9,6 @@ public interface PersistenceContext {
     public Cursor read(String table, String where, long id);
     public Cursor findById(String table, long id);
     public int update() throws ORMException;
-    public int delete(long id) throws ORMException;
+    public int delete(String table, long id) throws ORMException;
 
 }

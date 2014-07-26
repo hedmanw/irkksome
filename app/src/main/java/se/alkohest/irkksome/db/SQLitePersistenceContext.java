@@ -48,7 +48,7 @@ public class SQLitePersistenceContext implements PersistenceContext {
     }
 
     @Override
-    public int delete(long id) throws ORMException {
-        return 0;
+    public int delete(String table, long id) throws ORMException {
+        return database.delete(table, "id=?", new String[] {String.valueOf(id)});
     }
 }
