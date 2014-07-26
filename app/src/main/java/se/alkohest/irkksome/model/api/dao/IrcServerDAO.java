@@ -7,7 +7,6 @@ import java.util.HashSet;
 
 import se.alkohest.irkksome.model.api.local.IrcChannelDAOLocal;
 import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
-import se.alkohest.irkksome.model.api.local.IrcUserDAOLocal;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
@@ -16,7 +15,7 @@ import se.alkohest.irkksome.orm.GenericDAO;
 
 public class IrcServerDAO extends GenericDAO<IrcServerEB, IrcServer> implements IrcServerDAOLocal {
     private IrcChannelDAOLocal channelDAO = new IrcChannelDAO();
-    private IrcUserDAOLocal userDAO = new IrcUserDAO();
+    private IrcUserDAO userDAO = new IrcUserDAO();
 
     @Override
     public IrcServer create(String host) {
@@ -78,6 +77,7 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB, IrcServer> implements 
 
     @Override
     public void makePersistent(IrcServer beanEntity) {
+        userDAO.makePersistent(beanEntity.getSelf());
         super.makePersistent(beanEntity);
         channelDAO.makeAllPersistent(beanEntity.getConnectedChannels(), beanEntity.getId());
     }

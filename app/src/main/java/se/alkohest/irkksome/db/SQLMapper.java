@@ -2,7 +2,6 @@ package se.alkohest.irkksome.db;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,6 +18,7 @@ public class SQLMapper {
         put(Integer.class, "INTEGER");
         put(Long.class, "INTEGER");
         put(Double.class, "DOUBLE");
+        put(boolean.class, "BOOLEAN");
         put(int.class, "INTEGER");
         put(long.class, "INTEGER");
         put(double.class, "DOUBLE");

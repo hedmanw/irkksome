@@ -66,7 +66,7 @@ public class IrcServerEB extends AbstractBean implements IrcServer {
     public ContentValues createRow(long dependentPK) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("host", url);
-        contentValues.put("self", self.getName());
+        contentValues.put("self", self.getId());
         return contentValues;
     }
 }

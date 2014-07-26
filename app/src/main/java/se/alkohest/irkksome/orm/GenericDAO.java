@@ -17,6 +17,9 @@ public abstract class GenericDAO<E extends AbstractBean, I extends BeanEntity> {
     }
 
     public static <T extends BeanEntity> long persist(T beanEntity, long dependentPK) {
+        if (beanEntity.getId() != -1) {
+            return beanEntity.getId();
+        }
         String table = AnnotationStripper.getTable(beanEntity);
         long pk = 0;
         try {

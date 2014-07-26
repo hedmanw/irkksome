@@ -69,7 +69,8 @@ public class IrcMessageEB extends AbstractBean implements IrcMessage {
         contentValues.put("channel_id", dependentPK);
         contentValues.put("message", message);
 //        contentValues.put("timestamp", ); TODO: serialize/deserialize somehow (check SQLite)
-        contentValues.put("author", author.getName());
+        contentValues.put("author", author.getId());
+        contentValues.put("hilight", hilight);
         return contentValues;
     }
 }
