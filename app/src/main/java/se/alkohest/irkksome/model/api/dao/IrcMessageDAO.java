@@ -12,8 +12,6 @@ import se.alkohest.irkksome.model.impl.IrcMessageEB;
 import se.alkohest.irkksome.orm.GenericDAO;
 
 public class IrcMessageDAO extends GenericDAO<IrcMessageEB, IrcMessage> implements IrcMessageDAOLocal {
-    private IrcUserDAO userDAO = new IrcUserDAO();
-
     @Override
     public IrcMessage create(IrcUser author, String message, Date timestamp) {
         IrcMessage ircMessage = new IrcMessageEB();
@@ -42,7 +40,7 @@ public class IrcMessageDAO extends GenericDAO<IrcMessageEB, IrcMessage> implemen
 
     @Override
     public void makePersistent(IrcMessage beanEntity) {
-        userDAO.makePersistent(beanEntity.getAuthor());
+        persist(beanEntity.getAuthor(), -1);
         super.makePersistent(beanEntity);
     }
 }
