@@ -33,7 +33,7 @@ public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implemen
 
     @Override
     protected IrcChannel initFromCursor(Cursor cursor, long pk) {
-        IrcChannel channel = create(cursor.getString(2));
+        IrcChannel channel = create(cursor.getString(1));
         channel.getMessages().addAll(messageDAO.findMessagesByChannel(pk));
         return channel;
     }
