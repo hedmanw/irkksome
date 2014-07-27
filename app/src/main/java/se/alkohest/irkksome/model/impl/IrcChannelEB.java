@@ -15,7 +15,7 @@ import se.alkohest.irkksome.orm.Transient;
 
 @Table("t_channel")
 public class IrcChannelEB extends AbstractBean implements IrcChannel {
-    private String topic;
+    private String topic = "";
     @Transient
     private Map<IrcUser, String> users;
     @OneToMany(IrcMessageEB.class)

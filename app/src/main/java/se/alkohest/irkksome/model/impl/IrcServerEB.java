@@ -72,6 +72,6 @@ public class IrcServerEB extends AbstractBean implements IrcServer {
 
     @Override
     public String toString() {
-        return host + ":" + self.getName();
+        return host + ":" + self.getName() + ":" + connectedChannels.get(0).getName();
     }
 }
