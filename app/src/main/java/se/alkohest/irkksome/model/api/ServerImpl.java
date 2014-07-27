@@ -150,6 +150,9 @@ public class ServerImpl implements Server, IrcProtocolListener {
     public void serverRegistered(String server, String nick) {
         ircServer.setSelf(userDAO.create(nick));
         listener.showServerInfo(ircServer, motd);
+        for (IrcChannel channel : getBackingBean().getConnectedChannels()) {
+            joinChannel(channel.getName());
+        }
     }
 
     @Override

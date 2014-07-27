@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.view.Gravity;
+import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,6 +47,8 @@ public class CallbackHandler implements ServerCallback {
 
                 connectionListAdapter.notifyDataSetChanged();
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
+                // TODO: This is ugly
+                ((ExpandableListView) context.findViewById(R.id.left_drawer_list)).expandGroup(0);
             }
         });
     }

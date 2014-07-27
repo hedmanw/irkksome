@@ -39,9 +39,10 @@ protected void onCreate(Bundle savedInstanceState) {
     GenericDAO.persistenceContext = new SQLitePersistenceContext(this);
     setContentView(R.layout.activity_main_drawers);
     ConnectionListAdapter.setInstance(this, serverManager.getServers());
+    connectionsList = (ExpandableListView) findViewById(R.id.left_drawer_list);
 
     if (savedInstanceState == null) {
-//        serverManager.loadPersisted();
+        serverManager.loadPersisted();
         if (serverManager.getServers().isEmpty()) {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -64,7 +65,6 @@ protected void onCreate(Bundle savedInstanceState) {
     drawerLayout.setDrawerListener(drawerToggle);
     final View leftDrawer = findViewById(R.id.left_drawer);
 
-    connectionsList = (ExpandableListView) findViewById(R.id.left_drawer_list);
     connectionsList.setEmptyView(findViewById(android.R.id.empty));
     final ConnectionListAdapter listAdapter = ConnectionListAdapter.getInstance();
     connectionsList.setAdapter(listAdapter);
