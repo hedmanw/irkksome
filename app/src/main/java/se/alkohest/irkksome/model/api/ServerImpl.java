@@ -37,7 +37,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     public ServerImpl(IrcServer ircServer, String nickname) {
         this.ircServer = ircServer;
-        ircProtocol = IrcProtocolFactory.getIrcProtocol(ircServer.getUrl(), 6667);
+        ircProtocol = IrcProtocolFactory.getIrcProtocol(ircServer.getHost(), 6667);
         ircProtocol.setListener(this);
         ircProtocol.connect(nickname, "banned", "banned");
         hilightHelper = new HilightHelper();

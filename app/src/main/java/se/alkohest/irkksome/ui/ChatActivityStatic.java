@@ -18,7 +18,7 @@ public class ChatActivityStatic {
     public static void showNickChangeDialog(Context context, final Server activeServer) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final EditText popup = new EditText(context);
-        builder.setTitle("Change nick on " + activeServer.getBackingBean().getUrl());
+        builder.setTitle("Change nick on " + activeServer.getBackingBean().getHost());
         builder.setView(popup);
         builder.setPositiveButton(R.string.change_nick, new DialogInterface.OnClickListener() {
             @Override
@@ -32,7 +32,7 @@ public class ChatActivityStatic {
     public static void showJoinChannelDialog(Context context, final Server activeServer) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final EditText popup = new EditText(context);
-        builder.setTitle("Join channel on " + activeServer.getBackingBean().getUrl());
+        builder.setTitle("Join channel on " + activeServer.getBackingBean().getHost());
         builder.setView(popup);
         builder.setPositiveButton(R.string.join_channel, new DialogInterface.OnClickListener() {
             @Override

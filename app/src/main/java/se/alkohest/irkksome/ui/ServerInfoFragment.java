@@ -31,7 +31,7 @@ public class ServerInfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        getActivity().setTitle(ircServer.getUrl());
+        getActivity().setTitle(ircServer.getHost());
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ServerInfoFragment extends Fragment {
             TextView hostname = (TextView) inflatedView.findViewById(R.id.server_info_hostname);
             TextView nickname = (TextView) inflatedView.findViewById(R.id.server_info_nickname);
             TextView motdView = (TextView) inflatedView.findViewById(R.id.server_motd);
-            hostname.setText("Host: " + ircServer.getUrl());
+            hostname.setText("Host: " + ircServer.getHost());
             nickname.setText("Nick: " + ircServer.getSelf().getName());
             motdView.setText("Message of the day:\n" + motd);
         }

@@ -11,6 +11,6 @@ public class IrcServerDAOTest extends Specification {
 
         then:
         ircServer.connectedChannels != null
-        ircServer.url == "localhost"
+        ircServer.host == "localhost"
     }
 }

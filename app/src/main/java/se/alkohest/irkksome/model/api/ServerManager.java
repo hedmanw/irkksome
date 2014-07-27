@@ -20,6 +20,18 @@ public class ServerManager implements ServerDropAcidListener {
         unreadStack = new UnreadStack();
     }
 
+    public void loadPersisted() {
+        List<IrcServer> persisted = serverDAO.getAll();
+        for (IrcServer ircServer : persisted) {
+            Server server = new ServerImpl(ircServer, ircServer.getSelf().getName());
+            server.setDropListener(this);
+            servers.add(server);
+        }
+        if (!persisted.isEmpty()) {
+            setActiveServer(servers.get(0));
+        }
+    }
+
     public Server addServer(String host, String nickname) {
         final IrcServer ircServer = serverDAO.create(host);
         Server server = new ServerImpl(ircServer, nickname);

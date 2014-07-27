@@ -10,9 +10,9 @@ public interface IrcServer extends BeanEntity {
 
     public void setConnectedChannels(List<IrcChannel> channels);
 
-    public String getUrl();
+    public String getHost();
 
-    public void setUrl(String string);
+    public void setHost(String string);
 
     public void setSelf(IrcUser user);
 

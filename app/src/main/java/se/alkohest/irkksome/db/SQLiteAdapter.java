@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
+import se.alkohest.irkksome.irc.Log;
+
 public class SQLiteAdapter {
     private DatabaseHelper databaseHelper;
 
@@ -15,6 +17,7 @@ public class SQLiteAdapter {
 
     public long insert(String table, ContentValues contentValues) {
         SQLiteDatabase database = databaseHelper.getWritableDatabase();
+        Log.getInstance(getClass()).i(table + " " + contentValues.toString());
         return database.insert(table, null, contentValues);
     }
 

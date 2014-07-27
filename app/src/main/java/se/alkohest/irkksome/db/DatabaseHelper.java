@@ -22,9 +22,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         log.i("DB ONCREATE");
-        final String sql = SQLMapper.getFullCreateStatement(new Class[] {IrcServerEB.class, IrcChannelEB.class, IrcMessageEB.class, IrcUserEB.class});
-        log.i(sql);
-        db.execSQL(sql);
+        final String[] create = SQLMapper.getFullCreateStatement(new Class[] {IrcServerEB.class, IrcChannelEB.class, IrcMessageEB.class, IrcUserEB.class});
+        for (String createStatement : create) {
+            log.i(createStatement);
+            db.execSQL(createStatement);
+        }
+
     }
 
     @Override

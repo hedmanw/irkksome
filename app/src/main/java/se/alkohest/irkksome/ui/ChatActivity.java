@@ -14,12 +14,15 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
+import java.util.Arrays;
+
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.db.SQLitePersistenceContext;
 import se.alkohest.irkksome.irc.Log;
 import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.api.UnreadEntity;
+import se.alkohest.irkksome.model.api.dao.IrcServerDAO;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.orm.GenericDAO;
 
@@ -38,11 +41,17 @@ protected void onCreate(Bundle savedInstanceState) {
     ConnectionListAdapter.setInstance(this, serverManager.getServers());
 
     if (savedInstanceState == null) {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        ServerConnectFragment connectFragment = ServerConnectFragment.newInstance();
-        fragmentTransaction.add(R.id.fragment_container, connectFragment);
-        fragmentTransaction.commit();
+//        serverManager.loadPersisted();
+        if (serverManager.getServers().isEmpty()) {
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            ServerConnectFragment connectFragment = ServerConnectFragment.newInstance();
+            fragmentTransaction.add(R.id.fragment_container, connectFragment);
+            fragmentTransaction.commit();
+        }
+        else {
+            serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
+        }
     }
     else {
         // This might require us to loop through all servers and set new CallbackHandlers
@@ -111,6 +120,7 @@ public boolean onOptionsItemSelected(MenuItem item) {
     if (drawerToggle.onOptionsItemSelected(item)) {
         return true;
     }
+    IrcServerDAO serverDAO = new IrcServerDAO();
 
     int id = item.getItemId();
     switch (id) {
@@ -124,6 +134,12 @@ public boolean onOptionsItemSelected(MenuItem item) {
             break;
         case R.id.action_change_nick:
             ChatActivityStatic.showNickChangeDialog(this, serverManager.getActiveServer());
+            break;
+        case R.id.action_persist:
+            serverDAO.makePersistent(serverManager.getActiveServer().getBackingBean());
+            break;
+        case R.id.action_getservers:
+            LOG.i(Arrays.toString(serverDAO.getAll().toArray()));
             break;
     }
     return true;

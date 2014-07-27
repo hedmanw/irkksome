@@ -18,4 +18,6 @@ public interface IrcServerDAOLocal {
     public void removeUser(IrcServer ircServer, IrcUser user);
 
     public void removeChannel(IrcServer ircServer, IrcChannel channel);
+
+    public List<IrcServer> getAll();
 }

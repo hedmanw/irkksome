@@ -15,7 +15,7 @@ import se.alkohest.irkksome.orm.Transient;
 
 @Table("t_server")
 public class IrcServerEB extends AbstractBean implements IrcServer {
-    private String url;
+    private String host;
     @OneToMany(IrcChannelEB.class)
     private List<IrcChannel> connectedChannels;
     @Transient
@@ -23,13 +23,13 @@ public class IrcServerEB extends AbstractBean implements IrcServer {
     private IrcUser self;
 
     @Override
-    public String getUrl() {
-        return url;
+    public String getHost() {
+        return host;
     }
 
     @Override
-    public void setUrl(String url) {
-        this.url = url;
+    public void setHost(String host) {
+        this.host = host;
     }
 
     @Override
@@ -65,8 +65,13 @@ public class IrcServerEB extends AbstractBean implements IrcServer {
     @Override
     public ContentValues createRow(long dependentPK) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("host", url);
+        contentValues.put("host", host);
         contentValues.put("self", self.getId());
         return contentValues;
+    }
+
+    @Override
+    public String toString() {
+        return host + ":" + self.getName();
     }
 }

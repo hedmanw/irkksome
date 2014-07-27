@@ -27,15 +27,16 @@ public class SQLMapper {
 
     private static final Map<Class, SqlCreateStatement> sqlCreateCache = new HashMap<>();
 
-    public static String getFullCreateStatement(Class[] persistedBeans) {
-        StringBuilder stringBuilder = new StringBuilder();
+    public static String[] getFullCreateStatement(Class[] persistedBeans) {
+        String[] creates = new String[persistedBeans.length];
+        int index = 0;
         for(Class<? extends BeanEntity> bean : persistedBeans) {
             getCreateStatement(bean);
         }
         for (SqlCreateStatement sqlCreateStatement : sqlCreateCache.values()) {
-            stringBuilder.append(sqlCreateStatement.toString());
+            creates[index++] = sqlCreateStatement.toString();
         }
-        return stringBuilder.toString();
+        return creates;
     }
 
     private static SqlCreateStatement getCreateStatement(Class<? extends BeanEntity> bean) {

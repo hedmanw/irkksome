@@ -4,6 +4,7 @@ import android.database.Cursor;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import se.alkohest.irkksome.model.api.local.IrcChannelDAOLocal;
 import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
@@ -22,7 +23,7 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB, IrcServer> implements 
         IrcServer ircServer = new IrcServerEB();
         ircServer.setConnectedChannels(new ArrayList<IrcChannel>());
         ircServer.setKnownUsers(new HashSet<IrcUser>());
-        ircServer.setUrl(host);
+        ircServer.setHost(host);
         return ircServer;
     }
 
@@ -76,6 +77,11 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB, IrcServer> implements 
     @Override
     public void removeUser(IrcServer ircServer, IrcUser user) {
         ircServer.getKnownUsers().remove(user);
+    }
+
+    @Override
+    public List<IrcServer> getAll() {
+        return getAll(IrcServerEB.class);
     }
 
     @Override

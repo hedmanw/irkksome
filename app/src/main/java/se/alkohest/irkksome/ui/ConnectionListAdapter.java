@@ -95,7 +95,7 @@ public class ConnectionListAdapter extends BaseExpandableListAdapter {
 
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.drawer_label_server);
         lblListHeader.setTypeface(null, Typeface.BOLD);
-        lblListHeader.setText(server.getBackingBean().getUrl());
+        lblListHeader.setText(server.getBackingBean().getHost());
 
         return convertView;
     }

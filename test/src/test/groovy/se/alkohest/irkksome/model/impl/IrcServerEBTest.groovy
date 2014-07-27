@@ -9,10 +9,10 @@ public class IrcServerEBTest extends Specification {
     def "getSetUrl"() {
         when:
         def server = new IrcServerEB()
-        server.setUrl("localhost:8080")
+        server.setHost("localhost:8080")
 
         then:
-        server.url == "localhost:8080"
+        server.host == "localhost:8080"
     }
 
     def "getSetConnectedChannels"() {
