@@ -17,6 +17,7 @@ public class IrcProtocolAdapter implements IrcProtocol {
     private static final String HASHTAG = "#";
     private static final String BANG = "!";
     private static final String LINE_BREAK = "\r\n";
+    private final Log LOG = Log.getInstance(this.getClass());
 
     private static Set<String> errorType1 = new HashSet<String>() {{
         add(IrcProtocolStrings.ERR_NOSUCHNICK);

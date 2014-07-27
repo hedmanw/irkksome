@@ -38,7 +38,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
         this.ircServer = ircServer;
         ircProtocol = IrcProtocolFactory.getIrcProtocol(ircServer.getUrl(), 6667);
         ircProtocol.setListener(this);
-        ircProtocol.connect(nickname, "banned", "banned");
+        ircProtocol.connect("oed", "banned", "banned", "qwerqwer");
         hilightHelper = new HilightHelper();
         // TODO - fix dynamic hilights
         hilightHelper.addHilight(nickname);

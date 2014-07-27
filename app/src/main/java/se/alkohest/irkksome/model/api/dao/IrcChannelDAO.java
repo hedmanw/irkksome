@@ -5,6 +5,7 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import se.alkohest.irkksome.model.api.local.IrcChannelDAOLocal;
 import se.alkohest.irkksome.model.api.local.IrcMessageDAOLocal;
@@ -22,7 +23,7 @@ public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implemen
         IrcChannel ircChannel = new IrcChannelEB();
         ircChannel.setName(name);
         ircChannel.setMessages(new ArrayList<IrcMessage>());
-        ircChannel.setUsers(new HashMap<IrcUser, String>());
+        ircChannel.setUsers(new ConcurrentHashMap<IrcUser, String>());
         return ircChannel;
     }
 
