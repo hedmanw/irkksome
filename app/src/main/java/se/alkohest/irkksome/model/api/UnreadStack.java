@@ -20,9 +20,11 @@ public class UnreadStack {
 
     public void push(UnreadEntity entity, boolean isHiligth) {
         if (isHiligth) {
-            hilights.push(entity);
+            hilights.remove(entity);
             messages.remove(entity);
+            hilights.push(entity);
         } else {
+            messages.remove(entity);
             messages.push(entity);
         }
     }
