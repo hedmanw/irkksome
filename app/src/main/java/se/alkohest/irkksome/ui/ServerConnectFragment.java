@@ -33,6 +33,7 @@ public class ServerConnectFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        getActivity().setTitle(R.string.title_connect_to_server);
     }
 
     @Override
