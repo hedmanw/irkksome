@@ -1,4 +1,4 @@
-irkksome
+irkksome ![asdf](app/src/main/res/drawable-mdpi/ic_launcher.png)
 ========
 
 Android IRC client. New and improved!
