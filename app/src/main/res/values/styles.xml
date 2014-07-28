@@ -5,4 +5,22 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="base_string">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="category_hint" parent="base_string">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/tip_font_color</item>
+    </style>
+
+    <style name="list_item.hint" parent="base_string">
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:textColor">@color/tip_font_color</item>
+    </style>
+
+    <style name="list_item" parent="base_string">
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>

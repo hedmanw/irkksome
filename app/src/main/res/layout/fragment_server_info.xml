@@ -11,53 +11,32 @@
         android:orientation="vertical"
         android:padding="16dp">
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:textColor="@color/tip_font_color"
+            style="@style/category_hint"
             android:text="Basics" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
+            style="@style/list_item"
             android:id="@+id/server_info_hostname" />
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/tip_font_color"
-            android:layout_marginBottom="16dp"
+            style="@style/list_item.hint"
             android:text="@string/hint_hostname" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
+            style="@style/list_item"
             android:id="@+id/server_info_nickname" />
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/tip_font_color"
-            android:layout_marginBottom="16dp"
+            style="@style/list_item.hint"
             android:text="@string/hint_nickname" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
+            style="@style/list_item"
             android:id="@+id/server_motd" />
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/tip_font_color"
-            android:layout_marginBottom="16dp"
+            style="@style/list_item.hint"
             android:text="@string/hint_motd" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:textColor="@color/tip_font_color"
+            style="@style/category_hint"
             android:text="Connected channels" />
     </LinearLayout>
 
