@@ -5,22 +5,60 @@
     android:orientation="vertical"
     tools:context=".ui.ServerInfoFragment">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hint_hostname"
-        android:id="@+id/server_info_hostname"/>
+        android:orientation="vertical"
+        android:padding="16dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/tip_font_color"
+            android:text="Basics" />
 
-    <TextView
-        android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/server_info_hostname" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/tip_font_color"
+            android:text="@string/hint_hostname" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/server_info_nickname" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/tip_font_color"
+            android:text="@string/hint_nickname" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:typeface="monospace"
+            android:id="@+id/server_motd" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/tip_font_color"
+            android:text="@string/hint_motd" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/tip_font_color"
+            android:layout_marginTop="16dp"
+            android:text="Connected channels" />
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hint_nickname"
-        android:id="@+id/server_info_nickname" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:typeface="monospace"
-        android:id="@+id/server_motd" />
-
+        android:id="@+id/server_info_connected_channels"/>
 </LinearLayout>

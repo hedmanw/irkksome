@@ -17,5 +17,6 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="notification_no_servers">You\'re not connected to any servers yet!</string>
+    <string name="hint_motd">Message of the day</string>
 
 </resources>
