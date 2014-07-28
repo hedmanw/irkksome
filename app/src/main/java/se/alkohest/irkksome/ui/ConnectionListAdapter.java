@@ -3,7 +3,6 @@ package se.alkohest.irkksome.ui;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +54,7 @@ public class ConnectionListAdapter extends BaseExpandableListAdapter {
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.list_item, null);
+            convertView = inflater.inflate(R.layout.connection_list_channel, null);
         }
 
         TextView txtListChild = (TextView) convertView.findViewById(R.id.drawer_label_channel);
@@ -90,11 +89,10 @@ public class ConnectionListAdapter extends BaseExpandableListAdapter {
         Server server = getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.list_group, null);
+            convertView = inflater.inflate(R.layout.connection_list_server, null);
         }
 
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.drawer_label_server);
-        lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(server.getBackingBean().getHost());
 
         return convertView;
