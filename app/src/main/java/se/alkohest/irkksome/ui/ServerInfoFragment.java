@@ -19,7 +19,7 @@ public class ServerInfoFragment extends Fragment {
     public static ServerInfoFragment getInstance(IrcServer ircServer, String motd) {
         final ServerInfoFragment serverInfoFragment = new ServerInfoFragment();
         ServerInfoFragment.ircServer = ircServer;
-        ServerInfoFragment.motd = motd;
+        ServerInfoFragment.motd = motd.trim();
         return serverInfoFragment;
     }
 
@@ -48,9 +48,11 @@ public class ServerInfoFragment extends Fragment {
             TextView hostname = (TextView) inflatedView.findViewById(R.id.server_info_hostname);
             TextView nickname = (TextView) inflatedView.findViewById(R.id.server_info_nickname);
             TextView motdView = (TextView) inflatedView.findViewById(R.id.server_motd);
-            hostname.setText("Host: " + ircServer.getHost());
-            nickname.setText("Nick: " + ircServer.getSelf().getName());
-            motdView.setText("Message of the day:\n" + motd);
+            hostname.setText(ircServer.getHost());
+            nickname.setText(ircServer.getSelf().getName());
+            if (motd.length() > 20) {
+                motdView.setText(motd.substring(0, 20) + "[...]");
+            }
         }
         return inflatedView;
     }

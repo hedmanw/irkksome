@@ -20,32 +20,37 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
             android:id="@+id/server_info_hostname" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/tip_font_color"
+            android:layout_marginBottom="16dp"
             android:text="@string/hint_hostname" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="20sp"
             android:id="@+id/server_info_nickname" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/tip_font_color"
+            android:layout_marginBottom="16dp"
             android:text="@string/hint_nickname" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:typeface="monospace"
+            android:textSize="20sp"
             android:id="@+id/server_motd" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/tip_font_color"
+            android:layout_marginBottom="16dp"
             android:text="@string/hint_motd" />
 
         <TextView
@@ -53,12 +58,22 @@
             android:layout_height="wrap_content"
             android:textSize="13sp"
             android:textColor="@color/tip_font_color"
-            android:layout_marginTop="16dp"
             android:text="Connected channels" />
     </LinearLayout>
 
-    <ListView
-        android:layout_width="match_parent"
+    <!--<ListView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/server_info_connected_channels"/>-->
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/server_info_connected_channels"/>
+        android:layout_marginLeft="16dp"
+        android:text="[List of connected channels]"/>
+    <Button
+        android:id="@+id/server_info_join_channel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:text="@string/join_channel" />
 </LinearLayout>
