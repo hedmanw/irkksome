@@ -85,6 +85,11 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB, IrcServer> implements 
     }
 
     @Override
+    public void dropServer(IrcServer backingBean) {
+        makeTransient(backingBean);
+    }
+
+    @Override
     public void makePersistent(IrcServer beanEntity) {
         userDAO.makePersistent(beanEntity.getSelf());
         super.makePersistent(beanEntity);

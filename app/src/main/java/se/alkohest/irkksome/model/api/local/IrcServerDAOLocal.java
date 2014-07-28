@@ -20,4 +20,6 @@ public interface IrcServerDAOLocal {
     public void removeChannel(IrcServer ircServer, IrcChannel channel);
 
     public List<IrcServer> getAll();
+
+    void dropServer(IrcServer backingBean);
 }
