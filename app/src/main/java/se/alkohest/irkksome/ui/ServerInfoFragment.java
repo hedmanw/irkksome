@@ -37,6 +37,7 @@ public class ServerInfoFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.findItem(R.id.action_leave_channel).setEnabled(false);
+        menu.findItem(R.id.action_drop_server).setVisible(true);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

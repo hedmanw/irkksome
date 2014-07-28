@@ -73,7 +73,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public void disconnect() {
         // TODO - fix custom message
-        ircProtocol.disconnect("irkksome dissconect yolo!");
+        ircProtocol.disconnect("irkksome <3");
     }
 
     @Override
@@ -287,8 +287,8 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public void serverDisconnected() {
         // TODO - this method should try to reconnect if its appropriate?
-        listener.serverDisconnected();
         dropListener.dropServer(this);
+        listener.serverDisconnected();
     }
 
     @Override

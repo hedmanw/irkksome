@@ -20,6 +20,11 @@
     <item android:id="@+id/action_getservers"
         android:title="Get all servers!"
         android:showAsAction="never" />
+    <item android:id="@+id/action_drop_server"
+        android:title="Drop server"
+        android:showAsAction="ifRoom"
+        android:visible="false" />
     <item android:actionLayout="@layout/actionbar_highlight_button"
         android:showAsAction="always" />
+
 </menu>

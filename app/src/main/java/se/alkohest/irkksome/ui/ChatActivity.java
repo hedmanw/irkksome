@@ -141,6 +141,9 @@ public boolean onOptionsItemSelected(MenuItem item) {
         case R.id.action_getservers:
             LOG.i(Arrays.toString(serverDAO.getAll().toArray()));
             break;
+        case R.id.action_drop_server:
+            serverManager.getActiveServer().disconnect();
+            break;
     }
     return true;
 }
