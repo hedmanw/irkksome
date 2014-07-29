@@ -7,6 +7,7 @@ import java.util.Date;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
+import se.alkohest.irkksome.orm.OneToOne;
 import se.alkohest.irkksome.orm.Table;
 import se.alkohest.irkksome.orm.Transient;
 
@@ -15,6 +16,7 @@ public class IrcMessageEB extends AbstractBean implements IrcMessage {
     private String message;
     @Transient
     private Date timestamp;
+    @OneToOne(IrcUserEB.class)
     private IrcUser author;
     private boolean hilight;
 

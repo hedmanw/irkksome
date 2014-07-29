@@ -10,6 +10,7 @@ import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
 import se.alkohest.irkksome.orm.OneToMany;
+import se.alkohest.irkksome.orm.OneToOne;
 import se.alkohest.irkksome.orm.Table;
 import se.alkohest.irkksome.orm.Transient;
 
@@ -20,6 +21,7 @@ public class IrcServerEB extends AbstractBean implements IrcServer {
     private List<IrcChannel> connectedChannels;
     @Transient
     private Set<IrcUser> knownUsers;
+    @OneToOne(IrcUserEB.class)
     private IrcUser self;
 
     @Override

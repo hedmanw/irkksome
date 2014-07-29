@@ -56,10 +56,6 @@ public abstract class GenericDAO<E extends AbstractBean, I extends BeanEntity> {
         return allEntities;
     }
 
-    protected String[] queryProjection(Class<E> beanEntity) {
-        return AnnotationStripper.getColumnHeads(beanEntity);
-    }
-
     protected void makeTransient(I beanEntity) {
         String table = AnnotationStripper.getTable(beanEntity);
         try {

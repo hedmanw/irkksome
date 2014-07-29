@@ -1,6 +1,5 @@
 package se.alkohest.irkksome.db;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,6 +10,7 @@ import java.util.Map;
 import se.alkohest.irkksome.orm.AnnotationStripper;
 import se.alkohest.irkksome.orm.BeanEntity;
 import se.alkohest.irkksome.orm.OneToMany;
+import se.alkohest.irkksome.orm.Transient;
 
 public class SQLMapper {
     private static final Map<Class, String> sqlTypes = new HashMap<Class, String>() {{
@@ -49,14 +49,14 @@ public class SQLMapper {
         Field[] fields = bean.getDeclaredFields();
         List<String> columns = new ArrayList<>();
         for (Field field : fields) {
-            Annotation[] annotations = field.getAnnotations();
-            if (annotations.length == 0) {
-                columns.add(getCreateForColumn(field.getName(), getSQLType(field.getType())));
-            }
             final OneToMany oneToMany = field.getAnnotation(OneToMany.class);
+            final Transient isTransient = field.getAnnotation(Transient.class);
             if (oneToMany != null) {
                 SqlCreateStatement manyStatement = getCreateStatement(oneToMany.value());
                 manyStatement.addColumn(getCreateForColumn(tableName.substring(2) + "_id", getSQLType(long.class)));
+            }
+            else if (isTransient == null) {
+                columns.add(getCreateForColumn(field.getName(), getSQLType(field.getType())));
             }
         }
 
