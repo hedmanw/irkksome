@@ -83,7 +83,7 @@ public class ServerImplTest extends Specification {
 
         then:
         server.ircServer.getSelf().name == "fest"
-        1 * server.listener.showServerInfo(server.ircServer, motd)
+        1 * server.listener.showServerInfo(server.ircServer, server.motd)
     }
 
     def "nick changed"() {
@@ -163,10 +163,10 @@ public class ServerImplTest extends Specification {
         server.showServer()
 
         then:
-        1 * server.listener.showServerInfo(server.ircServer, motd)
+        1 * server.listener.showServerInfo(server.ircServer, server.motd)
     }
 
-    def "error"() {
+    def "test error msg"() {
         when:
         server.ircError("433", "nick already in use")
 

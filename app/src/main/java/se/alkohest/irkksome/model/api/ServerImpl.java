@@ -74,7 +74,6 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public void disconnect() {
         // TODO - fix custom message
-        serverDAO.dropServer(getBackingBean());
         ircProtocol.disconnect("irkksome <3");
     }
 

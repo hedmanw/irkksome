@@ -14,7 +14,7 @@ public class IrcChannelDAOTest extends Specification {
         then:
         ircChannel.messages != null
         ircChannel.users != null
-        ircChannel.topic == null
+        ircChannel.topic == ""
     }
 
     def "Add message to channel"() {
