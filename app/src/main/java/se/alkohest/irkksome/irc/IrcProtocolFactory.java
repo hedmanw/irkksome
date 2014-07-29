@@ -5,9 +5,15 @@ package se.alkohest.irkksome.irc;
  */
 public class IrcProtocolFactory {
 
-    public static IrcProtocol getIrcProtocol(String host, int port) {
-        return new IrcProtocolAdapter(new NormalConnection(host, port));
-//        return new IrcProtocolAdapter(new SSHConnection("hubben.chalmers.it", "joelto", "lösen här",
-//                "localhost", 50001, NormalConnection.class));
+    public static IrcProtocol getIrcProtocol(ConnectionData data) {
+        if (data.isUseSSH()) {
+            return new IrcProtocolAdapter(getSSHConnection(data));
+        }
+        return new IrcProtocolAdapter(new NormalConnection(data.getHost(), data.getPort()));
+    }
+
+    private static Connection getSSHConnection(ConnectionData data) {
+        return new SSHConnection(data.getSshHost(), data.getSshUser(), data.getSshPass(),
+                data.getHost(), data.getPort(), NormalConnection.class);
     }
 }

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.db.SQLitePersistenceContext;
+import se.alkohest.irkksome.irc.ConnectionData;
 import se.alkohest.irkksome.irc.Log;
 import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.api.ServerManager;
@@ -152,10 +153,8 @@ public void startQuery(View view) {
 }
 
 @Override
-public void onFragmentInteraction(Bundle bundle) {
-    String hostName = bundle.getString(ServerConnectFragment.ARG_HOSTNAME);
-    String nickname = bundle.getString(ServerConnectFragment.ARG_NICKNAME);
-    serverManager.setActiveServer(serverManager.addServer(hostName, nickname));
+public void onFragmentInteraction(ConnectionData data) {
+    serverManager.setActiveServer(serverManager.addServer(data));
 
     serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
     ConnectionListAdapter.getInstance().notifyDataSetChanged();

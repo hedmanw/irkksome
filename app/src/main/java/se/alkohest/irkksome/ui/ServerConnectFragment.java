@@ -9,13 +9,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
+import se.alkohest.irkksome.irc.ConnectionData;
 
 public class ServerConnectFragment extends Fragment {
-    public static final String ARG_HOSTNAME = "hostname";
-    public static final String ARG_NICKNAME = "nickname";
+    public static final String ARG_DATA = "data";
 
     private OnFragmentInteractionListener listener;
 
@@ -61,10 +62,19 @@ public class ServerConnectFragment extends Fragment {
         View progressBar = getView().findViewById(R.id.server_connect_progressbar);
         progressBar.setVisibility(View.VISIBLE);
         if (listener != null) {
-            Bundle bundle = new Bundle();
-            bundle.putString(ARG_HOSTNAME, getOptionValue(R.id.server_connect_host));
-            bundle.putString(ARG_NICKNAME, getOptionValue(R.id.server_connect_nickname));
-            listener.onFragmentInteraction(bundle);
+            ConnectionData data = new ConnectionData();
+            data.setHost(getOptionValue(R.id.server_connect_host));
+            data.setNickname(getOptionValue(R.id.server_connect_nickname));
+            data.setRealname(getOptionValue(R.id.server_connect_realname));
+            data.setUsername(getOptionValue(R.id.server_connect_username));
+            data.setPassword(getOptionValue(R.id.server_connect_password));
+            data.setPort(Integer.parseInt(getOptionValue(R.id.server_connect_port)));
+            data.setUseSSH(((CheckBox) getView().findViewById(R.id.server_connect_use_ssh)).isChecked());
+            data.setSshHost(getOptionValue(R.id.server_connect_sshHost));
+            data.setSshUser(getOptionValue(R.id.server_connect_sshUser));
+            data.setSshPass(getOptionValue(R.id.server_connect_sshPass));
+            data.setUseSSL(false);
+            listener.onFragmentInteraction(data);
         }
     }
 
@@ -89,6 +99,6 @@ public class ServerConnectFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Bundle bundle);
+        public void onFragmentInteraction(ConnectionData data);
     }
 }

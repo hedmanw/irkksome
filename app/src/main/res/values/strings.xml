@@ -17,5 +17,13 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="notification_no_servers">You\'re not connected to any servers yet!</string>
+    <string name="hint_realname">realname</string>
+    <string name="hint_sshHost">SSH hostname</string>
+    <string name="hint_sshUser">SSH username</string>
+    <string name="hint_sshPass">SSH password</string>
+    <string name="connect_ssh_checkbox">Use ssh</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_port">Port</string>
+    <string name="hint_password">Password</string>
 
 </resources>
