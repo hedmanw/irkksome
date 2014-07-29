@@ -17,6 +17,7 @@ public class IrcProtocolAdapter implements IrcProtocol {
     private static final String HASHTAG = "#";
     private static final String BANG = "!";
     private static final String LINE_BREAK = "\r\n";
+    private final Log LOG = Log.getInstance(this.getClass());
 
     private static Set<String> errorType1 = new HashSet<String>() {{
         add(IrcProtocolStrings.ERR_NOSUCHNICK);
@@ -220,7 +221,9 @@ public class IrcProtocolAdapter implements IrcProtocol {
 
     @Override
     public void connect(String nick, String login, String realName, String password) {
-        setPassword(password);
+        if (password != null) {
+            setPassword(password);
+        }
         connect(nick, login, realName);
     }
 

@@ -11,7 +11,7 @@
         android:id="@+id/server_connect_host"
         android:hint="@string/hint_hostname"
         android:inputType="textUri"
-        android:text="irc.chalmers.it" />
+        android:text="localhost" />
 
     <EditText
         android:layout_width="match_parent"
@@ -20,6 +20,63 @@
         android:hint="@string/hint_nickname"
         android:text="fest"
         android:inputType="textUri" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_realname"
+        android:hint="@string/hint_realname"
+        android:text="banned"
+        android:inputType="textUri" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_username"
+        android:hint="@string/hint_username"
+        android:text="banned"
+        android:inputType="textUri" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_password"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_port"
+        android:hint="@string/hint_port"
+        android:inputType="number" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/connect_ssh_checkbox"
+        android:id="@+id/server_connect_use_ssh" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_sshHost"
+        android:hint="@string/hint_sshHost"
+        android:inputType="textUri" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_sshUser"
+        android:hint="@string/hint_sshUser"
+        android:inputType="textUri" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_sshPass"
+        android:hint="@string/hint_sshPass"
+        android:inputType="textPassword" />
 
     <Button
         android:layout_width="wrap_content"

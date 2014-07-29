@@ -23,5 +23,6 @@ are in need for change - and we’re determined to do that!
 
 ##Specifics
 - Android SDK - API 20
+- sshj 0.10.0
 - Groovy 1.8.6
 - Spock 0.6-groovy-1.8

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import se.alkohest.irkksome.irc.ConnectionData;
 import se.alkohest.irkksome.irc.IrcProtocol;
 import se.alkohest.irkksome.irc.IrcProtocolFactory;
 import se.alkohest.irkksome.irc.IrcProtocolListener;
@@ -35,14 +36,14 @@ public class ServerImpl implements Server, IrcProtocolListener {
     private IrcChannel activeChannel;
     private ServerDropAcidListener dropListener;
 
-    public ServerImpl(IrcServer ircServer, String nickname) {
+    public ServerImpl(IrcServer ircServer, ConnectionData data) {
         this.ircServer = ircServer;
-        ircProtocol = IrcProtocolFactory.getIrcProtocol(ircServer.getHost(), 6667);
+        ircProtocol = IrcProtocolFactory.getIrcProtocol(data);
         ircProtocol.setListener(this);
-        ircProtocol.connect(nickname, "banned", "banned");
+        ircProtocol.connect(data.getNickname(), data.getUsername(), data.getRealname(), data.getPassword());
         hilightHelper = new HilightHelper();
         // TODO - fix dynamic hilights
-        hilightHelper.addHilight(nickname);
+        hilightHelper.addHilight(data.getNickname());
     }
 
     @Override

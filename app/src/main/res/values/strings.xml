@@ -20,5 +20,13 @@
     <string name="hint_motd">Message of the day (click for more) TODO: Implement</string>
     <string name="title_connect_to_server">Connect to a server</string>
     <string name="category_hint_connect_new_server">Connect to a new server</string>
+    <string name="hint_realname">realname</string>
+    <string name="hint_sshHost">SSH hostname</string>
+    <string name="hint_sshUser">SSH username</string>
+    <string name="hint_sshPass">SSH password</string>
+    <string name="connect_ssh_checkbox">Use ssh</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_port">Port</string>
+    <string name="hint_password">Password</string>
 
 </resources>

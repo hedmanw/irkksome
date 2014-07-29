@@ -1,5 +1,6 @@
 package se.alkohest.irkksome.model.api
 
+import se.alkohest.irkksome.irc.ConnectionData
 import se.alkohest.irkksome.irc.IrcProtocol
 import se.alkohest.irkksome.model.api.dao.IrcChannelDAO
 import se.alkohest.irkksome.model.api.dao.IrcMessageDAO
@@ -9,13 +10,17 @@ import spock.lang.Specification
 
 public class ServerImplTest extends Specification {
     def backingServer = new IrcServerDAO().create("localhost")
-    def server = new ServerImpl(backingServer, "fest")
+    def data = new ConnectionData()
+    def server
     def serverDAO = new IrcServerDAO()
     def channelDAO = new IrcChannelDAO()
     def messageDAO = new IrcMessageDAO()
     def userDAO = new IrcUserDAO()
 
     def setup() {
+        data.nickname = "test"
+        data.username = ""
+        server = new ServerImpl(backingServer, data)
         server.ircProtocol = Mock(IrcProtocol)
         server.listener = Mock(ServerCallback)
         server.dropListener = Mock(ServerDropAcidListener)
