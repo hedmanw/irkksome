@@ -2,19 +2,19 @@ use Irssi;
 
 $VERSION = "0.1";
 %IRSSI = (
-	authors         => "oed",
-	name            => "irkksome",
-	url             => "http://github.com/ircsex/irkksome",
-	description     => "This script integrates irssi with irkksome.",
-	license         => "Beerware",
-	changed         => "2014-07-29"
+    authors         => "oed",
+    name            => "irkksome",
+    url             => "http://github.com/ircsex/irkksome",
+    description     => "This script integrates irssi with irkksome.",
+    license         => "Beerware",
+    changed         => "2014-07-29"
 );
 
 sub send_backlog {
-	my ($server, $time) = @_;
-	Irssi::print("Sending backlog..");
+    my ($server, $time) = @_;
+    Irssi::print("Sending backlog..");
     signals_remove();
-	Irssi::signal_add_first('print text', 'stop_signal');
+    Irssi::signal_add_first('print text', 'stop_signal');
     my $file = Irssi::settings_get_str('irkksome_log');
     open(LOG, "< $file");
 
@@ -25,16 +25,16 @@ sub send_backlog {
     }
     close(LOG);
 
-	Irssi::signal_remove('print text', 'stop_signal');
+    Irssi::signal_remove('print text', 'stop_signal');
     signals_add();
 }
 
 sub stop_signal {
-	Irssi::signal_stop();
+    Irssi::signal_stop();
 }
 
 sub handle_command {
-	my ($client, $args, $data) = @_;
+    my ($client, $args, $data) = @_;
     my $server = $client->{server};
     my ($command, $arg) = split(/ /, $args, 2);
     Irssi::print("command: $command | $arg");
