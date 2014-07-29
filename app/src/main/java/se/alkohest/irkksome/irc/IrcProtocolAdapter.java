@@ -137,13 +137,11 @@ public class IrcProtocolAdapter implements IrcProtocol {
     }
 
     private void handleError(String[] parts) {
-        String message = parts[2];
         if (errorType1.contains(parts[1])) {
-            message = parts[2].split(BLANK, 2)[1].replace(COLON, EMPTY);
+            listener.ircError(parts[1], parts[2].split(BLANK, 2)[1].replace(COLON, EMPTY));
         } else if (errorType2.contains(parts[1])) {
-            message = parts[2].replace(COLON, EMPTY);
+            listener.ircError(parts[1], parts[2].replace(COLON, EMPTY));
         }
-        listener.ircError(parts[1], message);
     }
 
     private void handlePing(String[] parts) {
@@ -288,6 +286,11 @@ public class IrcProtocolAdapter implements IrcProtocol {
     @Override
     public void invite(String nick, String channel) {
         write(IrcProtocolStrings.INVITE + BLANK + nick + BLANK + channel);
+    }
+
+    @Override
+    public void sendBacklogRequest(long unixTime) {
+        write(IrcProtocolStrings.PROXY + BLANK + IrcProtocolStrings.BACKLOG + BLANK + unixTime);
     }
 
     @Override
