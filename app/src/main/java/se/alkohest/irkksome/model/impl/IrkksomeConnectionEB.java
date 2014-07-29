@@ -142,4 +142,22 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
         contentValues.put("sshPort", sshPort);
         return contentValues;
     }
+
+    @Override
+    public String toString() {
+        return "IrkksomeConnectionEB{" +
+                "host='" + host + '\'' +
+                ", port=" + port +
+                ", nickname='" + nickname + '\'' +
+                ", username='" + username + '\'' +
+                ", realname='" + realname + '\'' +
+                ", password='" + password + '\'' +
+                ", useSSL=" + useSSL +
+                ", useSSH=" + useSSH +
+                ", sshHost='" + sshHost + '\'' +
+                ", sshUser='" + sshUser + '\'' +
+                ", sshPass='" + sshPass + '\'' +
+                ", sshPort=" + sshPort +
+                '}';
+    }
 }

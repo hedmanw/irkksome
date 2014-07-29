@@ -23,8 +23,9 @@ import se.alkohest.irkksome.irc.Log;
 import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.api.UnreadEntity;
-import se.alkohest.irkksome.model.api.dao.IrcServerDAO;
+import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
 import se.alkohest.irkksome.model.entity.IrcChannel;
+import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.orm.GenericDAO;
 
 public class ChatActivity extends Activity implements ServerConnectFragment.OnFragmentInteractionListener {
@@ -121,7 +122,6 @@ public boolean onOptionsItemSelected(MenuItem item) {
     if (drawerToggle.onOptionsItemSelected(item)) {
         return true;
     }
-    IrcServerDAO serverDAO = new IrcServerDAO();
 
     int id = item.getItemId();
     switch (id) {
@@ -137,10 +137,10 @@ public boolean onOptionsItemSelected(MenuItem item) {
             ChatActivityStatic.showNickChangeDialog(this, serverManager.getActiveServer());
             break;
         case R.id.action_persist:
-            serverDAO.makePersistent(serverManager.getActiveServer().getBackingBean());
+
             break;
         case R.id.action_getservers:
-            LOG.i(Arrays.toString(serverDAO.getAll().toArray()));
+            LOG.i(Arrays.toString(new IrkksomeConnectionDAO().getAll().toArray()));
             break;
         case R.id.action_drop_server:
             serverManager.getActiveServer().disconnect();
@@ -172,9 +172,9 @@ public void startQuery(View view) {
 }
 
 @Override
-public void onFragmentInteraction(ConnectionData data) {
+public void onFragmentInteraction(IrkksomeConnection data) {
     serverManager.setActiveServer(serverManager.addServer(data));
-
+    new IrkksomeConnectionDAO().makePersistent(data);
     serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
     ConnectionListAdapter.getInstance().notifyDataSetChanged();
     connectionsList.expandGroup(serverManager.getServers().indexOf(serverManager.getActiveServer()));

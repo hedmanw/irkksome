@@ -36,7 +36,6 @@ public class SQLMapper {
         }
         for (SqlCreateStatement sqlCreateStatement : sqlCreateCache.values()) {
             creates[index++] = sqlCreateStatement.toString();
-            System.out.println(sqlCreateStatement.toString());
         }
         return creates;
     }

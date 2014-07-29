@@ -1,5 +1,7 @@
 package se.alkohest.irkksome.model.api.local;
 
+import java.util.List;
+
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 
 /**
@@ -7,4 +9,5 @@ import se.alkohest.irkksome.model.entity.IrkksomeConnection;
  */
 public interface IrkksomeConnectionDAOLocal {
     public IrkksomeConnection create();
+    public List<IrkksomeConnection> getAll();
 }

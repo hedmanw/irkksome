@@ -13,8 +13,8 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
-import se.alkohest.irkksome.irc.ConnectionData;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
+import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 
 public class ServerConnectFragment extends Fragment {
     private OnFragmentInteractionListener listener;
@@ -62,7 +62,7 @@ public class ServerConnectFragment extends Fragment {
         View progressBar = getView().findViewById(R.id.server_connect_progressbar);
         progressBar.setVisibility(View.VISIBLE);
         if (listener != null) {
-            ConnectionData data = new IrkksomeConnectionDAO().create();
+            IrkksomeConnection data = new IrkksomeConnectionDAO().create();
             data.setHost(getOptionValue(R.id.server_connect_host));
             data.setNickname(getOptionValue(R.id.server_connect_nickname));
             data.setRealname(getOptionValue(R.id.server_connect_realname));
@@ -99,6 +99,6 @@ public class ServerConnectFragment extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(ConnectionData data);
+        public void onFragmentInteraction(IrkksomeConnection data);
     }
 }

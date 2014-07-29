@@ -2,6 +2,8 @@ package se.alkohest.irkksome.model.api.dao;
 
 import android.database.Cursor;
 
+import java.util.List;
+
 import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
@@ -14,6 +16,11 @@ public class IrkksomeConnectionDAO extends GenericDAO<IrkksomeConnectionEB, Irkk
     @Override
     public IrkksomeConnection create() {
         return new IrkksomeConnectionEB();
+    }
+
+    @Override
+    public List<IrkksomeConnection> getAll() {
+        return getAll(IrkksomeConnectionEB.class);
     }
 
     @Override
