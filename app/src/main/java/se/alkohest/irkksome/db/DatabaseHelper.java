@@ -9,6 +9,7 @@ import se.alkohest.irkksome.model.impl.IrcChannelEB;
 import se.alkohest.irkksome.model.impl.IrcMessageEB;
 import se.alkohest.irkksome.model.impl.IrcServerEB;
 import se.alkohest.irkksome.model.impl.IrcUserEB;
+import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "irkksome.db";
@@ -22,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         log.i("DB ONCREATE");
-        final String[] create = SQLMapper.getFullCreateStatement(new Class[] {IrcServerEB.class, IrcChannelEB.class, IrcMessageEB.class, IrcUserEB.class});
+        final String[] create = SQLMapper.getFullCreateStatement(new Class[] {IrcServerEB.class, IrcChannelEB.class, IrcMessageEB.class, IrcUserEB.class, IrkksomeConnectionEB.class});
         for (String createStatement : create) {
             log.i(createStatement);
             db.execSQL(createStatement);

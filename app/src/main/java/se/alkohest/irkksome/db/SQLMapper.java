@@ -9,6 +9,7 @@ import java.util.Map;
 
 import se.alkohest.irkksome.orm.AnnotationStripper;
 import se.alkohest.irkksome.orm.BeanEntity;
+import se.alkohest.irkksome.orm.Nullable;
 import se.alkohest.irkksome.orm.OneToMany;
 import se.alkohest.irkksome.orm.Transient;
 
@@ -18,7 +19,7 @@ public class SQLMapper {
         put(Integer.class, "INTEGER");
         put(Long.class, "INTEGER");
         put(Double.class, "DOUBLE");
-        put(boolean.class, "BOOLEAN");
+        put(boolean.class, "INTEGER");
         put(int.class, "INTEGER");
         put(long.class, "INTEGER");
         put(double.class, "DOUBLE");
@@ -35,6 +36,7 @@ public class SQLMapper {
         }
         for (SqlCreateStatement sqlCreateStatement : sqlCreateCache.values()) {
             creates[index++] = sqlCreateStatement.toString();
+            System.out.println(sqlCreateStatement.toString());
         }
         return creates;
     }
@@ -50,13 +52,18 @@ public class SQLMapper {
         List<String> columns = new ArrayList<>();
         for (Field field : fields) {
             final OneToMany oneToMany = field.getAnnotation(OneToMany.class);
-            final Transient isTransient = field.getAnnotation(Transient.class);
+            final boolean nonTransient = field.getAnnotation(Transient.class) == null;
+            final boolean isNullable = field.getAnnotation(Nullable.class) != null;
             if (oneToMany != null) {
                 SqlCreateStatement manyStatement = getCreateStatement(oneToMany.value());
-                manyStatement.addColumn(getCreateForColumn(tableName.substring(2) + "_id", getSQLType(long.class)));
+                manyStatement.addColumn(getCreateForColumn(tableName.substring(2) + "_id", getSQLType(long.class), false));
             }
-            else if (isTransient == null) {
-                columns.add(getCreateForColumn(field.getName(), getSQLType(field.getType())));
+            else if (nonTransient) {
+                if (isNullable) {
+                    columns.add(getCreateForColumn(field.getName(), getSQLType(field.getType()), true));
+                } else {
+                    columns.add(getCreateForColumn(field.getName(), getSQLType(field.getType()), false));
+                }
             }
         }
 
@@ -65,8 +72,12 @@ public class SQLMapper {
         return createStatement;
     }
 
-    private static String getCreateForColumn(String columnName, String type) {
-        return ", " + columnName + ' ' + type + " NOT NULL";
+    private static String getCreateForColumn(String columnName, String type, boolean nullable) {
+        String createStatement = ", " + columnName + ' ' + type;
+        if (!nullable) {
+            createStatement += " NOT NULL";
+        }
+        return createStatement;
     }
 
     private static String getSQLType(Class fieldClass) {

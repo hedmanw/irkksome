@@ -18,11 +18,24 @@ public class IrkksomeConnectionDAO extends GenericDAO<IrkksomeConnectionEB, Irkk
 
     @Override
     public IrkksomeConnection findById(long id) {
-        return null;
+        return findById(IrkksomeConnectionEB.class, id);
     }
 
     @Override
     protected IrkksomeConnection initFromCursor(Cursor cursor, long pk) {
-        return null;
+        IrkksomeConnection irkksomeConnection = create();
+        irkksomeConnection.setHost(cursor.getString(1));
+        irkksomeConnection.setPort(cursor.getInt(2));
+        irkksomeConnection.setNickname(cursor.getString(3));
+        irkksomeConnection.setUsername(cursor.getString(4));
+        irkksomeConnection.setRealname(cursor.getString(5));
+        irkksomeConnection.setPassword(cursor.getString(6));
+        irkksomeConnection.setUseSSL(cursor.getInt(7) > 0);
+        irkksomeConnection.setUseSSH(cursor.getInt(8) > 0);
+        irkksomeConnection.setSshHost(cursor.getString(9));
+        irkksomeConnection.setSshUser(cursor.getString(10));
+        irkksomeConnection.setSshPass(cursor.getString(11));
+        irkksomeConnection.setSshPort(cursor.getInt(12));
+        return irkksomeConnection;
     }
 }
