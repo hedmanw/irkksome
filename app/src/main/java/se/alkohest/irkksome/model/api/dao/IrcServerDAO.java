@@ -36,7 +36,7 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB, IrcServer> implements 
     protected IrcServer initFromCursor(Cursor cursor, long pk) {
         IrcServer ircServer = create(cursor.getString(1));
         ircServer.setSelf(userDAO.findById(cursor.getLong(2)));
-        ircServer.getConnectedChannels().addAll(channelDAO.findChannelsByServer(pk));
+        ircServer.setConnectedChannels(channelDAO.findChannelsByServer(pk));
         return ircServer;
     }
 

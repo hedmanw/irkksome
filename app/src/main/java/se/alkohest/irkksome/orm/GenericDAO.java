@@ -5,7 +5,6 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: make DAOs overriding makePersistent to persist OneToOne rels use annotation and use reflection to persist those entities
 public abstract class GenericDAO<E extends AbstractBean, I extends BeanEntity> {
     public static PersistenceContext persistenceContext;
 

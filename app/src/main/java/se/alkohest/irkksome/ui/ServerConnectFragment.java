@@ -14,10 +14,9 @@ import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.irc.ConnectionData;
+import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
 
 public class ServerConnectFragment extends Fragment {
-    public static final String ARG_DATA = "data";
-
     private OnFragmentInteractionListener listener;
 
     public static ServerConnectFragment newInstance() {
@@ -63,7 +62,7 @@ public class ServerConnectFragment extends Fragment {
         View progressBar = getView().findViewById(R.id.server_connect_progressbar);
         progressBar.setVisibility(View.VISIBLE);
         if (listener != null) {
-            ConnectionData data = new ConnectionData();
+            ConnectionData data = new IrkksomeConnectionDAO().create();
             data.setHost(getOptionValue(R.id.server_connect_host));
             data.setNickname(getOptionValue(R.id.server_connect_nickname));
             data.setRealname(getOptionValue(R.id.server_connect_realname));

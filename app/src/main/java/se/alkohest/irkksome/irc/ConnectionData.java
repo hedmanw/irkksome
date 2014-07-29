@@ -1,119 +1,51 @@
 package se.alkohest.irkksome.irc;
 
-import java.io.Serializable;
+public interface ConnectionData {
+    public String getPassword();
 
-/**
- * Created by oed on 7/29/14.
- */
-public class ConnectionData implements Serializable {
-    private String host;
-    private int port;
-    private String nickname;
-    private String username;
-    private String realname;
-    private String password;
+    public void setPassword(String password);
 
-    private boolean useSSL;
+    public boolean isUseSSH();
 
-    private boolean useSSH;
-    private String sshHost;
-    private String sshUser;
-    private String sshPass;
-    private int sshPort = 22;
+    public void setUseSSH(boolean useSSH);
 
-    public String getPassword() {
-        return password;
-    }
+    public int getSshPort();
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public void setSshPort(int sshPort);
 
-    public boolean isUseSSH() {
-        return useSSH;
-    }
+    public String getSshPass();
 
-    public void setUseSSH(boolean useSSH) {
-        this.useSSH = useSSH;
-    }
+    public void setSshPass(String sshPass);
 
-    public int getSshPort() {
-        return sshPort;
-    }
+    public String getSshUser();
 
-    public void setSshPort(int sshPort) {
-        this.sshPort = sshPort;
-    }
+    public void setSshUser(String sshUser);
 
-    public String getSshPass() {
-        return sshPass;
-    }
+    public String getSshHost();
 
-    public void setSshPass(String sshPass) {
-        this.sshPass = sshPass;
-    }
+    public void setSshHost(String sshHost);
 
-    public String getSshUser() {
-        return sshUser;
-    }
+    public String getRealname();
 
-    public void setSshUser(String sshUser) {
-        this.sshUser = sshUser;
-    }
+    public void setRealname(String realname);
 
-    public String getSshHost() {
-        return sshHost;
-    }
+    public String getUsername();
 
-    public void setSshHost(String sshHost) {
-        this.sshHost = sshHost;
-    }
+    public void setUsername(String username);
 
-    public String getRealname() {
-        return realname;
-    }
+    public String getNickname();
 
-    public void setRealname(String realname) {
-        this.realname = realname;
-    }
+    public void setNickname(String nickname);
 
-    public String getUsername() {
-        return username;
-    }
+    public int getPort();
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public void setPort(int port);
 
-    public String getNickname() {
-        return nickname;
-    }
+    public String getHost();
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
+    public void setHost(String host);
 
-    public int getPort() {
-        return port;
-    }
+    public boolean isUseSSL();
 
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public boolean isUseSSL() {
-        return useSSL;
-    }
-
-    public void setUseSSL(boolean useSSL) {
-        this.useSSL = useSSL;
-    }
+    public void setUseSSL(boolean useSSL);
 }
