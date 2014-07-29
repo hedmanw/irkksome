@@ -145,6 +145,8 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void serverConnected() {
+        // TODO - this should only be done when we know we connect to irrsi?
+        ircProtocol.sendBacklogRequest(123);
     }
 
     @Override

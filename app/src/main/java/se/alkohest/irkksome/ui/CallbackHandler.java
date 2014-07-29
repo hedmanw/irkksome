@@ -135,7 +135,9 @@ public class CallbackHandler implements ServerCallback {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ChannelFragment.getAdapter().notifyDataSetChanged();
+                if (ChannelFragment.getAdapter() != null) {
+                    ChannelFragment.getAdapter().notifyDataSetChanged();
+                }
             }
         });
     }
