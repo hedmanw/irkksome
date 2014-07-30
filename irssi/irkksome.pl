@@ -1,6 +1,6 @@
 use Irssi;
 
-$VERSION = "0.4";
+$VERSION = "0.5";
 %IRSSI = (
     name            => "irkksome",
     description     => "Integrates irssi with the irkksome android app.",
@@ -19,14 +19,18 @@ sub send_backlog {
     my $file = Irssi::settings_get_str('irkksome_log');
     open(LOG, "< $file");
 
-    # TODO - only send messages after timestamp..
     while (my $line = <LOG>) {
         chomp $line;
-        Irssi::signal_emit('server incoming', $server, $line);
+        my $msg_time = substr $line, rindex($line, ":")+1;
+        if ($msg_time >= $time) {
+            Irssi::signal_emit('server incoming', $server, $line);
+        }
     }
     close(LOG);
 
     if (Irssi::settings_get_bool('irkksome_clear_log')) {
+        # maybe have a callback from server that confirms
+        # that all backlog is received first
         clear_backlog();
     }
     Irssi::signal_emit('server incoming', $server, ":$time PROXY stop");
