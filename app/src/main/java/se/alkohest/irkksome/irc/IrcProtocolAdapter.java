@@ -68,7 +68,6 @@ public class IrcProtocolAdapter implements IrcProtocol {
             try {
                 int index = parts[2].lastIndexOf(':');
                 long unixTime = Long.parseLong(parts[2].substring(index + 1));
-                log.e("time: " + unixTime);
                 time = new Date(unixTime*1000);
                 parts[2] = parts[2].substring(0, index - 1);
             } catch (NumberFormatException e) {}

@@ -101,7 +101,7 @@ sub quit {
 
 sub nick {
     my ($server, $new, $old, $address) = @_;
-    log_string("$old!$address NICK :$new")
+    log_string(":$old!$address NICK :$new")
 }
 
 # Signals

@@ -174,8 +174,8 @@ public void startQuery(View view) {
 @Override
 public void onFragmentInteraction(IrkksomeConnection data) {
     serverManager.setActiveServer(serverManager.addServer(data));
-    new IrkksomeConnectionDAO().makePersistent(data);
     serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
+    new IrkksomeConnectionDAO().makePersistent(data);
     ConnectionListAdapter.getInstance().notifyDataSetChanged();
     connectionsList.expandGroup(serverManager.getServers().indexOf(serverManager.getActiveServer()));
     }

@@ -41,6 +41,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
         ircProtocol = IrcProtocolFactory.getIrcProtocol(data);
         ircProtocol.setListener(this);
         ircProtocol.connect(data.getNickname(), data.getUsername(), data.getRealname(), data.getPassword());
+        ircServer.setSelf(serverDAO.getUser(ircServer, data.getNickname()));
         hilightHelper = new HilightHelper();
         // TODO - fix dynamic hilights
         hilightHelper.addHilight(data.getNickname());
@@ -151,7 +152,8 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void serverRegistered(String server, String nick) {
-        ircServer.setSelf(userDAO.create(nick));
+        // TODO - this should maybe check if your nick has changed and change it instead of creating new
+        ircServer.setSelf(serverDAO.getUser(ircServer, nick));
         listener.showServerInfo(ircServer, motd);
         for (IrcChannel channel : getBackingBean().getConnectedChannels()) {
             joinChannel(channel.getName());
@@ -216,12 +218,14 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void userParted(String channelName, String nick) {
+        IrcChannel channel = serverDAO.getChannel(ircServer, channelName);
         if (!userDAO.compare(ircServer.getSelf(), nick)) {
-            IrcChannel channel = serverDAO.getChannel(ircServer, channelName);
             IrcUser user = serverDAO.getUser(ircServer, nick);
             channelDAO.removeUser(channel, user);
             listener.userLeftChannel(channel, user);
             checkUserUpdate(channel);
+        } else {
+            leaveChannel(channel);
         }
     }
 
