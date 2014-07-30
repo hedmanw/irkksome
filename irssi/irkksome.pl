@@ -1,6 +1,6 @@
 use Irssi;
 
-$VERSION = "0.2";
+$VERSION = "0.3";
 %IRSSI = (
     name            => "irkksome",
     description     => "Integrates irssi with the irkksome android app.",
@@ -24,8 +24,10 @@ sub send_backlog {
         Irssi::signal_emit('server incoming', $server, $line);
     }
     close(LOG);
-    clear_backlog();
 
+    if (Irssi::settings_get_bool('irkksome_clear_log')) {
+        clear_backlog();
+    }
     Irssi::signal_remove('print text', 'stop_signal');
     signals_add();
 }
@@ -50,11 +52,9 @@ sub handle_command {
 
 sub log_string {
     my ($string) = @_;
-    Irssi::print($string);
-    # TODO - add unix time to string
     my $file = Irssi::settings_get_str('irkksome_log');
     open(LOG, ">> $file");
-    print LOG "$string\n";
+    print LOG "$string :".time()."\n";
     close(LOG);
 }
 
@@ -136,4 +136,5 @@ signals_add();
 
 # Settings
 Irssi::settings_add_str('irkksome', 'irkksome_log', $ENV{"HOME"}.'/.irssi/irkksome');
+Irssi::settings_add_bool('irkksome', 'irkksome_clear_log', 1);
 
