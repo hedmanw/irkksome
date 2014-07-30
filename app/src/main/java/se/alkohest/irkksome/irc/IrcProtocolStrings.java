@@ -23,6 +23,8 @@ public class IrcProtocolStrings {
     // Stuff for irssi-proxy
     public static final String PROXY = "PROXY";
     public static final String BACKLOG = "backlog";
+    public static final String START = "start";
+    public static final String STOP = "stop";
 
     // Numeric replies
     public static final String RPL_WELCOME = "001";

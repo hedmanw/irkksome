@@ -1,6 +1,6 @@
 use Irssi;
 
-$VERSION = "0.3";
+$VERSION = "0.4";
 %IRSSI = (
     name            => "irkksome",
     description     => "Integrates irssi with the irkksome android app.",
@@ -15,6 +15,7 @@ sub send_backlog {
     Irssi::print("Sending backlog..");
     signals_remove();
     Irssi::signal_add_first('print text', 'stop_signal');
+    Irssi::signal_emit('server incoming', $server, ":$time PROXY start");
     my $file = Irssi::settings_get_str('irkksome_log');
     open(LOG, "< $file");
 
@@ -28,6 +29,7 @@ sub send_backlog {
     if (Irssi::settings_get_bool('irkksome_clear_log')) {
         clear_backlog();
     }
+    Irssi::signal_emit('server incoming', $server, ":$time PROXY stop");
     Irssi::signal_remove('print text', 'stop_signal');
     signals_add();
 }
@@ -75,7 +77,6 @@ sub own_public {
 
 sub own_private {
     my ($server, $msg, $target, $orig_target) = @_;
-    #Irssi::print("strings: $msg $target $orig_target");
     log_string(":$server->{nick}! PRIVMSG $target :$msg");
 }
 

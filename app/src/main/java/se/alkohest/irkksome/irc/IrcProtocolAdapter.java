@@ -3,6 +3,7 @@ package se.alkohest.irkksome.irc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,6 +45,7 @@ public class IrcProtocolAdapter implements IrcProtocol {
     private List<String> writeWaitList;
     private StringBuilder motdBuilder;
     private Log log = Log.getInstance(getClass());
+    private boolean backlogReplaying;
 
     public IrcProtocolAdapter(Connection connection) {
         this.connection = connection;
@@ -61,7 +63,25 @@ public class IrcProtocolAdapter implements IrcProtocol {
         if (parts.length < 2) return;
         handlePing(parts);
 
+        Date time = new Date();
+        if (backlogReplaying) {
+            try {
+                int index = parts[2].lastIndexOf(':');
+                long unixTime = Long.parseLong(parts[2].substring(index + 1));
+                log.e("time: " + unixTime);
+                time = new Date(unixTime*1000);
+                parts[2] = parts[2].substring(0, index - 1);
+            } catch (NumberFormatException e) {}
+        }
+
         switch (parts[1]) {
+            case IrcProtocolStrings.PROXY:
+                if (parts[2].equals(IrcProtocolStrings.START)) {
+                    backlogReplaying = true;
+                } else if (parts[2].equals(IrcProtocolStrings.STOP)) {
+                    backlogReplaying = false;
+                }
+                break;
             case IrcProtocolStrings.PRIVMSG:
                 handlePrivmsg(parts);
                 break;
