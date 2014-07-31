@@ -6,6 +6,7 @@ import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.orm.AbstractBean;
 import se.alkohest.irkksome.orm.Nullable;
 import se.alkohest.irkksome.orm.Table;
+import se.alkohest.irkksome.orm.Transient;
 
 @Table("t_connection")
 public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnection {
@@ -16,7 +17,7 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
     private String username;
     @Nullable
     private String realname;
-    @Nullable
+    @Transient
     private String password;
 
     private boolean useSSL;
@@ -25,7 +26,7 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
     private String sshHost;
     @Nullable
     private String sshUser;
-    @Nullable
+    @Transient
     private String sshPass;
     private int sshPort = 22;
 
@@ -133,31 +134,20 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
         contentValues.put("nickname", nickname);
         contentValues.put("username", username);
         contentValues.put("realname", realname);
-        contentValues.put("password", password);
         contentValues.put("useSSL", useSSL);
         contentValues.put("useSSH", useSSH);
         contentValues.put("sshHost", sshHost);
         contentValues.put("sshUser", sshUser);
-        contentValues.put("sshPass", sshPass);
         contentValues.put("sshPort", sshPort);
         return contentValues;
     }
 
     @Override
     public String toString() {
-        return "IrkksomeConnectionEB{" +
-                "host='" + host + '\'' +
-                ", port=" + port +
-                ", nickname='" + nickname + '\'' +
-                ", username='" + username + '\'' +
-                ", realname='" + realname + '\'' +
-                ", password='" + password + '\'' +
-                ", useSSL=" + useSSL +
-                ", useSSH=" + useSSH +
-                ", sshHost='" + sshHost + '\'' +
-                ", sshUser='" + sshUser + '\'' +
-                ", sshPass='" + sshPass + '\'' +
-                ", sshPort=" + sshPort +
-                '}';
+        return "IrkksomeConnectionEB[ id = " + getId() + "\n" +
+                nickname + '@' + host + ':' + port +
+                ", username='" + username + '\'' + ", realname='" + realname + '\'' + ", password='" + password + '\'' + ", useSSL=" + useSSL +
+                ", SSH: [ " + sshUser + '@' + sshHost + ':' + sshPort + ", sshPass='" + sshPass + "']" +
+                "\n]";
     }
 }

@@ -31,18 +31,16 @@ public class IrkksomeConnectionDAO extends GenericDAO<IrkksomeConnectionEB, Irkk
     @Override
     protected IrkksomeConnection initFromCursor(Cursor cursor, long pk) {
         IrkksomeConnection irkksomeConnection = create();
-        irkksomeConnection.setHost(cursor.getString(1));
-        irkksomeConnection.setPort(cursor.getInt(2));
-        irkksomeConnection.setNickname(cursor.getString(3));
-        irkksomeConnection.setUsername(cursor.getString(4));
-        irkksomeConnection.setRealname(cursor.getString(5));
-        irkksomeConnection.setPassword(cursor.getString(6));
-        irkksomeConnection.setUseSSL(cursor.getInt(7) > 0);
-        irkksomeConnection.setUseSSH(cursor.getInt(8) > 0);
-        irkksomeConnection.setSshHost(cursor.getString(9));
-        irkksomeConnection.setSshUser(cursor.getString(10));
-        irkksomeConnection.setSshPass(cursor.getString(11));
-        irkksomeConnection.setSshPort(cursor.getInt(12));
+        irkksomeConnection.setHost(cursor.getString(cursor.getColumnIndexOrThrow("host")));
+        irkksomeConnection.setPort(cursor.getInt(cursor.getColumnIndexOrThrow("port")));
+        irkksomeConnection.setNickname(cursor.getString(cursor.getColumnIndexOrThrow("nickname")));
+        irkksomeConnection.setUsername(cursor.getString(cursor.getColumnIndexOrThrow("username")));
+        irkksomeConnection.setRealname(cursor.getString(cursor.getColumnIndexOrThrow("realname")));
+        irkksomeConnection.setUseSSL(cursor.getInt(cursor.getColumnIndexOrThrow("useSSL")) > 0);
+        irkksomeConnection.setUseSSH(cursor.getInt(cursor.getColumnIndexOrThrow("useSSH")) > 0);
+        irkksomeConnection.setSshHost(cursor.getString(cursor.getColumnIndexOrThrow("sshHost")));
+        irkksomeConnection.setSshUser(cursor.getString(cursor.getColumnIndexOrThrow("sshUser")));
+        irkksomeConnection.setSshPort(cursor.getInt(cursor.getColumnIndexOrThrow("sshPort")));
         return irkksomeConnection;
     }
 }
