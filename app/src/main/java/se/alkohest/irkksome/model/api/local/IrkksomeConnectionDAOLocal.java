@@ -10,4 +10,6 @@ import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 public interface IrkksomeConnectionDAOLocal {
     public IrkksomeConnection create();
     public List<IrkksomeConnection> getAll();
+    public String getPresentation(IrkksomeConnection connection);
+    public void remove(IrkksomeConnection bean);
 }

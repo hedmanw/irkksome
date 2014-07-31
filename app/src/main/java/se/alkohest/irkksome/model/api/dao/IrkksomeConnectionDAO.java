@@ -28,6 +28,26 @@ public class IrkksomeConnectionDAO extends GenericDAO<IrkksomeConnectionEB, Irkk
         return findById(IrkksomeConnectionEB.class, id);
     }
 
+    public String getPresentation(IrkksomeConnection connection) {
+        if (connection.isUseSSH()) {
+            if (connection.isIrssiProxyConnection()) {
+                return connection.getSshUser() + "@" + connection.getSshHost() + (connection.getSshPort() != 22 ? ":" + connection.getSshPort() : "") +
+                        " (" + connection.getUsername() + ":" + connection.getPort() + ")";
+            } else {
+                return connection.getSshUser() + "@" + connection.getSshHost() + (connection.getSshPort() != 22 ? ":" + connection.getSshPort() : "") +
+                        " (" + connection.getNickname() + "[" + connection.getUsername() + "]@" + connection.getHost() + ":" + connection.getPort() + ")";
+            }
+        }
+        else {
+            return connection.getNickname() + "@" + connection.getHost() + ":" + connection.getPort();
+        }
+    }
+
+    @Override
+    public void remove(IrkksomeConnection bean) {
+        makeTransient(bean);
+    }
+
     @Override
     protected IrkksomeConnection initFromCursor(Cursor cursor, long pk) {
         IrkksomeConnection irkksomeConnection = create();

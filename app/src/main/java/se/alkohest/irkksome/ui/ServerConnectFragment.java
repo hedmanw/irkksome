@@ -1,6 +1,7 @@
 package se.alkohest.irkksome.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.IdRes;
@@ -14,6 +15,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
@@ -38,7 +42,7 @@ public class ServerConnectFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        connectionsAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, connectionDAO.getAll());
+        connectionsAdapter = new ServersArrayAdapter(getActivity(), connectionDAO.getAll());
         setHasOptionsMenu(true);
         getActivity().setTitle(R.string.title_connect_to_server);
     }
@@ -83,13 +87,18 @@ public class ServerConnectFragment extends Fragment {
         View progressBar = getView().findViewById(R.id.server_connect_progressbar);
         progressBar.setVisibility(View.VISIBLE);
         if (listener != null) {
-            IrkksomeConnection data = new IrkksomeConnectionDAO().create();
+            IrkksomeConnection data = connectionDAO.create();
             data.setHost(getOptionValue(R.id.server_connect_host));
             data.setNickname(getOptionValue(R.id.server_connect_nickname));
             data.setRealname(getOptionValue(R.id.server_connect_realname));
             data.setUsername(getOptionValue(R.id.server_connect_username));
             data.setPassword(getOptionValue(R.id.server_connect_password));
-            data.setPort(Integer.parseInt(getOptionValue(R.id.server_connect_port)));
+            final String portNumber = getOptionValue(R.id.server_connect_port);
+            if (!portNumber.isEmpty()) {
+                data.setPort(Integer.parseInt(portNumber));
+            } else {
+                data.setPort(0);
+            }
             data.setUseSSH(((CheckBox) getView().findViewById(R.id.server_connect_use_ssh)).isChecked());
             data.setSshHost(getOptionValue(R.id.server_connect_sshHost));
             data.setSshUser(getOptionValue(R.id.server_connect_sshUser));
@@ -121,5 +130,51 @@ public class ServerConnectFragment extends Fragment {
 
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction(IrkksomeConnection data);
+    }
+
+    private class ServersArrayAdapter extends ArrayAdapter<IrkksomeConnection> {
+        private List<IrkksomeConnection> connections;
+
+        public ServersArrayAdapter(Context context, List<IrkksomeConnection> connections) {
+            super(context, R.layout.server_connect_list_item, connections);
+            this.connections = connections;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                convertView = inflater.inflate(R.layout.server_connect_list_item, parent, false);
+            }
+
+            TextView text = (TextView) convertView.findViewById(android.R.id.text1);
+            final IrkksomeConnection item = getItem(position);
+            text.setText(connectionDAO.getPresentation(item));
+
+            View button = convertView.findViewById(R.id.server_connect_list_delete);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getActivity(), "DELETE " + item.getId(), Toast.LENGTH_SHORT).show();
+                    connectionDAO.remove(item); // Should probably return bool?
+                    connections.remove(item); // Läs upp igen från DB istället? Efterblivet att ha en privat referens till en gammal jävla lista.
+                    notifyDataSetChanged();
+                }
+            });
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getActivity(), "CLICK " + item.getId(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            convertView.setLongClickable(true);
+            convertView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    return true;
+                }
+            });
+            return convertView;
+        }
     }
 }

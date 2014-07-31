@@ -107,7 +107,12 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
     }
 
     public void setPort(int port) {
-        this.port = port;
+        if (port <= 0) {
+            this.port = 6667;
+        }
+        else {
+            this.port = port;
+        }
     }
 
     public String getHost() {
@@ -124,6 +129,11 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
 
     public void setUseSSL(boolean useSSL) {
         this.useSSL = useSSL;
+    }
+
+    @Override
+    public boolean isIrssiProxyConnection() {
+        return host.equals("localhost");
     }
 
     @Override

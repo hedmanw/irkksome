@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="asdf"
+        android:id="@android:id/text1"/>
+    <TextView
+        style="@style/list_item.hint"
+        android:text="(2 hours ago)"
+        android:layout_below="@android:id/text1"
+        android:id="@android:id/text2"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="X"
+        android:id="@+id/server_connect_list_delete"/>
+</RelativeLayout>
