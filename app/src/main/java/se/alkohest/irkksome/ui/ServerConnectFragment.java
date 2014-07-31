@@ -9,15 +9,21 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
+import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 
 public class ServerConnectFragment extends Fragment {
     private OnFragmentInteractionListener listener;
+    private ArrayAdapter<IrkksomeConnection> connectionsAdapter;
+    private IrkksomeConnectionDAOLocal connectionDAO = new IrkksomeConnectionDAO();
 
     public static ServerConnectFragment newInstance() {
         ServerConnectFragment fragment = new ServerConnectFragment();
@@ -32,6 +38,7 @@ public class ServerConnectFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        connectionsAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, connectionDAO.getAll());
         setHasOptionsMenu(true);
         getActivity().setTitle(R.string.title_connect_to_server);
     }
@@ -51,6 +58,20 @@ public class ServerConnectFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 connectPressed();
+            }
+        });
+        ListView previouslyConnectedList = (ListView) inflatedView.findViewById(R.id.server_connect_list);
+        previouslyConnectedList.setAdapter(connectionsAdapter);
+        CheckBox sshSettings = (CheckBox) inflatedView.findViewById(R.id.server_connect_use_ssh);
+        sshSettings.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+                    inflatedView.findViewById(R.id.server_connect_ssh_settings).setVisibility(View.VISIBLE);
+                }
+                else {
+                    inflatedView.findViewById(R.id.server_connect_ssh_settings).setVisibility(View.GONE);
+                }
             }
         });
         return inflatedView;

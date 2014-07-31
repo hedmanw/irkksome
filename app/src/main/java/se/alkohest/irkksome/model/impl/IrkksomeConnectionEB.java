@@ -146,8 +146,8 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
     public String toString() {
         return "IrkksomeConnectionEB[ id = " + getId() + "\n" +
                 nickname + '@' + host + ':' + port +
-                ", username='" + username + '\'' + ", realname='" + realname + '\'' + ", password='" + password + '\'' + ", useSSL=" + useSSL +
-                ", SSH: [ " + sshUser + '@' + sshHost + ':' + sshPort + ", sshPass='" + sshPass + "']" +
+                ", username='" + username + '\'' + ", realname='" + realname + '\'' + ", useSSL=" + useSSL +
+                ", SSH: [ " + sshUser + '@' + sshHost + ':' + sshPort + ']' +
                 "\n]";
     }
 }
