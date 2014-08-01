@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
@@ -21,9 +23,18 @@ public abstract class AbstractConnectionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             // Kan läsa upp irkksomeConnection.
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.findItem(R.id.action_join_channel).setEnabled(false);
+        menu.findItem(R.id.action_leave_channel).setEnabled(false);
+        menu.findItem(R.id.action_change_nick).setEnabled(false);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     public void connectPressed() {
