@@ -18,7 +18,7 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="notification_no_servers">You\'re not connected to any servers yet!</string>
     <string name="hint_motd">Message of the day (click for more) TODO: Implement</string>
-    <string name="title_connect_to_server">Connect to a server</string>
+    <string name="title_connect_to_server">New connection</string>
     <string name="category_hint_connect_new_server">Connect to a new server</string>
     <string name="hint_realname">realname</string>
     <string name="hint_sshHost">SSH hostname</string>

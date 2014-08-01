@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp">
+    <View
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:minHeight="10dp"
+        android:minWidth="10dp"
+        android:background="@drawable/connection_icon_blue"
+        android:id="@+id/server_connect_icon"/>
+    <TextView
+        android:id="@android:id/text1"
+        android:layout_toRightOf="@id/server_connect_icon"
+        android:paddingLeft="16dp"
+        android:layout_centerVertical="true"
+        style="@style/list_item"
+        android:text="hej"/>
+</RelativeLayout>

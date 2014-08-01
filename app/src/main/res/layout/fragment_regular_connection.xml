@@ -1,0 +1,62 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    tools:context=".ui.fragment.RegularConnectionFragment">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_host"
+        android:hint="@string/hint_hostname"
+        android:inputType="textUri"
+        android:text="irc.chalmers.it"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_port"
+        android:hint="@string/hint_port"
+        android:text="6667"
+        android:inputType="number" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_nickname"
+        android:hint="@string/hint_nickname"
+        android:text="fest"
+        android:inputType="textUri" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_realname"
+        android:hint="@string/hint_realname"
+        android:text="banned"
+        android:inputType="textUri" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_username"
+        android:hint="@string/hint_username"
+        android:text="banned"
+        android:inputType="textUri" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_password"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_connect"
+        android:id="@+id/server_connect_button" />
+</LinearLayout>

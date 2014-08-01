@@ -4,113 +4,11 @@
     android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ProgressBar
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:indeterminateBehavior="repeat"
-        style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
-        android:visibility="invisible"
-        android:id="@+id/server_connect_progressbar" />
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp">
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/server_connect_host"
-            android:hint="@string/hint_hostname"
-            android:inputType="textUri"
-            android:text="localhost" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/server_connect_nickname"
-            android:hint="@string/hint_nickname"
-            android:text="fest"
-            android:inputType="textUri" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/server_connect_realname"
-            android:hint="@string/hint_realname"
-            android:text="banned"
-            android:inputType="textUri" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/server_connect_username"
-            android:hint="@string/hint_username"
-            android:text="banned"
-            android:inputType="textUri" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/server_connect_password"
-            android:hint="@string/hint_password"
-            android:inputType="textPassword" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/server_connect_port"
-            android:hint="@string/hint_port"
-            android:inputType="number" />
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/connect_ssh_checkbox"
-            android:id="@+id/server_connect_use_ssh" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:id="@+id/server_connect_ssh_settings">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/server_connect_sshHost"
-                android:hint="@string/hint_sshHost"
-                android:inputType="textUri" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/server_connect_sshUser"
-                android:hint="@string/hint_sshUser"
-                android:inputType="textUri" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/server_connect_sshPass"
-                android:hint="@string/hint_sshPass"
-                android:inputType="textPassword" />
-        </LinearLayout>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/hint_connect"
-            android:id="@+id/server_connect_button" />
+<!--TODO: REMOVE-->
 
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/server_connect_list" />
-    </LinearLayout>
 </LinearLayout>

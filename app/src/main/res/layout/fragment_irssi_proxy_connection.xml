@@ -1,0 +1,65 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.fragment.IrssiProxyConnectionFragment">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_host"
+        android:hint="@string/hint_hostname"
+        android:inputType="textUri"
+        android:text="localhost"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_port"
+        android:hint="@string/hint_port"
+        android:text="2777"
+        android:inputType="number" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_username"
+        android:hint="@string/hint_username"
+        android:inputType="textUri" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_password"
+        android:hint="@string/hint_password"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_sshHost"
+        android:hint="@string/hint_sshHost"
+        android:inputType="textUri"
+        android:text="hubben.chalmers.it"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_sshUser"
+        android:hint="@string/hint_sshUser"
+        android:inputType="textUri"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/server_connect_sshPass"
+        android:hint="@string/hint_sshPass"
+        android:inputType="textPassword" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_connect"
+        android:id="@+id/server_connect_button" />
+</LinearLayout>
