@@ -2,6 +2,7 @@ package se.alkohest.irkksome.model.impl;
 
 import android.content.ContentValues;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +24,8 @@ public class IrcServerEB extends AbstractBean implements IrcServer {
     private Set<IrcUser> knownUsers;
     @OneToOne(IrcUserEB.class)
     private IrcUser self;
+    @Transient
+    private Date lastMessageTime;
 
     @Override
     public String getHost() {
@@ -52,6 +55,16 @@ public class IrcServerEB extends AbstractBean implements IrcServer {
     @Override
     public void setKnownUsers(Set<IrcUser> users) {
         knownUsers = users;
+    }
+
+    @Override
+    public void setLastMessageTime(Date time) {
+        lastMessageTime = time;
+    }
+
+    @Override
+    public Date getLastMessageTime() {
+        return lastMessageTime;
     }
 
     @Override

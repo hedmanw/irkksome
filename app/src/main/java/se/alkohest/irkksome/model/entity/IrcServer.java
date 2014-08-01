@@ -1,5 +1,6 @@
 package se.alkohest.irkksome.model.entity;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -21,4 +22,8 @@ public interface IrcServer extends BeanEntity {
     public Set<IrcUser> getKnownUsers();
 
     public void setKnownUsers(Set<IrcUser> users);
+
+    public void setLastMessageTime(Date time);
+
+    public Date getLastMessageTime();
 }

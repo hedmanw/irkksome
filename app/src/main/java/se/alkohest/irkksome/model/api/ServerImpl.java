@@ -147,7 +147,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public void serverConnected() {
         // TODO - this should only be done when we know we connect to irrsi?
-        ircProtocol.sendBacklogRequest(123);
+        ircProtocol.sendBacklogRequest(ircServer.getLastMessageTime().getTime()/1000);
     }
 
     @Override
@@ -245,8 +245,9 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void channelMessageReceived(String channel, String user, String message) {
+        Date time = new Date();
         IrcUser ircUser = serverDAO.getUser(ircServer, user);
-        IrcMessage ircMessage = messageDAO.create(ircUser, message, new Date());
+        IrcMessage ircMessage = messageDAO.create(ircUser, message, time);
         IrcChannel ircChannel;
         if (ircServer.getSelf().getName().equals(channel)) {
             ircChannel = serverDAO.getChannel(ircServer, user);
@@ -262,6 +263,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
             listener.updateHilights();
         }
 
+        ircServer.setLastMessageTime(time);
         channelDAO.addMessage(ircChannel, ircMessage);
         listener.messageReceived();
     }

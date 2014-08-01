@@ -3,6 +3,7 @@ package se.alkohest.irkksome.model.api.dao;
 import android.database.Cursor;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB, IrcServer> implements 
         ircServer.setConnectedChannels(new ArrayList<IrcChannel>());
         ircServer.setKnownUsers(new HashSet<IrcUser>());
         ircServer.setHost(host);
+        ircServer.setLastMessageTime(new Date(0));
         return ircServer;
     }
 
