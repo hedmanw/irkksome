@@ -1,7 +1,6 @@
 package se.alkohest.irkksome.ui;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.IdRes;
@@ -42,7 +41,7 @@ public class ServerConnectFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        connectionsAdapter = new ServersArrayAdapter(getActivity(), connectionDAO.getAll());
+        connectionsAdapter = new ConnectionsArrayAdapter(connectionDAO.getAll());
         setHasOptionsMenu(true);
         getActivity().setTitle(R.string.title_connect_to_server);
     }
@@ -132,11 +131,11 @@ public class ServerConnectFragment extends Fragment {
         public void onFragmentInteraction(IrkksomeConnection data);
     }
 
-    private class ServersArrayAdapter extends ArrayAdapter<IrkksomeConnection> {
+    private class ConnectionsArrayAdapter extends ArrayAdapter<IrkksomeConnection> {
         private List<IrkksomeConnection> connections;
 
-        public ServersArrayAdapter(Context context, List<IrkksomeConnection> connections) {
-            super(context, R.layout.server_connect_list_item, connections);
+        public ConnectionsArrayAdapter(List<IrkksomeConnection> connections) {
+            super(getActivity(), R.layout.server_connect_list_item, connections);
             this.connections = connections;
         }
 
@@ -156,8 +155,8 @@ public class ServerConnectFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     Toast.makeText(getActivity(), "DELETE " + item.getId(), Toast.LENGTH_SHORT).show();
-                    connectionDAO.remove(item); // Should probably return bool?
-                    connections.remove(item); // Läs upp igen från DB istället? Efterblivet att ha en privat referens till en gammal jävla lista.
+                    connectionDAO.remove(item);
+                    connections.remove(item); // Fan vad android är runkigt ibland. Här hade man ju velat läsa upp allt från databasen igen.
                     notifyDataSetChanged();
                 }
             });
