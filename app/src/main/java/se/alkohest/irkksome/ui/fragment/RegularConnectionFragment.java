@@ -27,7 +27,25 @@ public class RegularConnectionFragment extends AbstractConnectionFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_regular_connection, container, false);
+        final View inflatedView = inflater.inflate(R.layout.fragment_regular_connection, container, false);
+        inflatedView.findViewById(R.id.server_connect_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connectPressed();
+            }
+        });
+        return inflatedView;
     }
 
+    @Override
+    public IrkksomeConnection getConnection() {
+        IrkksomeConnection connection = connectionDAO.create();
+        connection.setHost(getFieldValue(R.id.server_connect_host));
+        connection.setPort(Integer.parseInt(getFieldValue(R.id.server_connect_port)));
+        connection.setNickname(getFieldValue(R.id.server_connect_nickname));
+        connection.setRealname(getFieldValue(R.id.server_connect_realname));
+        connection.setUsername(getFieldValue(R.id.server_connect_username));
+        connection.setPassword(getFieldValue(R.id.server_connect_password));
+        return connection;
+    }
 }

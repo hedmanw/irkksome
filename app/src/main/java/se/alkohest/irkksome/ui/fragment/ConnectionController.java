@@ -19,7 +19,7 @@ public class ConnectionController {
 
     static {
         addItem(new ConnectionMethod("Regular irkk", R.drawable.connection_icon_blue));
-        addItem(new ConnectionMethod("Irssi-proxy master race", R.drawable.connection_icon_purple));
+        addItem(new ConnectionMethod("Irssi proxy", R.drawable.connection_icon_purple));
     }
 
     private static void addItem(ConnectionItem item) {

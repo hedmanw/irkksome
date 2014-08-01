@@ -3,15 +3,20 @@ package se.alkohest.irkksome.ui.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
+import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
+import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 
 public abstract class AbstractConnectionFragment extends Fragment {
     public static final String CONNECTION_ARGUMENT = "CONNECTION";
 
     protected OnConnectPressedListener listener;
-    protected IrkksomeConnection connection;
+    protected IrkksomeConnection templateConnection;
+    protected IrkksomeConnectionDAOLocal connectionDAO = new IrkksomeConnectionDAO();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -21,9 +26,9 @@ public abstract class AbstractConnectionFragment extends Fragment {
         }
     }
 
-    public void onButtonPressed() {
+    public void connectPressed() {
         if (listener != null) {
-            listener.onConnectPressed(null);
+            listener.onConnectPressed(getConnection());
         }
     }
 
@@ -33,8 +38,7 @@ public abstract class AbstractConnectionFragment extends Fragment {
         try {
             listener = (OnConnectPressedListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(activity.toString() + " must implement OnConnectPressedListener");
         }
     }
 
@@ -53,6 +57,12 @@ public abstract class AbstractConnectionFragment extends Fragment {
         }
         return null;
     }
+
+    protected String getFieldValue(@IdRes int resourceId) {
+        return ((TextView)getActivity().findViewById(resourceId)).getText().toString().trim();
+    }
+
+    public abstract IrkksomeConnection getConnection();
 
     public interface OnConnectPressedListener {
         public void onConnectPressed(IrkksomeConnection irkksomeConnection);

@@ -46,19 +46,21 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
         connectionsList = (ExpandableListView) findViewById(R.id.left_drawer_list);
 
         if (savedInstanceState == null) {
-            serverManager.loadPersisted();
-            if (serverManager.getServers().isEmpty()) {
+//            serverManager.loadPersisted();
+            if (serverManager.getServers().isEmpty()) { // No sessions are running, cold start
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 ConnectionsListFragment connectFragment = ConnectionsListFragment.newInstance();
-                fragmentTransaction.add(R.id.fragment_container, connectFragment);
+                fragmentTransaction.add(R.id.fragment_container, connectFragment, ConnectionsListFragment.TAG);
                 fragmentTransaction.commit();
             }
-            else {
+            else { // Back stack was emptied with sessions running, resume them (eller?)
                 serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
+                serverManager.getActiveServer().showServer();
             }
         }
         else {
+            LOG.i("How did we get here? Tilt?"); // Kan vi ens hamna här?
             // This might require us to loop through all servers and set new CallbackHandlers
             serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
         }
@@ -86,16 +88,15 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
                 return true;
             }
         });
-        connectionsList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+        connectionsList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
-            public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPos, long id) {
+            public void onGroupExpand(int groupPos) {
                 drawerLayout.closeDrawer(leftDrawer);
                 final Server selectedServer = listAdapter.getGroup(groupPos);
                 if (selectedServer != serverManager.getActiveServer()) {
                     serverManager.setActiveServer(selectedServer);
                 }
                 serverManager.getActiveServer().showServer();
-                return true;
             }
         });
     }
@@ -179,6 +180,8 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         AbstractConnectionFragment connectFragment = connectionItem.getConnectionFragment();
         fragmentTransaction.replace(R.id.fragment_container, connectFragment);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 

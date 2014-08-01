@@ -11,6 +11,7 @@ import android.widget.ListView;
 import se.alkohest.irkksome.R;
 
 public class ConnectionsListFragment extends ListFragment {
+    public static final String TAG = "CONNECTION_LIST";
     private OnConnectionSelectedListener listener;
 
     public static ConnectionsListFragment newInstance() {

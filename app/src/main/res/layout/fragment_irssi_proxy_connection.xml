@@ -3,7 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     tools:context=".ui.fragment.IrssiProxyConnectionFragment">
+
+    <View
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:minHeight="10dp"
+        android:minWidth="10dp"
+        android:background="@drawable/connection_icon_purple"
+        android:id="@+id/server_connect_icon"/>
 
     <EditText
         android:layout_width="match_parent"

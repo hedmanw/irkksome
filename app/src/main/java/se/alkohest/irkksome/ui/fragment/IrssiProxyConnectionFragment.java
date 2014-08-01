@@ -31,8 +31,28 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_irssi_proxy_connection, container, false);
+        final View inflatedView = inflater.inflate(R.layout.fragment_irssi_proxy_connection, container, false);
+        inflatedView.findViewById(R.id.server_connect_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connectPressed();
+            }
+        });
+        return inflatedView;
     }
 
-
+    @Override
+    public IrkksomeConnection getConnection() {
+        IrkksomeConnection connection = connectionDAO.create();
+        connection.setHost(getFieldValue(R.id.server_connect_host));
+        connection.setPort(Integer.parseInt(getFieldValue(R.id.server_connect_port)));
+        connection.setNickname(""); // Because why the fuck not?
+        connection.setUsername(getFieldValue(R.id.server_connect_username));
+        connection.setPassword(getFieldValue(R.id.server_connect_password));
+        connection.setSshHost(getFieldValue(R.id.server_connect_sshHost));
+        connection.setSshUser(getFieldValue(R.id.server_connect_sshUser));
+        connection.setSshPass(getFieldValue(R.id.server_connect_sshPass));
+        connection.setUseSSH(true);
+        return connection;
+    }
 }

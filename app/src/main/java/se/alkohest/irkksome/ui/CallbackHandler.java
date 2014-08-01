@@ -43,13 +43,12 @@ public class CallbackHandler implements ServerCallback {
             @Override
             public void run() {
                 ServerInfoFragment serverInfoFragment = ServerInfoFragment.getInstance(server, motd);
+                fragmentManager.popBackStack();
                 fragmentTransaction.replace(R.id.fragment_container, serverInfoFragment);
                 fragmentTransaction.commit();
 
                 connectionListAdapter.notifyDataSetChanged();
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
-                // TODO: This is ugly
-                ((ExpandableListView) context.findViewById(R.id.left_drawer_list)).expandGroup(0);
             }
         });
     }
