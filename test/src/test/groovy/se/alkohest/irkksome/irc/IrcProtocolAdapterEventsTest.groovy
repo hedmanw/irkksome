@@ -20,7 +20,7 @@ class IrcProtocolAdapterEventsTest extends Specification {
         ipa.handleReply(":" + user + command + channel)
 
         then:
-        1 * subscriber.userJoined(channel, user)
+        1 * subscriber.userJoined(channel, user, {it.class == Date.class})
 
         where:
         channel << ["#fest", "#svinstia", "#party"]
@@ -33,7 +33,7 @@ class IrcProtocolAdapterEventsTest extends Specification {
         ipa.handleReply(":" + user + command + channel)
 
         then:
-        1 * subscriber.userParted(channel, user)
+        1 * subscriber.userParted(channel, user, {it.class == Date.class})
 
         where:
         channel << ["#fest", "#svinstia", "#party"]
@@ -46,7 +46,7 @@ class IrcProtocolAdapterEventsTest extends Specification {
         ipa.handleReply(":" + user + command + quitMessage)
 
         then:
-        1 * subscriber.userQuit(user, quitMessage)
+        1 * subscriber.userQuit(user, quitMessage, {it.class == Date.class})
 
         where:
         user << ["oed", "Heissman", "Rascal"]
@@ -80,7 +80,7 @@ class IrcProtocolAdapterEventsTest extends Specification {
         ipa.handleReply(":" + oldNick + command + newNick)
 
         then:
-        1 * subscriber.nickChanged(oldNick, newNick)
+        1 * subscriber.nickChanged(oldNick, newNick, {it.class == Date.class})
 
         where:
         oldNick << ["oed", "Heissman", "Rascal"]
@@ -94,7 +94,7 @@ class IrcProtocolAdapterEventsTest extends Specification {
         ipa.handleReply(":" + nick + command + channel + " :" + message)
 
         then:
-        1* subscriber.channelMessageReceived(channel, nick, message)
+        1* subscriber.channelMessageReceived(channel, nick, message, {it.class == Date.class})
 
         where:
         channel << ["#fest", "#svinstia", "#party"]

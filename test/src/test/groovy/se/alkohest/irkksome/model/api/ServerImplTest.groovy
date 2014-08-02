@@ -89,8 +89,8 @@ public class ServerImplTest extends Specification {
     def "nick changed"() {
         when:
         server.ircServer.self = userDAO.create("fest")
-        server.nickChanged("fest", "slutfest")
-        server.nickChanged("old", "new")
+        server.nickChanged("fest", "slutfest", new Date())
+        server.nickChanged("old", "new", new Date())
 
         then:
         server.ircServer.getSelf().name == "slutfest"
@@ -112,8 +112,8 @@ public class ServerImplTest extends Specification {
     def "user joined" () {
         when:
         server.ircServer.self = userDAO.create("palle")
-        server.userJoined("#fest", "palle")
-        server.userJoined("#fest", "pelle")
+        server.userJoined("#fest", "palle", new Date())
+        server.userJoined("#fest", "pelle", new Date())
 
         then:
         1 * server.listener.userJoinedChannel(serverDAO.getChannel(server.ircServer, "#fest"),
@@ -125,7 +125,7 @@ public class ServerImplTest extends Specification {
     def "user parted"() {
         when:
         server.backingBean.setSelf(userDAO.create("erland"));
-        server.userParted("#fest", "palle")
+        server.userParted("#fest", "palle", new Date())
 
         then:
         1 * server.listener.userLeftChannel(serverDAO.getChannel(server.ircServer, "#fest"),
@@ -141,7 +141,7 @@ public class ServerImplTest extends Specification {
         channel1.users.put(user, "")
         channel2.users.put(user, "@")
         server.ircServer.connectedChannels = [channel1, channel2, channel3]
-        server.userQuit("palle", "bye..")
+        server.userQuit("palle", "bye..", new Date())
 
         then:
         1 * server.listener.userQuit(serverDAO.getUser(server.ircServer, "palle"),
@@ -151,7 +151,7 @@ public class ServerImplTest extends Specification {
     def "channel message received"() {
         when:
         server.backingBean.setSelf(userDAO.create("erland"));
-        server.channelMessageReceived("#fest", "lars", "lalalala")
+        server.channelMessageReceived("#fest", "lars", "lalalala", new Date())
 
         then:
         1 * server.listener.messageReceived()

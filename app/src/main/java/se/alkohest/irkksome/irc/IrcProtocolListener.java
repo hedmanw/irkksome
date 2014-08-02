@@ -1,5 +1,6 @@
 package se.alkohest.irkksome.irc;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public interface IrcProtocolListener {
      * @param oldNick - the nick that the user had until now
      * @param newNick - the new nick of the user
      */
-    public void nickChanged(String oldNick, String newNick);
+    public void nickChanged(String oldNick, String newNick, Date time);
 
     /**
      * This method gives you info about which users are in a specific channel.
@@ -40,21 +41,21 @@ public interface IrcProtocolListener {
      * @param channelName
      * @param nick
      */
-    public void userJoined(String channelName, String nick);
+    public void userJoined(String channelName, String nick, Date time);
 
     /**
      * This method is called when a user parts a channel.
      * @param channelName
      * @param nick
      */
-    public void userParted(String channelName, String nick);
+    public void userParted(String channelName, String nick, Date time);
 
     /**
      * This method is called whn a user quits from the server.
      * @param nick - the nick of the user
      * @param quitMessage - the quit message
      */
-    public void userQuit(String nick, String quitMessage);
+    public void userQuit(String nick, String quitMessage, Date time);
 
     /**
      * Sent when a channel message is received from the server.
@@ -62,7 +63,7 @@ public interface IrcProtocolListener {
      * @param user - the user that sent the message
      * @param message - the message sent
      */
-    public void channelMessageReceived(String channel, String user, String message);
+    public void channelMessageReceived(String channel, String user, String message, Date time);
 
     /**
      * This method sends a list of connected channels as a whois request resopnse.

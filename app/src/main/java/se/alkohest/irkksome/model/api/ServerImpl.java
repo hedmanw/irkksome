@@ -161,7 +161,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
-    public void nickChanged(String oldNick, String newNick) {
+    public void nickChanged(String oldNick, String newNick, Date time) {
         if (userDAO.compare(ircServer.getSelf(), oldNick)) {
             ircServer.getSelf().setName(newNick);
         } else {
@@ -169,6 +169,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
             user.setName(newNick);
             listener.nickChanged(oldNick, user);
         }
+        ircServer.setLastMessageTime(time);
     }
 
     @Override
@@ -203,7 +204,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
-    public void userJoined(String channelName, String nick) {
+    public void userJoined(String channelName, String nick, Date time) {
         IrcChannel channel = serverDAO.getChannel(ircServer, channelName);
         if (userDAO.compare(ircServer.getSelf(), nick)) {
             listener.setActiveChannel(channel);
@@ -214,10 +215,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
             listener.userJoinedChannel(channel, user);
         }
         checkUserUpdate(channel);
+        ircServer.setLastMessageTime(time);
     }
 
     @Override
-    public void userParted(String channelName, String nick) {
+    public void userParted(String channelName, String nick, Date time) {
         IrcChannel channel = serverDAO.getChannel(ircServer, channelName);
         if (!userDAO.compare(ircServer.getSelf(), nick)) {
             IrcUser user = serverDAO.getUser(ircServer, nick);
@@ -227,10 +229,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
         } else {
             leaveChannel(channel);
         }
+        ircServer.setLastMessageTime(time);
     }
 
     @Override
-    public void userQuit(String nick, String quitMessage) {
+    public void userQuit(String nick, String quitMessage, Date time) {
         IrcUser user = serverDAO.getUser(ircServer, nick);
         serverDAO.removeUser(ircServer, user);
         List<IrcChannel> channels = new ArrayList<>();
@@ -240,12 +243,12 @@ public class ServerImpl implements Server, IrcProtocolListener {
                 channels.add(c);
             }
         }
+        ircServer.setLastMessageTime(time);
         listener.userQuit(user, channels);
     }
 
     @Override
-    public void channelMessageReceived(String channel, String user, String message) {
-        Date time = new Date();
+    public void channelMessageReceived(String channel, String user, String message, Date time) {
         IrcUser ircUser = serverDAO.getUser(ircServer, user);
         IrcMessage ircMessage = messageDAO.create(ircUser, message, time);
         IrcChannel ircChannel;

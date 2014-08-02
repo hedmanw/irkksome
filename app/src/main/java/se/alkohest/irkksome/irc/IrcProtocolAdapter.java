@@ -82,27 +82,27 @@ public class IrcProtocolAdapter implements IrcProtocol {
                 }
                 break;
             case IrcProtocolStrings.PRIVMSG:
-                handlePrivmsg(parts);
+                handlePrivmsg(parts, time);
                 break;
             case IrcProtocolStrings.JOIN:
                 listener.userJoined(
                         parts[2].substring(parts[2].indexOf(COLON) + 1),
-                        parts[0].substring(1, parts[0].indexOf(BANG)));
+                        parts[0].substring(1, parts[0].indexOf(BANG)), time);
                 break;
             case IrcProtocolStrings.PART:
                 listener.userParted(
                         parts[2],
-                        parts[0].substring(1, parts[0].indexOf(BANG)));
+                        parts[0].substring(1, parts[0].indexOf(BANG)), time);
                 break;
             case IrcProtocolStrings.QUIT:
                 listener.userQuit(
                         parts[0].substring(1, parts[0].indexOf(BANG)),
-                        parts[2].substring(parts[2].indexOf(COLON) + 1));
+                        parts[2].substring(parts[2].indexOf(COLON) + 1), time);
                 break;
             case IrcProtocolStrings.NICK:
                 listener.nickChanged(
                         parts[0].substring(1, parts[0].indexOf(BANG)),
-                        parts[2].substring(parts[2].indexOf(COLON) + 1));
+                        parts[2].substring(parts[2].indexOf(COLON) + 1), time);
                 break;
             case IrcProtocolStrings.RPL_WELCOME:
                 listener.serverRegistered(
@@ -169,12 +169,12 @@ public class IrcProtocolAdapter implements IrcProtocol {
         }
     }
 
-    private void handlePrivmsg(String[] parts) {
+    private void handlePrivmsg(String[] parts, Date time) {
         String nick = parts[0].substring(1, parts[0].indexOf(BANG));
         String channel = parts[2].substring(0, parts[2].indexOf(BLANK));
         String msg = parts[2].substring(parts[2].indexOf(COLON) + 1);
 
-        listener.channelMessageReceived(channel, nick, msg);
+        listener.channelMessageReceived(channel, nick, msg, time);
     }
 
     private void write(String s) {
