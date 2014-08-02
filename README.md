@@ -4,6 +4,7 @@ irkksome ![asdf](app/src/main/res/drawable-mdpi/ic_launcher.png)
 Android IRC client. New and improved!
 We aim to bring an actually usable client to the platform.
 
+[![Stories in Ready](https://badge.waffle.io/ircsex/irkksome.svg?label=ready&title=Ready for impl)](http://waffle.io/ircsex/irkksome)
 ##Introduction
 IRC or Internet Relay Chat is a messaging protocol for communication
 with groups or individuals over the internet. It was created in 1988
