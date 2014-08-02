@@ -139,12 +139,6 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
             case R.id.action_change_nick:
                 ChatActivityStatic.showNickChangeDialog(this, serverManager.getActiveServer());
                 break;
-            case R.id.action_persist:
-
-                break;
-            case R.id.action_getservers:
-                LOG.i(Arrays.toString(new IrkksomeConnectionDAO().getAll().toArray()));
-                break;
             case R.id.action_drop_server:
                 serverManager.getActiveServer().disconnect();
                 break;
