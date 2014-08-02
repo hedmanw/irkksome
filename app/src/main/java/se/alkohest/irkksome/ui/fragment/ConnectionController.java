@@ -14,49 +14,35 @@ import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 
 public class ConnectionController {
-    public static List<ConnectionItem> ITEMS = new ArrayList<>();
+    public static List<ConnectionItem> CONNECTIONS = new ArrayList<>();
+    public static List<ConnectionItem> PERMANENT_CONNECTIONS = new ArrayList<>();
     private static final IrkksomeConnectionDAOLocal connectionDAO = new IrkksomeConnectionDAO();
-    public enum ConnectionTypeEnum {
-        NEW_CONNECTION, OLD_CONNECTION
-    }
 
     static {
-        addConnectionItem(new ConnectionMethod("Regular irkk", R.drawable.connection_icon_blue));
-        addConnectionItem(new ConnectionMethod("Irssi proxy", R.drawable.connection_icon_purple));
-        addConnections();
+        addPermanentConnection(new ConnectionMethod("Regular irkk", R.drawable.connection_icon_blue));
+        addPermanentConnection(new ConnectionMethod("Irssi proxy", R.drawable.connection_icon_purple));
+        addLegacyConnections();
     }
 
     private static void addConnectionItem(ConnectionItem item) {
-        ITEMS.add(item);
+        CONNECTIONS.add(item);
     }
 
-    private static void addConnections() {
+    private static void addPermanentConnection(ConnectionItem item) {
+        PERMANENT_CONNECTIONS.add(item);
+        addConnectionItem(item);
+    }
+
+    private static void addLegacyConnections() {
         List<IrkksomeConnection> connections = connectionDAO.getAll();
         for (IrkksomeConnection connection : connections) {
             addConnectionItem(new LegacyConnection(connection));
         }
     }
 
-    public static abstract class ConnectionItem {
-        private String representation;
-        private ConnectionTypeEnum viewType;
-
-        public ConnectionItem(ConnectionTypeEnum viewType, String representation) {
-            this.representation = representation;
-            this.viewType = viewType;
-        }
-
-        public abstract View getView(LayoutInflater inflater, View convertView);
-        public abstract AbstractConnectionFragment getConnectionFragment();
-
-        @Override
-        public String toString() {
-            return representation;
-        }
-
-        public ConnectionTypeEnum getViewType() {
-            return viewType;
-        }
+    private static void datasetChanged() {
+        CONNECTIONS.retainAll(PERMANENT_CONNECTIONS);
+        addLegacyConnections();
     }
 
     public static class ConnectionMethod extends ConnectionItem {
@@ -102,6 +88,23 @@ public class ConnectionController {
 
             TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
             tv.setText(toString());
+
+            View mainClick = convertView.findViewById(R.id.server_connect_legacy);
+            mainClick.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+            View deleteButton = convertView.findViewById(R.id.server_connect_legacy_remove);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    connectionDAO.remove(connection);
+                    datasetChanged();
+                }
+            });
             return convertView;
         }
 
@@ -115,4 +118,5 @@ public class ConnectionController {
             }
         }
     }
+
 }

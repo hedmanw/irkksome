@@ -27,8 +27,8 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.orm.GenericDAO;
 import se.alkohest.irkksome.ui.fragment.AbstractConnectionFragment;
+import se.alkohest.irkksome.ui.fragment.ConnectionItem;
 import se.alkohest.irkksome.ui.fragment.ConnectionsListFragment;
-import se.alkohest.irkksome.ui.fragment.ConnectionController;
 
 public class ChatActivity extends Activity implements ConnectionsListFragment.OnConnectionSelectedListener, AbstractConnectionFragment.OnConnectPressedListener {
     private static final Log LOG = Log.getInstance(ChatActivity.class);
@@ -175,7 +175,7 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
     }
 
     @Override
-    public void onConnectionSelected(ConnectionController.ConnectionItem connectionItem) {
+    public void onConnectionSelected(ConnectionItem connectionItem) {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         AbstractConnectionFragment connectFragment = connectionItem.getConnectionFragment();

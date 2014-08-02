@@ -6,17 +6,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-public class ConnectionsArrayAdapter extends ArrayAdapter<ConnectionController.ConnectionItem> {
+public class ConnectionsArrayAdapter extends ArrayAdapter<ConnectionItem> {
     private LayoutInflater inflater;
 
     public ConnectionsArrayAdapter(Context context) {
-        super(context, 0, ConnectionController.ITEMS);
+        super(context, 0, ConnectionController.CONNECTIONS);
         inflater = LayoutInflater.from(context);
     }
 
     @Override
     public int getViewTypeCount() {
-        return ConnectionController.ConnectionTypeEnum.values().length;
+        return ConnectionItem.ConnectionTypeEnum.values().length;
     }
 
     @Override

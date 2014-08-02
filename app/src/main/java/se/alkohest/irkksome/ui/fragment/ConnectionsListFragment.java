@@ -7,9 +7,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import org.bouncycastle.crypto.modes.CCMBlockCipher;
 
 import se.alkohest.irkksome.R;
 
@@ -62,18 +59,13 @@ public class ConnectionsListFragment extends ListFragment {
         super.onListItemClick(listView, view, position, id);
 
         if (null != listener) {
-            final ConnectionController.ConnectionItem connectionItem = ConnectionController.ITEMS.get(position);
-            if (position < ConnectionController.ConnectionTypeEnum.values().length) {
-                listener.onConnectionSelected(connectionItem);
-            }
-            else {
-                Toast.makeText(getActivity(), "id=" + ((ConnectionController.LegacyConnection) connectionItem).connection.getId(), Toast.LENGTH_SHORT).show();
-            }
+            final ConnectionItem connectionItem = ConnectionController.CONNECTIONS.get(position);
+            listener.onConnectionSelected(connectionItem);
         }
     }
 
     public interface OnConnectionSelectedListener {
-        public void onConnectionSelected(ConnectionController.ConnectionItem connectionItem);
+        public void onConnectionSelected(ConnectionItem connectionItem);
     }
 
 }
