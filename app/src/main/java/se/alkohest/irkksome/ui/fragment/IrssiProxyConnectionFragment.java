@@ -46,8 +46,9 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
         IrkksomeConnection connection = connectionDAO.create();
         connection.setHost(getFieldValue(R.id.server_connect_host));
         connection.setPort(Integer.parseInt(getFieldValue(R.id.server_connect_port)));
-        connection.setNickname(""); // Because why the fuck not?
-        connection.setUsername(getFieldValue(R.id.server_connect_username));
+        final String userName = getFieldValue(R.id.server_connect_username);
+        connection.setUsername(userName);
+        connection.setNickname(userName); // This field is not present in UI. The hack is to get hilights to recognize "your" name
         connection.setPassword(getFieldValue(R.id.server_connect_password));
         connection.setSshHost(getFieldValue(R.id.server_connect_sshHost));
         connection.setSshUser(getFieldValue(R.id.server_connect_sshUser));
