@@ -10,9 +10,10 @@ import android.widget.ListView;
 
 import se.alkohest.irkksome.R;
 
-public class ConnectionsListFragment extends ListFragment {
+public class ConnectionsListFragment extends ListFragment implements ConnectionController.LegacyConnectionListener {
     public static final String TAG = "CONNECTION_LIST";
     private OnConnectionSelectedListener listener;
+    private ConnectionsArrayAdapter adapter;
 
     public static ConnectionsListFragment newInstance() {
         ConnectionsListFragment fragment = new ConnectionsListFragment();
@@ -25,7 +26,9 @@ public class ConnectionsListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setListAdapter(new ConnectionsArrayAdapter(getActivity()));
+        adapter = new ConnectionsArrayAdapter(getActivity());
+        ConnectionController.listener = this;
+        setListAdapter(adapter);
         setHasOptionsMenu(true);
         getActivity().setTitle(R.string.title_connect_to_server);
     }
@@ -58,10 +61,22 @@ public class ConnectionsListFragment extends ListFragment {
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
 
-        if (null != listener) {
+        if (listener != null) {
             final ConnectionItem connectionItem = ConnectionController.CONNECTIONS.get(position);
             listener.onConnectionSelected(connectionItem);
         }
+    }
+
+    @Override
+    public void legacyConnectionClicked(ConnectionItem connectionItem) {
+        if (listener != null) {
+            listener.onConnectionSelected(connectionItem);
+        }
+    }
+
+    @Override
+    public void legacyConnectionRemoved() {
+        adapter.notifyDataSetChanged();
     }
 
     public interface OnConnectionSelectedListener {

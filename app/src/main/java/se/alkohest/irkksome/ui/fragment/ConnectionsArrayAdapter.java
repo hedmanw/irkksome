@@ -10,7 +10,7 @@ public class ConnectionsArrayAdapter extends ArrayAdapter<ConnectionItem> {
     private LayoutInflater inflater;
 
     public ConnectionsArrayAdapter(Context context) {
-        super(context, 0, ConnectionController.CONNECTIONS);
+        super(context, 0, ConnectionController.getDataset());
         inflater = LayoutInflater.from(context);
     }
 

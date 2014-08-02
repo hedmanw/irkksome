@@ -17,11 +17,11 @@ public class ConnectionController {
     public static List<ConnectionItem> CONNECTIONS = new ArrayList<>();
     public static List<ConnectionItem> PERMANENT_CONNECTIONS = new ArrayList<>();
     private static final IrkksomeConnectionDAOLocal connectionDAO = new IrkksomeConnectionDAO();
+    public static LegacyConnectionListener listener;
 
     static {
         addPermanentConnection(new ConnectionMethod("Regular irkk", R.drawable.connection_icon_blue));
         addPermanentConnection(new ConnectionMethod("Irssi proxy", R.drawable.connection_icon_purple));
-        addLegacyConnections();
     }
 
     private static void addConnectionItem(ConnectionItem item) {
@@ -43,6 +43,11 @@ public class ConnectionController {
     private static void datasetChanged() {
         CONNECTIONS.retainAll(PERMANENT_CONNECTIONS);
         addLegacyConnections();
+    }
+
+    public static List<ConnectionItem> getDataset() {
+        datasetChanged();
+        return CONNECTIONS;
     }
 
     public static class ConnectionMethod extends ConnectionItem {
@@ -93,7 +98,7 @@ public class ConnectionController {
             mainClick.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    listener.legacyConnectionClicked(LegacyConnection.this);
                 }
             });
 
@@ -103,6 +108,7 @@ public class ConnectionController {
                 public void onClick(View view) {
                     connectionDAO.remove(connection);
                     datasetChanged();
+                    listener.legacyConnectionRemoved();
                 }
             });
             return convertView;
@@ -119,4 +125,8 @@ public class ConnectionController {
         }
     }
 
+    public interface LegacyConnectionListener {
+        public void legacyConnectionClicked(ConnectionItem connectionItem);
+        public void legacyConnectionRemoved();
+    }
 }
