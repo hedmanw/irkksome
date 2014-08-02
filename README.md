@@ -31,6 +31,9 @@ In irkksome, you can connect to an existing irssi session. There's no need to us
 ##License
 This software is licensed under the Beerware license.
 
-The Beerware License (version 42)
+The Beerware License (version 42)  
 Very thirsty people wrote this code.
 As long as you retain this notice you can do whatever you want with it. If we meet some day, and you think this stuff is worth it, you are more than welcome to buy us a beer. 
+
+##Warranty
+The software is distributed "as is" - in the hopes that it will be useful to you. No responsibility is implied for usage with irssi proxy.
