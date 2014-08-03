@@ -38,6 +38,16 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
                 connectPressed();
             }
         });
+        if (templateConnection != null) {
+            setFieldValue(inflatedView, R.id.server_connect_host, templateConnection.getHost());
+            setFieldValue(inflatedView, R.id.server_connect_port, String.valueOf(templateConnection.getPort()));
+            setFieldValue(inflatedView, R.id.server_connect_username, templateConnection.getUsername());
+//            setFieldValue(inflatedView, R.id.server_connect_password, templateConnection.getPassword());
+            setFieldValue(inflatedView, R.id.server_connect_sshHost, templateConnection.getSshHost());
+            setFieldValue(inflatedView, R.id.server_connect_sshUser, templateConnection.getSshUser());
+//            setFieldValue(inflatedView, R.id.server_connect_sshPass, templateConnection.getSshPass());
+
+        }
         return inflatedView;
     }
 

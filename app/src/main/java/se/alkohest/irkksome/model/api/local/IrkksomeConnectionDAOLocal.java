@@ -12,4 +12,5 @@ public interface IrkksomeConnectionDAOLocal {
     public List<IrkksomeConnection> getAll();
     public String getPresentation(IrkksomeConnection connection);
     public void remove(IrkksomeConnection bean);
+    IrkksomeConnection findById(long id);
 }

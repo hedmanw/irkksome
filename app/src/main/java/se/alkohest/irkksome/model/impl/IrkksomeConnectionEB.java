@@ -160,4 +160,45 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
                 ", SSH: [ " + sshUser + '@' + sshHost + ':' + sshPort + ']' +
                 "\n]";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        IrkksomeConnectionEB that = (IrkksomeConnectionEB) o;
+
+        if (port != that.port) return false;
+        if (sshPort != that.sshPort) return false;
+        if (useSSH != that.useSSH) return false;
+        if (useSSL != that.useSSL) return false;
+        if (host != null ? !host.equals(that.host) : that.host != null) return false;
+        if (nickname != null ? !nickname.equals(that.nickname) : that.nickname != null)
+            return false;
+//        if (!password.equals(that.password)) return false;
+        if (!realname.equals(that.realname)) return false;
+        if (sshHost != null ? !sshHost.equals(that.sshHost) : that.sshHost != null) return false;
+//        if (sshPass != null ? !sshPass.equals(that.sshPass) : that.sshPass != null) return false;
+        if (sshUser != null ? !sshUser.equals(that.sshUser) : that.sshUser != null) return false;
+        if (!username.equals(that.username)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = host != null ? host.hashCode() : 0;
+        result = 31 * result + port;
+        result = 31 * result + (nickname != null ? nickname.hashCode() : 0);
+        result = 31 * result + username.hashCode();
+        result = 31 * result + realname.hashCode();
+        result = 31 * result + password.hashCode();
+        result = 31 * result + (useSSL ? 1 : 0);
+        result = 31 * result + (useSSH ? 1 : 0);
+        result = 31 * result + (sshHost != null ? sshHost.hashCode() : 0);
+        result = 31 * result + (sshUser != null ? sshUser.hashCode() : 0);
+        result = 31 * result + (sshPass != null ? sshPass.hashCode() : 0);
+        result = 31 * result + sshPort;
+        return result;
+    }
 }

@@ -34,6 +34,14 @@ public class RegularConnectionFragment extends AbstractConnectionFragment {
                 connectPressed();
             }
         });
+        if (templateConnection != null) {
+            setFieldValue(inflatedView, R.id.server_connect_host, templateConnection.getHost());
+            setFieldValue(inflatedView, R.id.server_connect_port, String.valueOf(templateConnection.getPort()));
+            setFieldValue(inflatedView, R.id.server_connect_nickname, templateConnection.getNickname());
+            setFieldValue(inflatedView, R.id.server_connect_realname, templateConnection.getRealname());
+            setFieldValue(inflatedView, R.id.server_connect_username, templateConnection.getUsername());
+            setFieldValue(inflatedView, R.id.server_connect_password, templateConnection.getPassword());
+        }
         return inflatedView;
     }
 

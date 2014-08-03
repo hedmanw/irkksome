@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
@@ -25,7 +26,7 @@ public abstract class AbstractConnectionFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (getArguments() != null) {
-            // Kan läsa upp irkksomeConnection.
+            templateConnection = connectionDAO.findById(getArguments().getLong(CONNECTION_ARGUMENT));
         }
     }
 
@@ -71,6 +72,10 @@ public abstract class AbstractConnectionFragment extends Fragment {
 
     protected String getFieldValue(@IdRes int resourceId) {
         return ((TextView)getActivity().findViewById(resourceId)).getText().toString().trim();
+    }
+
+    protected void setFieldValue(View view, @IdRes int resourceId, String text) {
+        ((TextView) view.findViewById(resourceId)).setText(text);
     }
 
     public abstract IrkksomeConnection getConnection();
