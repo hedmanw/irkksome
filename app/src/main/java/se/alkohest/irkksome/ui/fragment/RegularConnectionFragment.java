@@ -54,6 +54,11 @@ public class RegularConnectionFragment extends AbstractConnectionFragment {
         connection.setRealname(getFieldValue(R.id.server_connect_realname));
         connection.setUsername(getFieldValue(R.id.server_connect_username));
         connection.setPassword(getFieldValue(R.id.server_connect_password));
-        return connection;
+        if (connection.equals(templateConnection)) {
+            return templateConnection;
+        }
+        else {
+            return connection;
+        }
     }
 }

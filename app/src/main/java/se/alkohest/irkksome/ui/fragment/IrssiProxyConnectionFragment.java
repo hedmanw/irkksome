@@ -64,6 +64,13 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
         connection.setSshUser(getFieldValue(R.id.server_connect_sshUser));
         connection.setSshPass(getFieldValue(R.id.server_connect_sshPass));
         connection.setUseSSH(true);
-        return connection;
+        if (connection.equals(templateConnection)) {
+            templateConnection.setPassword(connection.getPassword());
+            templateConnection.setSshPass(connection.getSshPass());
+            return templateConnection;
+        }
+        else {
+            return connection;
+        }
     }
 }

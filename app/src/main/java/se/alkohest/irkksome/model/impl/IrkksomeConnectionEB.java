@@ -10,24 +10,24 @@ import se.alkohest.irkksome.orm.Transient;
 
 @Table("t_connection")
 public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnection {
-    private String host;
+    private String host = "";
     private int port;
-    private String nickname;
+    private String nickname = "";
     @Nullable
-    private String username;
+    private String username = "";
     @Nullable
-    private String realname;
+    private String realname = "";
     @Transient
-    private String password;
+    private String password = "";
 
     private boolean useSSL;
     private boolean useSSH;
     @Nullable
-    private String sshHost;
+    private String sshHost = "";
     @Nullable
-    private String sshUser;
+    private String sshUser = "";
     @Transient
-    private String sshPass;
+    private String sshPass = "";
     private int sshPort = 22;
 
     public String getPassword() {
@@ -183,22 +183,5 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
         if (!username.equals(that.username)) return false;
 
         return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = host != null ? host.hashCode() : 0;
-        result = 31 * result + port;
-        result = 31 * result + (nickname != null ? nickname.hashCode() : 0);
-        result = 31 * result + username.hashCode();
-        result = 31 * result + realname.hashCode();
-        result = 31 * result + password.hashCode();
-        result = 31 * result + (useSSL ? 1 : 0);
-        result = 31 * result + (useSSH ? 1 : 0);
-        result = 31 * result + (sshHost != null ? sshHost.hashCode() : 0);
-        result = 31 * result + (sshUser != null ? sshUser.hashCode() : 0);
-        result = 31 * result + (sshPass != null ? sshPass.hashCode() : 0);
-        result = 31 * result + sshPort;
-        return result;
     }
 }

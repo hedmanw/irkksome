@@ -67,7 +67,10 @@ public abstract class GenericDAO<E extends AbstractBean, I extends BeanEntity> {
     protected I findById(Class<E> beanClass, long id) {
         final Cursor cursor = persistenceContext.findById(AnnotationStripper.getTable(beanClass), id);
         cursor.moveToNext();
-        return initFromCursor(cursor, id);
+        final long pk = cursor.getLong(0);
+        final I bean = initFromCursor(cursor, pk);
+        bean.setId(pk);
+        return bean;
     }
 
     public abstract I findById(long id);
