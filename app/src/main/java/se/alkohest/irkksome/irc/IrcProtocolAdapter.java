@@ -41,14 +41,15 @@ public class IrcProtocolAdapter implements IrcProtocol {
 
     private IrcProtocolListener listener;
     private Connection connection;
+    private BacklogHandler backlogHandler;
     private boolean running;
     private List<String> writeWaitList;
     private StringBuilder motdBuilder;
     private Log log = Log.getInstance(getClass());
-    private boolean backlogReplaying;
 
-    public IrcProtocolAdapter(Connection connection) {
+    public IrcProtocolAdapter(Connection connection, BacklogHandler backlogHandler) {
         this.connection = connection;
+        this.backlogHandler = backlogHandler;
         writeWaitList = new ArrayList<>();
     }
 
@@ -63,24 +64,9 @@ public class IrcProtocolAdapter implements IrcProtocol {
         if (parts.length < 2) return;
         handlePing(parts);
 
-        Date time = new Date();
-        if (backlogReplaying) {
-            try {
-                int index = parts[2].lastIndexOf(':');
-                long unixTime = Long.parseLong(parts[2].substring(index + 1));
-                time = new Date(unixTime*1000);
-                parts[2] = parts[2].substring(0, index - 1);
-            } catch (NumberFormatException e) {}
-        }
+        Date time = backlogHandler.extractDate(parts);
 
         switch (parts[1]) {
-            case IrcProtocolStrings.PROXY:
-                if (parts[2].equals(IrcProtocolStrings.START)) {
-                    backlogReplaying = true;
-                } else if (parts[2].equals(IrcProtocolStrings.STOP)) {
-                    backlogReplaying = false;
-                }
-                break;
             case IrcProtocolStrings.PRIVMSG:
                 handlePrivmsg(parts, time);
                 break;
@@ -309,7 +295,7 @@ public class IrcProtocolAdapter implements IrcProtocol {
 
     @Override
     public void sendBacklogRequest(long unixTime) {
-        write(IrcProtocolStrings.PROXY + BLANK + IrcProtocolStrings.BACKLOG + BLANK + unixTime);
+        write(backlogHandler.getBacklogRequest(unixTime));
     }
 
     @Override

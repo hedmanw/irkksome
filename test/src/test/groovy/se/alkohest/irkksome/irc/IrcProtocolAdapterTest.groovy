@@ -11,10 +11,11 @@ class IrcProtocolAdapterTest extends Specification {
     IrcProtocolAdapter ipa
     IrcProtocolListener subscriber = Mock(IrcProtocolListener)
     Connection connection = Mock(Connection)
+    BacklogHandler backlogHandler = Mock(BacklogHandler)
 
     def setup() {
         mockLog.i(_) >> { args -> println args[0] }
-        ipa = new IrcProtocolAdapter(connection);
+        ipa = new IrcProtocolAdapter(connection, backlogHandler);
         ipa.log = mockLog
         ipa.setListener(subscriber)
         connection.isConnected() >> true

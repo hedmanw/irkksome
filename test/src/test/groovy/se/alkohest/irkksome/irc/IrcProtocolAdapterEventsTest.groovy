@@ -5,7 +5,9 @@ import spock.lang.Specification
 class IrcProtocolAdapterEventsTest extends Specification {
     Log mockLog = Mock(Log)
     IrcProtocolListener subscriber = Mock()
-    IrcProtocolAdapter ipa = new IrcProtocolAdapter()
+    Connection connection = Mock(Connection)
+    BacklogHandler backlogHandler = new NoBacklogHandler()
+    IrcProtocolAdapter ipa = new IrcProtocolAdapter(connection, backlogHandler);
 
     def setup() {
         mockLog.i(_) >> { args -> println args[0] }
