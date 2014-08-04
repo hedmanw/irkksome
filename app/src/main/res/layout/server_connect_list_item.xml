@@ -19,7 +19,7 @@
 
         <TextView
             style="@style/list_item.hint"
-            android:text="(2 hours ago) --> ikonen ska eg. vara ett X"
+            android:text="(2 hours ago)"
             android:layout_below="@android:id/text1"
             android:id="@android:id/text2" />
     </RelativeLayout>
@@ -28,7 +28,7 @@
         android:layout_height="70dp"
         android:paddingRight="16dp"
         android:paddingLeft="16dp"
-        android:src="@drawable/send_now"
+        android:src="@drawable/ic_menu_remove"
         android:background="@drawable/states_split_list"
         android:layout_alignParentRight="true"
         android:id="@+id/server_connect_legacy_remove"/>

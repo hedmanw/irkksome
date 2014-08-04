@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/send_button"
             android:padding="4dp"
-            android:src="@drawable/send_now"
+            android:src="@drawable/ic_menu_send"
             android:background="@drawable/states_split_list"
             android:layout_alignParentRight="true"
             android:onClick="sendMessage" />
