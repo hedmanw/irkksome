@@ -7,10 +7,8 @@
 
     <TextView
         android:id="@+id/drawer_label_server"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:textSize="17sp"
-        android:textStyle="bold"/>
+        style="@style/list_heading"
+        android:textColor="#58585B"
+        android:text="irc.chalmers.it"/>
 
 </LinearLayout>
