@@ -8,17 +8,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listView"
-        android:layout_gravity="center_vertical" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_above="@android:id/inputArea"
-        android:background="#FFC0C0C0"/>
+        android:layout_gravity="center_vertical"
+        android:layout_above="@android:id/inputArea"/>
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@android:id/inputArea"
         android:layout_alignParentBottom="true">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFC0C0C0"
+            android:layout_alignParentTop="true"/>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
