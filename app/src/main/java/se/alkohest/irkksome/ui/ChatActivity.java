@@ -59,8 +59,7 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
                 serverManager.getActiveServer().showServer();
             }
         }
-        else {
-            LOG.i("How did we get here? Tilt?"); // Kan vi ens hamna här?
+        else { // Device was tilted
             // This might require us to loop through all servers and set new CallbackHandlers
             serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
         }
