@@ -22,6 +22,7 @@ import se.alkohest.irkksome.ui.fragment.ConnectionsListFragment;
 
 public class CallbackHandler implements ServerCallback {
     private final ConnectionListAdapter connectionListAdapter;
+    private final ListView connectionListView;
     private UserAdapter userAdapter;
     private final Activity context;
     private final FragmentManager fragmentManager;
@@ -31,6 +32,7 @@ public class CallbackHandler implements ServerCallback {
         this.context = context;
         fragmentManager = context.getFragmentManager();
         connectionListAdapter = ConnectionListAdapter.getInstance();
+        connectionListView = (ListView) context.findViewById(R.id.left_drawer_list);
         this.unreadStack = unreadStack;
     }
 
@@ -47,7 +49,8 @@ public class CallbackHandler implements ServerCallback {
                 fragmentTransaction.replace(R.id.fragment_container, serverInfoFragment);
                 fragmentTransaction.commit();
 
-                connectionListAdapter.notifyDataSetChanged();
+                connectionListAdapter.notifyDataSetChanged(); // We don't need to reload the dataset unless it's a NEW connection, fix this!
+                connectionListView.setItemChecked(0, true);
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
             }
         });
@@ -120,7 +123,8 @@ public class CallbackHandler implements ServerCallback {
 
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
 
-                connectionListAdapter.notifyDataSetChanged();
+                connectionListAdapter.notifyDataSetChanged(); // We don't need to reload the dataset unless it's a NEW channel, fix this!
+                connectionListView.setItemChecked(connectionListAdapter.getPosition(channel), true);
             }
         });
     }

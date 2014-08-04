@@ -107,4 +107,19 @@ public class ConnectionListAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
+    public int getPosition(IrcChannel channel) {
+        int cummulativePosition = 0;
+        for (Server server : servers) {
+            cummulativePosition++;
+            IrcServer bean = server.getBackingBean();
+            final int indexOfChannel = bean.getConnectedChannels().indexOf(channel);
+            if (indexOfChannel >= 0) {
+                cummulativePosition += indexOfChannel;
+                return cummulativePosition;
+            }
+            cummulativePosition += bean.getConnectedChannels().size();
+        }
+        return 0;
+    }
 }

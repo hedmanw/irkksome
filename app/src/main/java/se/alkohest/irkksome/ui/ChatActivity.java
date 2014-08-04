@@ -88,15 +88,16 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
                 return true;
             }
         });
-        connectionsList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+        connectionsList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
-            public void onGroupExpand(int groupPos) {
+            public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPos, long id) {
                 drawerLayout.closeDrawer(leftDrawer);
                 final Server selectedServer = listAdapter.getGroup(groupPos);
                 if (selectedServer != serverManager.getActiveServer()) {
                     serverManager.setActiveServer(selectedServer);
                 }
                 serverManager.getActiveServer().showServer();
+                return true;
             }
         });
     }
