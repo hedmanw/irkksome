@@ -16,6 +16,7 @@ import se.alkohest.irkksome.model.entity.IrcMessage;
 public class ChannelFragment extends Fragment {
     private static ArrayAdapter<IrcMessage> arrayAdapter;
     private static IrcChannel ircChannel;
+    private static ListView messageList;
 
     public static ChannelFragment newInstance(IrcChannel ircChannel) {
         ChannelFragment fragment = new ChannelFragment();
@@ -41,9 +42,26 @@ public class ChannelFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_channel, container, false);
-        ListView lv = (ListView) inflatedView.findViewById(R.id.listView);
-        lv.setAdapter(arrayAdapter);
+        messageList = (ListView) inflatedView.findViewById(R.id.listView);
+        messageList.setAdapter(arrayAdapter);
+        scrollToBottom();
         return inflatedView;
+    }
+
+    public static void scrollWhenAtBottom() {
+        if (!hasBacklog()) {
+            scrollToBottom();
+        }
+    }
+
+    private static boolean hasBacklog() {
+        return messageList.getLastVisiblePosition() < arrayAdapter.getCount()-1;
+    }
+
+    public static void scrollToBottom() {
+        if (arrayAdapter != null) {
+            messageList.setSelection(arrayAdapter.getCount()-1);
+        }
     }
 
     public static ArrayAdapter<IrcMessage> getAdapter() {

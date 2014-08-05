@@ -12,6 +12,11 @@ public class NoBacklogHandler implements BacklogHandler {
     }
 
     @Override
+    public boolean isBacklogReplaying() {
+        return false;
+    }
+
+    @Override
     public String getBacklogRequest(long unixTime) {
         return "";
     }

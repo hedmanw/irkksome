@@ -40,6 +40,10 @@ public class IrssiProxyBacklogHandler implements BacklogHandler {
         return new Date();
     }
 
+    public boolean isBacklogReplaying() {
+        return backlogReplaying;
+    }
+
     @Override
     public String getBacklogRequest(long unixTime) {
         return PROXY + BLANK + BACKLOG + BLANK + unixTime;

@@ -11,7 +11,7 @@ import spock.lang.Specification
 public class ServerImplTest extends Specification {
     def backingServer = new IrcServerDAO().create("localhost")
     def data = new IrkksomeConnectionDAO().create()
-    def server
+    Server server
     def serverDAO = new IrcServerDAO()
     def channelDAO = new IrcChannelDAO()
     def messageDAO = new IrcMessageDAO()
@@ -152,10 +152,12 @@ public class ServerImplTest extends Specification {
         when:
         server.backingBean.setSelf(userDAO.create("erland"));
         server.channelMessageReceived("#fest", "lars", "lalalala", new Date())
+        server.setActiveChannel(serverDAO.getChannel(server.ircServer, "#fest"))
+        server.channelMessageReceived("#fest", "lars", "lalalala", new Date())
 
         then:
         1 * server.listener.messageReceived()
-        serverDAO.getChannel(server.ircServer, "#fest").messages.size() == 1
+        serverDAO.getChannel(server.ircServer, "#fest").messages.size() == 2
     }
 
     def "show server"() {

@@ -252,6 +252,8 @@ public class ServerImpl implements Server, IrcProtocolListener {
         IrcUser ircUser = serverDAO.getUser(ircServer, user);
         IrcMessage ircMessage = messageDAO.create(ircUser, message, time);
         IrcChannel ircChannel;
+
+        // Hilightlogiken ska flyttas till hilights
         if (ircServer.getSelf().getName().equals(channel)) {
             ircChannel = serverDAO.getChannel(ircServer, user);
             ircMessage.setHilight(true);
@@ -268,7 +270,9 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
         ircServer.setLastMessageTime(time);
         channelDAO.addMessage(ircChannel, ircMessage);
-        listener.messageReceived();
+        if (ircChannel == activeChannel && !ircProtocol.isBacklogReplaying()) {
+            listener.messageReceived();
+        }
     }
 
     @Override

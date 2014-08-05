@@ -299,6 +299,11 @@ public class IrcProtocolAdapter implements IrcProtocol {
     }
 
     @Override
+    public boolean isBacklogReplaying() {
+        return backlogHandler.isBacklogReplaying();
+    }
+
+    @Override
     public void setListener(IrcProtocolListener listener) {
         this.listener = listener;
     }

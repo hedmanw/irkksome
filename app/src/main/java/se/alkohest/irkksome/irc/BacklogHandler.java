@@ -9,5 +9,7 @@ public interface BacklogHandler {
 
     public Date extractDate(String[] parts);
 
+    public boolean isBacklogReplaying();
+
     public String getBacklogRequest(long unixTime);
 }

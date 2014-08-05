@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.view.Gravity;
-import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -51,6 +50,7 @@ public class CallbackHandler implements ServerCallback {
 
                 connectionListAdapter.notifyDataSetChanged(); // We don't need to reload the dataset unless it's a NEW connection, fix this!
                 connectionListView.setItemChecked(0, true);
+                connectionListView.setSelection(0);
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
             }
         });
@@ -124,7 +124,9 @@ public class CallbackHandler implements ServerCallback {
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
 
                 connectionListAdapter.notifyDataSetChanged(); // We don't need to reload the dataset unless it's a NEW channel, fix this!
-                connectionListView.setItemChecked(connectionListAdapter.getPosition(channel), true);
+                final int position = connectionListAdapter.getPosition(channel);
+                connectionListView.setItemChecked(position, true);
+                connectionListView.setSelection(position);
             }
         });
     }
@@ -141,6 +143,7 @@ public class CallbackHandler implements ServerCallback {
             public void run() {
                 if (ChannelFragment.getAdapter() != null) {
                     ChannelFragment.getAdapter().notifyDataSetChanged();
+                    ChannelFragment.scrollToBottom();
                 }
             }
         });
