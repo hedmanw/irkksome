@@ -20,8 +20,8 @@ public class ConnectionController {
     public static LegacyConnectionListener listener;
 
     static {
-        addPermanentConnection(new ConnectionMethod("Regular irkk", R.drawable.connection_icon_blue));
-        addPermanentConnection(new ConnectionMethod("Irssi proxy", R.drawable.connection_icon_purple));
+        addPermanentConnection(new ConnectionMethod(R.string.connection_type_regular, R.drawable.connection_icon_blue));
+        addPermanentConnection(new ConnectionMethod(R.string.connection_type_irssi, R.drawable.connection_icon_purple));
     }
 
     private static void addConnectionItem(ConnectionItem item) {
@@ -52,9 +52,11 @@ public class ConnectionController {
 
     public static class ConnectionMethod extends ConnectionItem {
         private int icon;
+        private int representationID;
 
-        public ConnectionMethod(String representation, int color) {
-            super(ConnectionTypeEnum.NEW_CONNECTION, representation);
+        public ConnectionMethod(int representation, int color) {
+            super(ConnectionTypeEnum.NEW_CONNECTION, "");
+            representationID = representation;
             this.icon = color;
         }
 
@@ -67,7 +69,7 @@ public class ConnectionController {
             View view = convertView.findViewById(R.id.server_connect_icon);
             view.setBackground(icon);
             TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
-            tv.setText(toString());
+            tv.setText(representationID);
             return convertView;
         }
 

@@ -28,5 +28,7 @@
     <string name="hint_username">Username</string>
     <string name="hint_port">Port</string>
     <string name="hint_password">Password</string>
+    <string name="connection_type_regular">Regular irkk</string>
+    <string name="connection_type_irssi">Irssi proxy</string>
 
 </resources>

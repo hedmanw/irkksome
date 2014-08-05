@@ -7,13 +7,21 @@
     android:paddingRight="16dp"
     tools:context=".ui.fragment.IrssiProxyConnectionFragment">
 
-    <View
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:minHeight="10dp"
-        android:minWidth="10dp"
-        android:background="@drawable/connection_icon_purple"
-        android:id="@+id/server_connect_icon"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            style="@style/new_connection_icon"
+            android:background="@drawable/connection_icon_purple"
+            android:id="@+id/server_connect_icon" />
+
+        <TextView
+            style="@style/list_item"
+            android:text="@string/connection_type_irssi"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@id/server_connect_icon"/>
+    </RelativeLayout>
 
     <EditText
         android:layout_width="match_parent"
