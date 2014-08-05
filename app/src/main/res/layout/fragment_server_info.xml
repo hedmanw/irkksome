@@ -5,54 +5,52 @@
     android:orientation="vertical"
     tools:context=".ui.ServerInfoFragment">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
         <TextView
-            style="@style/category_hint"
-            android:text="Basics" />
+            style="@style/list_heading"
+            android:text="BASICS" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grayish"/>
 
-        <TextView
-            style="@style/list_item"
-            android:id="@+id/server_info_hostname" />
         <TextView
             style="@style/list_item.hint"
             android:text="@string/hint_hostname" />
-
         <TextView
             style="@style/list_item"
-            android:id="@+id/server_info_nickname" />
+            android:id="@+id/server_info_hostname" />
+
         <TextView
             style="@style/list_item.hint"
             android:text="@string/hint_nickname" />
-
         <TextView
             style="@style/list_item"
-            android:id="@+id/server_motd" />
+            android:id="@+id/server_info_nickname" />
+
         <TextView
             style="@style/list_item.hint"
             android:text="@string/hint_motd" />
+        <TextView
+            style="@style/list_item"
+            android:id="@+id/server_motd" />
+
 
         <TextView
-            style="@style/category_hint"
-            android:text="Connected channels" />
+            style="@style/list_heading"
+            android:text="CHANNELS" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grayish"/>
     </LinearLayout>
-
     <!--<ListView-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->
         <!--android:id="@+id/server_info_connected_channels"/>-->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:text="[List of connected channels]"/>
-    <Button
-        android:id="@+id/server_info_join_channel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:text="@string/join_channel" />
 </LinearLayout>

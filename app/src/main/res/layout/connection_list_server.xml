@@ -8,7 +8,6 @@
     <TextView
         android:id="@+id/drawer_label_server"
         style="@style/list_heading"
-        android:textColor="#58585B"
         android:text="irc.chalmers.it"/>
 
 </LinearLayout>
