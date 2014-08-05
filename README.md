@@ -29,6 +29,9 @@ In irkksome, you can connect to an existing irssi session. There's no need to us
 - Groovy 1.8.6
 - Spock 0.6-groovy-1.8
 
+##Contact
+Want to contribute or have questions? Meet us at [`#irkksome` on irc.chalmers.it](ircs://irc.chalmers.it:9999/irkksome) 
+
 ##License
 This software is licensed under the Beerware license.
 
