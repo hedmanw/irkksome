@@ -46,7 +46,7 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
         connectionsList = (ExpandableListView) findViewById(R.id.left_drawer_list);
 
         if (savedInstanceState == null) {
-//            serverManager.loadPersisted();
+//            serverManager.loadPersisted(); Either load from DB, or make connections static. Can we ensure all connections are kept alive?
             if (serverManager.getServers().isEmpty()) { // No sessions are running, cold start
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -75,6 +75,9 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
         connectionsList.setEmptyView(findViewById(android.R.id.empty));
         final ConnectionListAdapter listAdapter = ConnectionListAdapter.getInstance();
         connectionsList.setAdapter(listAdapter);
+        for (int i = 0, serversSize = serverManager.getServers().size(); i < serversSize; i++) {
+            connectionsList.expandGroup(i);
+        }
         connectionsList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPos, int childPos, long id) {
