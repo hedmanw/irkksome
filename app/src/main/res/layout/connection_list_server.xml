@@ -8,6 +8,7 @@
     <TextView
         android:id="@+id/drawer_label_server"
         style="@style/list_heading"
+        android:paddingLeft="8dp"
         android:text="irc.chalmers.it"/>
 
 </LinearLayout>
