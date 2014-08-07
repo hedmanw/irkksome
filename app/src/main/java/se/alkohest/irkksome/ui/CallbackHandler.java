@@ -68,8 +68,8 @@ public class CallbackHandler implements ServerCallback {
                 ConnectionsListFragment connectionsListFragment = ConnectionsListFragment.newInstance();
                 fragmentTransaction.replace(R.id.fragment_container, connectionsListFragment);
                 fragmentTransaction.commit();
-
                 connectionListAdapter.notifyDataSetChanged();
+                ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(null);
             }
         });
 
