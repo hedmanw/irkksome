@@ -10,8 +10,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.Arrays;
@@ -104,6 +106,15 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
                 return true;
             }
         });
+
+        final ListView userList = (ListView) findViewById(R.id.right_drawer_list);
+        userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final String nick = ((TextView) view.findViewById(R.id.nick)).getText().toString();
+                startQuery(nick);
+            }
+        });
     }
 
     @Override
@@ -167,9 +178,8 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
         editText.getText().clear();
     }
 
-    public void startQuery(View view) {
-        String nick = (String) ((TextView) view.findViewById(R.id.nick)).getText();
-        serverManager.getActiveServer().startQuery(nick);
+    public void startQuery(String nickname) {
+        serverManager.getActiveServer().startQuery(nickname);
         drawerLayout.closeDrawer(findViewById(R.id.right_drawer));
     }
 
