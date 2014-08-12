@@ -50,7 +50,7 @@ public class UserSetAdapter extends UserAdapter {
         final View result;
 
         if (convertView == null) {
-            result = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item, parent, false);
+            result = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_list_item, parent, false);
         } else {
             result = convertView;
         }

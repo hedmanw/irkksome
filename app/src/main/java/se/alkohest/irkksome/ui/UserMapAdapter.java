@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import se.alkohest.irkksome.R;
@@ -58,7 +57,7 @@ public class UserMapAdapter extends UserAdapter {
         final View result;
 
         if (convertView == null) {
-            result = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item, parent, false);
+            result = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_list_item, parent, false);
         } else {
             result = convertView;
         }

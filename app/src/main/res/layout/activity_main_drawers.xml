@@ -41,11 +41,6 @@
             android:orientation="vertical"
             android:id="@+id/right_drawer"
             android:background="#EEE">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Här kommer det vara users"/>
         <ListView
                 android:id="@+id/right_drawer_list"
                 android:layout_width="280dp"
