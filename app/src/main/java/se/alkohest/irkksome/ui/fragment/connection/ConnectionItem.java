@@ -3,7 +3,9 @@ package se.alkohest.irkksome.ui.fragment.connection;
 import android.view.LayoutInflater;
 import android.view.View;
 
-public abstract class ConnectionItem {
+import se.alkohest.irkksome.ui.AbstractListItem;
+
+public abstract class ConnectionItem extends AbstractListItem {
     public enum ConnectionTypeEnum {
         NEW_CONNECTION, OLD_CONNECTION
     }
