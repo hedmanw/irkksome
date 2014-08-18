@@ -1,8 +1,8 @@
-package se.alkohest.irkksome.ui.fragment;
+package se.alkohest.irkksome.ui.fragment.connection;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.app.ListFragment;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;

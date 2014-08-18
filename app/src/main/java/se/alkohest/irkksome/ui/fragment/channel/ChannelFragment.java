@@ -1,4 +1,4 @@
-package se.alkohest.irkksome.ui;
+package se.alkohest.irkksome.ui.fragment.channel;
 
 import android.app.Activity;
 import android.app.Fragment;

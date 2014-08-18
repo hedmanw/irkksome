@@ -16,21 +16,18 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.Arrays;
-
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.db.SQLitePersistenceContext;
 import se.alkohest.irkksome.irc.Log;
 import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.api.UnreadEntity;
-import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.orm.GenericDAO;
-import se.alkohest.irkksome.ui.fragment.AbstractConnectionFragment;
-import se.alkohest.irkksome.ui.fragment.ConnectionItem;
-import se.alkohest.irkksome.ui.fragment.ConnectionsListFragment;
+import se.alkohest.irkksome.ui.fragment.connection.AbstractConnectionFragment;
+import se.alkohest.irkksome.ui.fragment.connection.ConnectionItem;
+import se.alkohest.irkksome.ui.fragment.connection.ConnectionsListFragment;
 
 public class ChatActivity extends Activity implements ConnectionsListFragment.OnConnectionSelectedListener, AbstractConnectionFragment.OnConnectPressedListener {
     private static final Log LOG = Log.getInstance(ChatActivity.class);

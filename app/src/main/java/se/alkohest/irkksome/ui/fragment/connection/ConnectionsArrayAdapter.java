@@ -1,4 +1,4 @@
-package se.alkohest.irkksome.ui.fragment;
+package se.alkohest.irkksome.ui.fragment.connection;
 
 import android.content.Context;
 import android.view.LayoutInflater;
