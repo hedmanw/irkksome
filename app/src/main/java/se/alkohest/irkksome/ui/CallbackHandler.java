@@ -93,6 +93,7 @@ public class CallbackHandler implements ServerCallback {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                // Controller?
                 TextView number = (TextView) context.findViewById(R.id.actionbar_notifcation_textview);
                 if (unreadStack.getHilightCount() > 0) {
                     number.setText(unreadStack.getHilightCount() + "");
