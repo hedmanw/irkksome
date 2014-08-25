@@ -158,10 +158,12 @@ public class CallbackHandler implements ServerCallback {
 
     @Override
     public void userLeftChannel(IrcChannel channel, IrcUser user) {
+        updateUserList();
     }
 
     @Override
     public void userQuit(IrcUser user, List<IrcChannel> channels) {
+        updateUserList();
     }
 
     @Override
