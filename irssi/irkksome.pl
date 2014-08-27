@@ -1,6 +1,6 @@
 use Irssi;
 
-$VERSION = "0.5";
+$VERSION = "0.6";
 %IRSSI = (
     name            => "irkksome",
     description     => "Integrates irssi with the irkksome android app.",
@@ -111,9 +111,9 @@ sub signals_add {
     Irssi::signal_add_last('message private', 'private');
     Irssi::signal_add_last('message own_public', 'own_public');
     Irssi::signal_add_last('message own_private', 'own_private');
-    Irssi::signal_add_last('message join', 'join');
-    Irssi::signal_add_last('message part', 'part');
-    Irssi::signal_add_last('message quit', 'quit');
+    #Irssi::signal_add_last('message join', 'join');
+    #Irssi::signal_add_last('message part', 'part');
+    #Irssi::signal_add_last('message quit', 'quit');
     #Irssi::signal_add_last('message kick', 'kick');
     Irssi::signal_add_last('message nick', 'nick');
     Irssi::signal_add_last('message own_nick', 'nick');
@@ -127,9 +127,9 @@ sub signals_remove {
     Irssi::signal_remove('message private', 'private');
     Irssi::signal_remove('message own_public', 'own_public');
     Irssi::signal_remove('message own_private', 'own_private');
-    Irssi::signal_remove('message join', 'join');
-    Irssi::signal_remove('message part', 'part');
-    Irssi::signal_remove('message quit', 'quit');
+    #Irssi::signal_remove('message join', 'join');
+    #Irssi::signal_remove('message part', 'part');
+    #Irssi::signal_remove('message quit', 'quit');
     #Irssi::signal_remove('message kick', 'kick');
     Irssi::signal_remove('message nick', 'nick');
     Irssi::signal_remove('message own_nick', 'nick');
