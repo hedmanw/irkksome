@@ -31,9 +31,9 @@ public class IrcChannelEBTest extends Specification {
 
     def "getSetMessages"() {
         when:
-        def fest = new IrcMessageEB()
+        def fest = new IrcChatMessageEB()
         fest.setMessage("fest?")
-        def ligga = new IrcMessageEB()
+        def ligga = new IrcChatMessageEB()
         ligga.setMessage("ligga!")
 
         def messages = new ArrayList<IrcMessage>()

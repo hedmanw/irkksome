@@ -1,13 +1,6 @@
 package se.alkohest.irkksome.orm
 
-import se.alkohest.irkksome.model.entity.IrcMessage
-import se.alkohest.irkksome.model.impl.FuckYouGradle
-import se.alkohest.irkksome.model.impl.GradleIsPrettyWorthless
-import se.alkohest.irkksome.model.impl.GradleSucks
-import se.alkohest.irkksome.model.impl.IrcChannelEB
-import se.alkohest.irkksome.model.impl.IrcMessageEB
-import se.alkohest.irkksome.model.impl.IrcServerEB
-import se.alkohest.irkksome.model.impl.IrcUserEB
+import se.alkohest.irkksome.model.impl.*
 import spock.lang.Specification
 
 public class AnnotationStripperTest extends Specification{
@@ -64,7 +57,7 @@ public class AnnotationStripperTest extends Specification{
 
     def "Gets OTO class"() {
         when:
-        def oneToOne = AnnotationStripper.getOneToOne(new IrcMessageEB())
+        def oneToOne = AnnotationStripper.getOneToOne(new IrcChatMessageEB())
 
         then:
         oneToOne == IrcUserEB.class

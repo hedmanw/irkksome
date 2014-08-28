@@ -5,7 +5,7 @@ import spock.lang.Specification
 public class IrcMessageEBTest extends Specification {
     def "getSetMessage"() {
         when:
-        def message = new IrcMessageEB()
+        def message = new IrcChatMessageEB()
         message.setMessage("This is a message")
 
         then:
@@ -14,7 +14,7 @@ public class IrcMessageEBTest extends Specification {
 
     def "getSetTimestamp"() {
         when:
-        def message = new IrcMessageEB()
+        def message = new IrcChatMessageEB()
         def date = new Date()
         message.setTimestamp(date)
 
@@ -24,7 +24,7 @@ public class IrcMessageEBTest extends Specification {
 
     def "getSetAuthor"() {
         when:
-        def message = new IrcMessageEB()
+        def message = new IrcChatMessageEB()
         def author = new IrcUserEB()
         author.setName("Korvryttarn")
         message.setAuthor(author)

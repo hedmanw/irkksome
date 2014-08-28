@@ -21,6 +21,7 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
+import se.alkohest.irkksome.model.impl.IrcChatMessageEB;
 
 public class ServerImpl implements Server, IrcProtocolListener {
     private IrcProtocol ircProtocol;
@@ -250,7 +251,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public void channelMessageReceived(String channel, String user, String message, Date time) {
         IrcUser ircUser = serverDAO.getUser(ircServer, user);
-        IrcMessage ircMessage = messageDAO.create(ircUser, message, time);
+        IrcChatMessageEB ircMessage = messageDAO.create(ircUser, message, time);
         IrcChannel ircChannel;
 
         // Hilightlogiken ska flyttas till hilights

@@ -12,12 +12,4 @@ public interface IrcMessage extends BeanEntity {
     public Date getTimestamp();
 
     public void setTimestamp(Date timestamp);
-
-    public IrcUser getAuthor();
-
-    public void setAuthor(IrcUser author);
-
-    public boolean isHilight();
-
-    public void setHilight(boolean hilight);
 }
