@@ -9,6 +9,10 @@ public interface ConnectionData {
 
     public void setUseSSH(boolean useSSH);
 
+    public boolean isSSHKeySaved();
+
+    public void setSSHKeySaved(boolean saved);
+
     public int getSshPort();
 
     public void setSshPort(int sshPort);

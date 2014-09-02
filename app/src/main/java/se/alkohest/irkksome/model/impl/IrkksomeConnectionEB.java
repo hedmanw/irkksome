@@ -42,6 +42,7 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
     private String sshPass = "";
     @Column("sshPort")
     private int sshPort = 22;
+    private boolean SSHKeySaved;
 
     public String getPassword() {
         return password;
@@ -57,6 +58,16 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
 
     public void setUseSSH(boolean useSSH) {
         this.useSSH = useSSH;
+    }
+
+    @Override
+    public boolean isSSHKeySaved() {
+        return SSHKeySaved;
+    }
+
+    @Override
+    public void setSSHKeySaved(boolean saved) {
+        SSHKeySaved = saved;
     }
 
     public int getSshPort() {
