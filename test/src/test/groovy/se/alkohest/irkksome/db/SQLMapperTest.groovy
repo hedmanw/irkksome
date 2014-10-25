@@ -38,7 +38,7 @@ public class SQLMapperTest extends Specification {
         length == user.length() + server.length() + channel.length() + message.length() + chatmessage.length() + irkksomeconn.length()
     }
 
-    def "getCreateStatement works for IrcUserEB"() {
+    def "getCreateStatement works for plain object"() {
         when:
         String userEB = SQLMapper.getCreateStatement(IrcUserEB.class)
 
@@ -46,11 +46,19 @@ public class SQLMapperTest extends Specification {
         userEB == "CREATE TABLE User(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL);"
     }
 
-    def "getCreateStatement works for IrkksomeConnection"() {
+    def "getCreateStatement works for multiple types/nullable"() {
         when:
         String irkksomeConnectionEB = SQLMapper.getCreateStatement(IrkksomeConnectionEB.class)
 
         then:
         irkksomeConnectionEB == "CREATE TABLE Connection(id INTEGER PRIMARY KEY AUTOINCREMENT, host TEXT NOT NULL, port INTEGER NOT NULL, nickname TEXT NOT NULL, username TEXT, realname TEXT, useSSL INTEGER NOT NULL, useSSH INTEGER NOT NULL, sshHost TEXT, sshUser TEXT, sshPort INTEGER NOT NULL);"
+    }
+
+    def "getCreateStatement works for one to one"() {
+        when:
+        String chatMessageEB = SQLMapper.getCreateStatement(IrcChatMessageEB.class)
+
+        then:
+        chatMessageEB == "CREATE TABLE ChatMessage(id INTEGER PRIMARY KEY AUTOINCREMENT, author_id INTEGER NOT NULL, hilight INTEGER NOT NULL);" // TODO: Ska även ha ref till parent
     }
 }

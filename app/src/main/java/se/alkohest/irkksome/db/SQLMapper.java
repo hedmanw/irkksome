@@ -8,6 +8,7 @@ import java.util.Map;
 import se.alkohest.irkksome.orm.AbstractBean;
 import se.alkohest.irkksome.orm.AnnotationStripper;
 import se.alkohest.irkksome.orm.Nullable;
+import se.alkohest.irkksome.orm.OneToOne;
 import se.emilsjolander.sprinkles.annotations.Column;
 
 public class SQLMapper {
@@ -38,7 +39,13 @@ public class SQLMapper {
                 stringBuilder.append(", ");
                 String fieldName = field.getAnnotation(Column.class).value();
                 stringBuilder.append(fieldName).append(" ");
-                String type = getSQLType(field);
+                String type;
+                if (field.isAnnotationPresent(OneToOne.class)) {
+                    type = sqlTypes.get(long.class);
+                }
+                else {
+                    type = getSQLType(field);
+                }
                 stringBuilder.append(type);
                 if (!field.isAnnotationPresent(Nullable.class)) {
                     stringBuilder.append(" NOT NULL");

@@ -8,7 +8,7 @@ import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.orm.AbstractBean;
 import se.emilsjolander.sprinkles.annotations.Table;
 
-@Table("t_message")
+@Table("Message")
 public abstract class IrcMessageEB extends AbstractBean implements IrcMessage {
     protected String message;
     protected Date timestamp;

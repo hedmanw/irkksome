@@ -4,12 +4,15 @@ import android.content.ContentValues;
 
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.OneToOne;
+import se.emilsjolander.sprinkles.annotations.Column;
 import se.emilsjolander.sprinkles.annotations.Table;
 
 @Table("ChatMessage")
 public class IrcChatMessageEB extends IrcMessageEB {
+    @Column("author_id")
     @OneToOne(IrcUserEB.class)
     private IrcUser author;
+    @Column("hilight")
     private boolean hilight;
 
     public IrcUser getAuthor() {
