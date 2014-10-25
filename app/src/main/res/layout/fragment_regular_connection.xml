@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/server_connect_host"
         android:hint="@string/hint_hostname"
+        android:text="irc.chalmers.it"
         android:inputType="textUri" />
 
     <EditText
@@ -36,6 +37,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/server_connect_port"
         android:hint="@string/hint_port"
+        android:text="6667"
         android:inputType="number" />
 
     <EditText
@@ -43,6 +45,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/server_connect_nickname"
         android:hint="@string/hint_nickname"
+        android:text="irkksome"
         android:inputType="textUri" />
 
     <EditText
@@ -50,6 +53,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/server_connect_realname"
         android:hint="@string/hint_realname"
+        android:text="irkksome"
         android:inputType="textUri" />
 
     <EditText
@@ -57,6 +61,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/server_connect_username"
         android:hint="@string/hint_username"
+        android:text="banned"
         android:inputType="textUri" />
 
     <EditText

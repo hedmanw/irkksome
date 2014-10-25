@@ -4,10 +4,12 @@ import android.content.ContentValues;
 
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
-import se.alkohest.irkksome.orm.Table;
+import se.emilsjolander.sprinkles.annotations.Column;
+import se.emilsjolander.sprinkles.annotations.Table;
 
-@Table("t_user")
+@Table("User")
 public class IrcUserEB extends AbstractBean implements IrcUser {
+    @Column("name")
     private String name;
 
     @Override
@@ -35,7 +37,7 @@ public class IrcUserEB extends AbstractBean implements IrcUser {
         return name.hashCode();
     }
 
-    @Override
+//    @Override
     public ContentValues createRow(long dependentPK) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);

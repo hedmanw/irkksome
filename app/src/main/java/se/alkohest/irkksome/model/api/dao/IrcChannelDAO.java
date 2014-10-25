@@ -1,10 +1,6 @@
 package se.alkohest.irkksome.model.api.dao;
 
-import android.database.Cursor;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import se.alkohest.irkksome.model.api.local.IrcChannelDAOLocal;
@@ -13,9 +9,8 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.model.impl.IrcChannelEB;
-import se.alkohest.irkksome.orm.GenericDAO;
 
-public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implements IrcChannelDAOLocal {
+public class IrcChannelDAO implements IrcChannelDAOLocal {
     private IrcMessageDAOLocal messageDAO = new IrcMessageDAO();
 
     @Override
@@ -25,18 +20,6 @@ public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implemen
         ircChannel.setMessages(new ArrayList<IrcMessage>());
         ircChannel.setUsers(new ConcurrentHashMap<IrcUser, String>());
         return ircChannel;
-    }
-
-    @Override
-    public IrcChannel findById(long id) {
-        return findById(IrcChannelEB.class, id);
-    }
-
-    @Override
-    protected IrcChannel initFromCursor(Cursor cursor, long pk) {
-        IrcChannel channel = create(cursor.getString(1));
-        channel.setMessages(messageDAO.findMessagesByChannel(pk));
-        return channel;
     }
 
     @Override
@@ -57,23 +40,5 @@ public class IrcChannelDAO extends GenericDAO<IrcChannelEB, IrcChannel> implemen
     @Override
     public String removeUser(IrcChannel channel, IrcUser user) {
         return channel.getUsers().remove(user);
-    }
-
-    @Override
-    public void makeAllPersistent(List<IrcChannel> channels, long serverPK) {
-        for (IrcChannel channel : channels) {
-            makePersistent(channel, serverPK);
-        }
-    }
-
-    @Override
-    public List<IrcChannel> findChannelsByServer(long serverId) {
-        return getAll(IrcChannelEB.class, "server_id=?", serverId);
-    }
-
-    @Override
-    public void makePersistent(IrcChannel beanEntity) {
-        super.makePersistent(beanEntity);
-        messageDAO.makeAllPersistent(beanEntity.getMessages(), beanEntity.getId());
     }
 }

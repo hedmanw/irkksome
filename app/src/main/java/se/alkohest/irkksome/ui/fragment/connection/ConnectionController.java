@@ -34,10 +34,10 @@ public class ConnectionController {
     }
 
     private static void addLegacyConnections() {
-        List<IrkksomeConnection> connections = connectionDAO.getAll();
-        for (IrkksomeConnection connection : connections) {
-            addConnectionItem(new LegacyConnection(connection));
-        }
+//        List<IrkksomeConnection> connections = connectionDAO.getAll(); // TODO
+//        for (IrkksomeConnection connection : connections) {
+//            addConnectionItem(new LegacyConnection(connection));
+//        }
     }
 
     private static void datasetChanged() {
@@ -108,7 +108,7 @@ public class ConnectionController {
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    connectionDAO.remove(connection);
+//                    connectionDAO.remove(connection); // TODO: fixa remove
                     datasetChanged();
                     listener.legacyConnectionRemoved();
                 }

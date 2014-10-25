@@ -6,13 +6,11 @@ import java.util.Date;
 
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.orm.AbstractBean;
-import se.alkohest.irkksome.orm.Table;
-import se.alkohest.irkksome.orm.Transient;
+import se.emilsjolander.sprinkles.annotations.Table;
 
 @Table("t_message")
 public abstract class IrcMessageEB extends AbstractBean implements IrcMessage {
     protected String message;
-    @Transient
     protected Date timestamp;
 
     @Override
@@ -35,12 +33,12 @@ public abstract class IrcMessageEB extends AbstractBean implements IrcMessage {
         this.timestamp = timestamp;
     }
 
-    @Override
-    public ContentValues createRow(long dependentPK) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("channel_id", dependentPK);
-        contentValues.put("message", message);
-//        contentValues.put("timestamp", ); TODO: serialize/deserialize somehow (check SQLite)
-        return contentValues;
-    }
+//    @Override
+//    public ContentValues createRow(long dependentPK) {
+//        ContentValues contentValues = new ContentValues();
+//        contentValues.put("channel_id", dependentPK);
+//        contentValues.put("message", message);
+////        contentValues.put("timestamp", ); TODO: serialize/deserialize somehow (check SQLite)
+//        return contentValues;
+//    }
 }

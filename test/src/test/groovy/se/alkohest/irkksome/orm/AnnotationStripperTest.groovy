@@ -9,15 +9,7 @@ public class AnnotationStripperTest extends Specification{
         def annotatedClass = new IrcServerEB();
 
         then:
-        AnnotationStripper.getTable(annotatedClass) == "t_server";
-    }
-
-    def "Returns null for not annotated class"() {
-        when:
-        def notAnnotatedClass = new GradleSucks();
-
-        then:
-        AnnotationStripper.getTable(notAnnotatedClass) == null
+        AnnotationStripper.getTable(annotatedClass) == "Server";
     }
 
 //    def "Gets all columns for the entity table with OTM and OTO"() {

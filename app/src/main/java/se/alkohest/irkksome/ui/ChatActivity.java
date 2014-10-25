@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -17,14 +18,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
-import se.alkohest.irkksome.db.SQLitePersistenceContext;
 import se.alkohest.irkksome.irc.Log;
 import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.api.UnreadEntity;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
-import se.alkohest.irkksome.orm.GenericDAO;
 import se.alkohest.irkksome.ui.fragment.connection.AbstractConnectionFragment;
 import se.alkohest.irkksome.ui.fragment.connection.ConnectionItem;
 import se.alkohest.irkksome.ui.fragment.connection.ConnectionsListFragment;
@@ -39,7 +38,7 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GenericDAO.persistenceContext = new SQLitePersistenceContext(this);
+
         setContentView(R.layout.activity_main_drawers);
         ConnectionListAdapter.setInstance(this, serverManager.getServers());
         connectionsList = (ExpandableListView) findViewById(R.id.left_drawer_list);

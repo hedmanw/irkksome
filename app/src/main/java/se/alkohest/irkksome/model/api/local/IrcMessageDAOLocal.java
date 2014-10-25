@@ -9,6 +9,4 @@ import se.alkohest.irkksome.model.impl.IrcChatMessageEB;
 
 public interface IrcMessageDAOLocal {
     public IrcChatMessageEB create(IrcUser author, String message, Date timestamp);
-    public void makeAllPersistent(List<IrcMessage> messages, long channelPK);
-    public List<IrcMessage> findMessagesByChannel(long channelPK);
 }

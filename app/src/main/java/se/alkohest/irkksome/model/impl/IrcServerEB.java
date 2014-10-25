@@ -10,21 +10,18 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
-import se.alkohest.irkksome.orm.OneToMany;
-import se.alkohest.irkksome.orm.OneToOne;
-import se.alkohest.irkksome.orm.Table;
-import se.alkohest.irkksome.orm.Transient;
+import se.emilsjolander.sprinkles.annotations.Table;
 
-@Table("t_server")
+@Table("Server")
 public class IrcServerEB extends AbstractBean implements IrcServer {
     private String host;
-    @OneToMany(IrcChannelEB.class)
+//    @OneToMany(IrcChannelEB.class)
     private List<IrcChannel> connectedChannels;
-    @Transient
+//    @Transient
     private Set<IrcUser> knownUsers;
-    @OneToOne(IrcUserEB.class)
+//    @OneToOne(IrcUserEB.class)
     private IrcUser self;
-    @Transient
+//    @Transient
     private Date lastMessageTime;
 
     @Override
@@ -77,7 +74,7 @@ public class IrcServerEB extends AbstractBean implements IrcServer {
         this.connectedChannels = connectedChannels;
     }
 
-    @Override
+//    @Override
     public ContentValues createRow(long dependentPK) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("host", host);

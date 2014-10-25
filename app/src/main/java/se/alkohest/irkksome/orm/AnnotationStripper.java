@@ -2,6 +2,8 @@ package se.alkohest.irkksome.orm;
 
 import java.lang.reflect.Field;
 
+import se.emilsjolander.sprinkles.annotations.Table;
+
 public class AnnotationStripper {
     public static String getTable(BeanEntity bean) {
         return getTable(bean.getClass());

@@ -26,7 +26,7 @@ public abstract class AbstractConnectionFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (getArguments() != null) {
-            templateConnection = connectionDAO.findById(getArguments().getLong(CONNECTION_ARGUMENT));
+//            templateConnection = connectionDAO.findById(getArguments().getLong(CONNECTION_ARGUMENT)); TODO: findById
         }
     }
 

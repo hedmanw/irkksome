@@ -4,9 +4,9 @@ import android.content.ContentValues;
 
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.OneToOne;
-import se.alkohest.irkksome.orm.Table;
+import se.emilsjolander.sprinkles.annotations.Table;
 
-@Table("t_chatmessage")
+@Table("ChatMessage")
 public class IrcChatMessageEB extends IrcMessageEB {
     @OneToOne(IrcUserEB.class)
     private IrcUser author;
@@ -32,7 +32,7 @@ public class IrcChatMessageEB extends IrcMessageEB {
         return author.getName() + ": " + message;
     }
 
-    @Override
+
     public ContentValues createRow(long dependentPK) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("message_id", getId());

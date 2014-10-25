@@ -4,29 +4,27 @@ import android.content.ContentValues;
 
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.orm.AbstractBean;
-import se.alkohest.irkksome.orm.Nullable;
-import se.alkohest.irkksome.orm.Table;
-import se.alkohest.irkksome.orm.Transient;
+import se.emilsjolander.sprinkles.annotations.Table;
 
-@Table("t_connection")
+@Table("Connection")
 public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnection {
     private String host = "";
     private int port;
     private String nickname = "";
-    @Nullable
+//    @Nullable
     private String username = "";
-    @Nullable
+//    @Nullable
     private String realname = "";
-    @Transient
+//    @Transient
     private String password = "";
 
     private boolean useSSL;
     private boolean useSSH;
-    @Nullable
+//    @Nullable
     private String sshHost = "";
-    @Nullable
+//    @Nullable
     private String sshUser = "";
-    @Transient
+//    @Transient
     private String sshPass = "";
     private int sshPort = 22;
 
@@ -136,7 +134,7 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
         return host.equals("localhost");
     }
 
-    @Override
+//    @Override
     public ContentValues createRow(long dependentPK) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("host", host);

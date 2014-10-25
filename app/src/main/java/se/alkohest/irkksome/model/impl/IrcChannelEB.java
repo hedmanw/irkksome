@@ -10,13 +10,11 @@ import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
 import se.alkohest.irkksome.orm.OneToMany;
-import se.alkohest.irkksome.orm.Table;
-import se.alkohest.irkksome.orm.Transient;
+import se.emilsjolander.sprinkles.annotations.Table;
 
-@Table("t_channel")
+@Table("Channel")
 public class IrcChannelEB extends AbstractBean implements IrcChannel {
     private String topic = "";
-    @Transient
     private Map<IrcUser, String> users;
     @OneToMany(IrcMessageEB.class)
     private List<IrcMessage> messages;
@@ -62,7 +60,7 @@ public class IrcChannelEB extends AbstractBean implements IrcChannel {
         this.messages = messages;
     }
 
-    @Override
+//    @Override
     public ContentValues createRow(long dependentPK) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("server_id", dependentPK);

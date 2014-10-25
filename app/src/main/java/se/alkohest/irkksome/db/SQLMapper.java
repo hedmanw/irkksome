@@ -11,7 +11,6 @@ import se.alkohest.irkksome.orm.AnnotationStripper;
 import se.alkohest.irkksome.orm.BeanEntity;
 import se.alkohest.irkksome.orm.Nullable;
 import se.alkohest.irkksome.orm.OneToMany;
-import se.alkohest.irkksome.orm.Transient;
 
 public class SQLMapper {
     private static final Map<Class, String> sqlTypes = new HashMap<Class, String>() {{
@@ -51,7 +50,7 @@ public class SQLMapper {
         List<String> columns = new ArrayList<>();
         for (Field field : fields) {
             final OneToMany oneToMany = field.getAnnotation(OneToMany.class);
-            final boolean nonTransient = field.getAnnotation(Transient.class) == null;
+            final boolean nonTransient = /*field.getAnnotation(Transient.class) == null*/false;
             final boolean isNullable = field.getAnnotation(Nullable.class) != null;
             if (oneToMany != null) {
                 SqlCreateStatement manyStatement = getCreateStatement(oneToMany.value());

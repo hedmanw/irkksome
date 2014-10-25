@@ -1,14 +1,8 @@
 package se.alkohest.irkksome.orm;
 
-import android.content.ContentValues;
-import android.database.Cursor;
+import se.emilsjolander.sprinkles.Model;
+import se.emilsjolander.sprinkles.QueryResult;
 
 public interface PersistenceContext {
-    public long create(String table, ContentValues contentValues) throws ORMException;
-    public Cursor read(String table, String[] projection);
-    public Cursor read(String table, String where, long id);
-    public Cursor findById(String table, long id);
-    public int update() throws ORMException;
-    public int delete(String table, long id) throws ORMException;
-
+    public QueryResult findById(Class<? extends Model> entityBean, long id);
 }

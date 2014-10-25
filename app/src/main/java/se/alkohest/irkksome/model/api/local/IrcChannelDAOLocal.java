@@ -16,8 +16,4 @@ public interface IrcChannelDAOLocal {
     public void addUser(IrcChannel channel, IrcUser user, String flag);
 
     public String removeUser(IrcChannel channel, IrcUser user);
-
-    public void makeAllPersistent(List<IrcChannel> channels, long serverPK);
-
-    public List<IrcChannel> findChannelsByServer(long serverId);
 }
