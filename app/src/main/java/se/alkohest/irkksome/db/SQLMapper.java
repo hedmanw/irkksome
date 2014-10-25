@@ -9,6 +9,7 @@ import java.util.Map;
 
 import se.alkohest.irkksome.orm.AbstractBean;
 import se.alkohest.irkksome.orm.AnnotationStripper;
+import se.alkohest.irkksome.orm.Inherits;
 import se.alkohest.irkksome.orm.Nullable;
 import se.alkohest.irkksome.orm.OneToMany;
 import se.alkohest.irkksome.orm.OneToOne;
@@ -44,8 +45,13 @@ public class SQLMapper {
         }
 
         String tableName = AnnotationStripper.getTableName(bean);
-
         StringBuilder stringBuilder = new StringBuilder();
+
+        if (bean.isAnnotationPresent(Inherits.class)) {
+            String parent = bean.getAnnotation(Inherits.class).value();
+            stringBuilder.append(", ").append(parent).append(" INTEGER NOT NULL");
+        }
+
         Field[] fields = bean.getDeclaredFields();
         for (Field field : fields) {
             if (field.isAnnotationPresent(Column.class)) {

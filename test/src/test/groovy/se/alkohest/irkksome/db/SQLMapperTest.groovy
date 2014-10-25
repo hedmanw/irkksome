@@ -56,10 +56,10 @@ public class SQLMapperTest extends Specification {
 
     def "getCreateStatement works for one to one"() {
         when:
-        String chatMessageEB = SQLMapper.getCreateStatement(IrcChatMessageEB.class)
+        String serverEB = SQLMapper.getCreateStatement(IrcServerEB)
 
         then:
-        chatMessageEB == "CREATE TABLE ChatMessage(id INTEGER PRIMARY KEY AUTOINCREMENT, author_id INTEGER NOT NULL, hilight INTEGER NOT NULL);" // TODO: Ska även ha ref till parent
+        serverEB == "CREATE TABLE Server(id INTEGER PRIMARY KEY AUTOINCREMENT, host TEXT NOT NULL, self INTEGER NOT NULL);"
     }
 
     def "getCreateStatement works for one to many"() {
@@ -71,8 +71,11 @@ public class SQLMapperTest extends Specification {
         channelEB == "CREATE TABLE Channel(id INTEGER PRIMARY KEY AUTOINCREMENT, topic TEXT NOT NULL, name TEXT NOT NULL, server_id INTEGER NOT NULL);"
     }
 
-    @Ignore
     def "getCreateStatement works for IS A"() {
+        when:
+        String chatMessageEB = SQLMapper.getCreateStatement(IrcChatMessageEB)
 
+        then:
+        chatMessageEB == "CREATE TABLE ChatMessage(id INTEGER PRIMARY KEY AUTOINCREMENT, message_id INTEGER NOT NULL, author_id INTEGER NOT NULL, hilight INTEGER NOT NULL);"
     }
 }
