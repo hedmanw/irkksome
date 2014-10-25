@@ -10,15 +10,18 @@ import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
 import se.alkohest.irkksome.orm.OneToMany;
+import se.emilsjolander.sprinkles.annotations.Column;
 import se.emilsjolander.sprinkles.annotations.Table;
 
 @Table("Channel")
 public class IrcChannelEB extends AbstractBean implements IrcChannel {
+    @Column("topic")
     private String topic = "";
+    @Column("name")
+    private String name;
     private Map<IrcUser, String> users;
     @OneToMany(IrcMessageEB.class)
     private List<IrcMessage> messages;
-    private String name;
 
     @Override
     public String getTopic() {

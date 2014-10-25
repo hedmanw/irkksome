@@ -10,16 +10,23 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
+import se.alkohest.irkksome.orm.OneToMany;
+import se.alkohest.irkksome.orm.OneToOne;
+import se.emilsjolander.sprinkles.annotations.Column;
 import se.emilsjolander.sprinkles.annotations.Table;
 
 @Table("Server")
 public class IrcServerEB extends AbstractBean implements IrcServer {
+    @Column("host")
     private String host;
-//    @OneToMany(IrcChannelEB.class)
+    @Column("server_id")
+    @OneToMany(IrcChannelEB.class)
     private List<IrcChannel> connectedChannels;
 //    @Transient
     private Set<IrcUser> knownUsers;
-//    @OneToOne(IrcUserEB.class)
+
+    @Column("self")
+    @OneToOne(IrcUserEB.class)
     private IrcUser self;
 //    @Transient
     private Date lastMessageTime;

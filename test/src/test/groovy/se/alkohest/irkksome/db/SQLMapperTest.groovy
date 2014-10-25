@@ -61,4 +61,18 @@ public class SQLMapperTest extends Specification {
         then:
         chatMessageEB == "CREATE TABLE ChatMessage(id INTEGER PRIMARY KEY AUTOINCREMENT, author_id INTEGER NOT NULL, hilight INTEGER NOT NULL);" // TODO: Ska även ha ref till parent
     }
+
+    def "getCreateStatement works for one to many"() {
+        when:
+        SQLMapper.getCreateStatement(IrcServerEB)
+        def channelEB = SQLMapper.getCreateStatement(IrcChannelEB)
+
+        then:
+        channelEB == "CREATE TABLE Channel(id INTEGER PRIMARY KEY AUTOINCREMENT, topic TEXT NOT NULL, name TEXT NOT NULL, server_id INTEGER NOT NULL);"
+    }
+
+    @Ignore
+    def "getCreateStatement works for IS A"() {
+
+    }
 }
