@@ -22,7 +22,7 @@ public class SprinklesPersistenceContext implements PersistenceContext {
 
     @Override
     public QueryResult findById(Class<? extends Model> entityBean, long id) {
-        return database.read(entityBean, "SELECT * FROM WHERE " + AnnotationStripper.getTableName(entityBean) + " ID=?", new String[] {String.valueOf(id)}).get();
+        return database.read(entityBean, "SELECT * FROM " + AnnotationStripper.getTableName(entityBean) + " WHERE ID=?", new String[] {String.valueOf(id)}).get();
     }
 
     @Override

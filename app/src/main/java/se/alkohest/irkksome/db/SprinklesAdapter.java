@@ -25,7 +25,7 @@ public class SprinklesAdapter {
                 log.i("STARTED MIGRATION...");
                 execute(sqLiteDatabase, SQLMapper.getCreateStatement(IrkksomeConnectionEB.class));
 //                execute(sqLiteDatabase, SQLMapper.getCreateStatement(IrcServerEB.class));
-                log.i("FINISHED MIGRATION. Took " + (time-System.currentTimeMillis()) + " ms.");
+                log.i("FINISHED MIGRATION. Took " + (System.currentTimeMillis() - time) + " ms.");
             }
         });
     }
