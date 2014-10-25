@@ -12,33 +12,6 @@ public class AnnotationStripperTest extends Specification{
         AnnotationStripper.getTable(annotatedClass) == "Server";
     }
 
-//    def "Gets all columns for the entity table with OTM and OTO"() {
-//        when:
-//        def heads = AnnotationStripper.getColumnHeads(IrcServerEB.class)
-//
-//        then:
-//        heads[0] == "id"
-//        heads[1] == "host"
-//        heads[2] == "self"
-//    }
-//
-//    def "Gets all columns for regular tables"() {
-//        when:
-//        def head = AnnotationStripper.getColumnHeads(IrcUserEB.class)
-//
-//        then:
-//        head[0] == "id"
-//        head[1] == "name"
-//    }
-//
-//    def "Respects transient fields"() {
-//        when:
-//        def heads = AnnotationStripper.getColumnHeads(GradleSucks.class)
-//
-//        then:
-//        !heads.contains("transientString")
-//    }
-
     def "Gets OTM class"() {
         when:
         def oneToMany = AnnotationStripper.getOneToMany(new IrcChannelEB())

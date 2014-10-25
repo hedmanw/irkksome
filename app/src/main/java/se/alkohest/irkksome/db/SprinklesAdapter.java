@@ -11,16 +11,11 @@ import se.emilsjolander.sprinkles.Sprinkles;
 
 public class SprinklesAdapter {
     public SprinklesAdapter(Context context) {
-        final String[] createStatements = SQLMapper.getFullCreateStatement(new Class[] {IrcUserEB.class});
         Sprinkles sprinkles = Sprinkles.init(context);
         sprinkles.addMigration(new Migration() {
             @Override
             protected void doMigration(SQLiteDatabase sqLiteDatabase) {
-                for (String createStatement : createStatements) {
-                    sqLiteDatabase.execSQL(
-                            createStatement
-                    );
-                }
+                sqLiteDatabase.execSQL(SQLMapper.getCreateStatement(IrcUserEB.class));
             }
         });
     }

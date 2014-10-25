@@ -4,28 +4,43 @@ import android.content.ContentValues;
 
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.orm.AbstractBean;
+import se.alkohest.irkksome.orm.Nullable;
+import se.emilsjolander.sprinkles.annotations.Column;
 import se.emilsjolander.sprinkles.annotations.Table;
 
 @Table("Connection")
 public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnection {
+    @Column("host")
     private String host = "";
+    @Column("port")
     private int port;
+    @Column("nickname")
     private String nickname = "";
-//    @Nullable
+
+    @Column("username")
+    @Nullable
     private String username = "";
-//    @Nullable
+
+    @Column("realname")
+    @Nullable
     private String realname = "";
 //    @Transient
     private String password = "";
 
+    @Column("useSSL")
     private boolean useSSL;
+    @Column("useSSH")
     private boolean useSSH;
-//    @Nullable
+
+    @Column("sshHost")
+    @Nullable
     private String sshHost = "";
-//    @Nullable
+    @Column("sshUser")
+    @Nullable
     private String sshUser = "";
 //    @Transient
     private String sshPass = "";
+    @Column("sshPort")
     private int sshPort = 22;
 
     public String getPassword() {

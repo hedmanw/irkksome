@@ -1,10 +1,12 @@
 package se.alkohest.irkksome.db
 
 import se.alkohest.irkksome.model.impl.*
+import spock.lang.Ignore
 import spock.lang.Specification
 
 public class SQLMapperTest extends Specification {
-    def "Maps simple object"() {
+    @Ignore
+    def "Schema creation"() {
         when:
         Class[] classes = new Class[6];
         classes[0] = IrcServerEB.class;
@@ -14,6 +16,7 @@ public class SQLMapperTest extends Specification {
         classes[4] = IrcUserEB.class;
         classes[5] = IrkksomeConnectionEB.class;
         String[] createStatement = SQLMapper.getFullCreateStatement(classes);
+
         def user = "CREATE TABLE t_user(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL);"
         def server = "CREATE TABLE t_server(id INTEGER PRIMARY KEY AUTOINCREMENT, host TEXT NOT NULL, self INTEGER NOT NULL);"
         def channel = "CREATE TABLE t_channel(id INTEGER PRIMARY KEY AUTOINCREMENT, topic TEXT NOT NULL, name TEXT NOT NULL, server_id INTEGER NOT NULL);"
@@ -33,5 +36,21 @@ public class SQLMapperTest extends Specification {
         createStatement.contains(chatmessage)
         createStatement.contains(irkksomeconn)
         length == user.length() + server.length() + channel.length() + message.length() + chatmessage.length() + irkksomeconn.length()
+    }
+
+    def "getCreateStatement works for IrcUserEB"() {
+        when:
+        String userEB = SQLMapper.getCreateStatement(IrcUserEB.class)
+
+        then:
+        userEB == "CREATE TABLE User(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL);"
+    }
+
+    def "getCreateStatement works for IrkksomeConnection"() {
+        when:
+        String irkksomeConnectionEB = SQLMapper.getCreateStatement(IrkksomeConnectionEB.class)
+
+        then:
+        irkksomeConnectionEB == "CREATE TABLE Connection(id INTEGER PRIMARY KEY AUTOINCREMENT, host TEXT NOT NULL, port INTEGER NOT NULL, nickname TEXT NOT NULL, username TEXT, realname TEXT, useSSL INTEGER NOT NULL, useSSH INTEGER NOT NULL, sshHost TEXT, sshUser TEXT, sshPort INTEGER NOT NULL);"
     }
 }

@@ -1,22 +1,23 @@
 package se.alkohest.irkksome.orm;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
+import se.emilsjolander.sprinkles.Model;
 import se.emilsjolander.sprinkles.annotations.Table;
+import se.emilsjolander.sprinkles.exceptions.NoTableAnnotationException;
 
 public class AnnotationStripper {
-    public static String getTable(BeanEntity bean) {
-        return getTable(bean.getClass());
+    public static String getTable(Model bean) {
+        return getTableName(bean.getClass());
     }
 
-    public static String getTable(Class<? extends BeanEntity> beanClass) {
-        final Table annotation = beanClass.getAnnotation(Table.class);
-        if (annotation == null) {
-            return null;
+    public static String getTableName(Class<? extends Model> entityBean) {
+        if (entityBean.isAnnotationPresent(Table.class)) {
+            return entityBean.getAnnotation(Table.class).value();
         }
-        else {
-            return annotation.value();
-        }
+        throw new NoTableAnnotationException();
     }
 
     public static Class<? extends AbstractBean> getOneToMany(BeanEntity bean) {
