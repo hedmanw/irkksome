@@ -5,6 +5,7 @@ import java.util.List;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
+import se.alkohest.irkksome.model.impl.IrcServerEB;
 
 public interface IrcServerDAOLocal {
     public IrcServer create(String host);
@@ -18,4 +19,6 @@ public interface IrcServerDAOLocal {
     public void removeUser(IrcServer ircServer, IrcUser user);
 
     public void removeChannel(IrcServer ircServer, IrcChannel channel);
+
+    public List<IrcServerEB> getAll();
 }

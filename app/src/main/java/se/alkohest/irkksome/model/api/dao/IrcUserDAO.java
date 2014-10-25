@@ -17,4 +17,9 @@ public class IrcUserDAO extends GenericDAO<IrcUserEB> implements IrcUserDAOLocal
     public boolean compare(IrcUser user, String nick) {
         return user.getName().toLowerCase().equals(nick.toLowerCase());
     }
+
+    @Override
+    protected Class<IrcUserEB> getEntityBean() {
+        return IrcUserEB.class;
+    }
 }

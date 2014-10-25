@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.res.Configuration;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -24,7 +23,7 @@ import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.api.UnreadEntity;
 import se.alkohest.irkksome.model.entity.IrcChannel;
-import se.alkohest.irkksome.model.entity.IrkksomeConnection;
+import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 import se.alkohest.irkksome.orm.GenericDAO;
 import se.alkohest.irkksome.ui.fragment.connection.AbstractConnectionFragment;
 import se.alkohest.irkksome.ui.fragment.connection.ConnectionItem;
@@ -193,7 +192,7 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
     }
 
     @Override
-    public void onConnectPressed(IrkksomeConnection irkksomeConnection) {
+    public void onConnectPressed(IrkksomeConnectionEB irkksomeConnection) {
         serverManager.setActiveServer(serverManager.addServer(irkksomeConnection));
         serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
         ConnectionListAdapter.getInstance().notifyDataSetChanged();

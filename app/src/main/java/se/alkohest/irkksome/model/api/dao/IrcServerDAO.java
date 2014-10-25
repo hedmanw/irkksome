@@ -3,6 +3,7 @@ package se.alkohest.irkksome.model.api.dao;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 import se.alkohest.irkksome.model.api.local.IrcChannelDAOLocal;
 import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
@@ -10,8 +11,9 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.model.impl.IrcServerEB;
+import se.alkohest.irkksome.orm.GenericDAO;
 
-public class IrcServerDAO implements IrcServerDAOLocal {
+public class IrcServerDAO extends GenericDAO<IrcServerEB> implements IrcServerDAOLocal {
     private IrcChannelDAOLocal channelDAO = new IrcChannelDAO();
     private IrcUserDAO userDAO = new IrcUserDAO();
 
@@ -62,5 +64,15 @@ public class IrcServerDAO implements IrcServerDAOLocal {
     @Override
     public void removeUser(IrcServer ircServer, IrcUser user) {
         ircServer.getKnownUsers().remove(user);
+    }
+
+    @Override
+    public List<IrcServerEB> getAll() {
+        return getAll(IrcServerEB.class);
+    }
+
+    @Override
+    protected Class<IrcServerEB> getEntityBean() {
+        return IrcServerEB.class;
     }
 }

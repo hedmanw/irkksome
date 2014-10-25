@@ -1,5 +1,8 @@
 package se.alkohest.irkksome.orm;
 
+import java.util.List;
+
+import se.emilsjolander.sprinkles.CursorList;
 import se.emilsjolander.sprinkles.Model;
 
 public abstract class GenericDAO<E extends Model> {
@@ -9,72 +12,20 @@ public abstract class GenericDAO<E extends Model> {
         entityBean.save();
     }
 
-//    public void makePersistent(I beanEntity) {
-//        persist(beanEntity, -1);
-//    }
-//
-//    public void makePersistent(I beanEntity, long dependentPK) {
-//        persist(beanEntity, dependentPK);
-//    }
+    public void delete(E entityBean) {
+        entityBean.delete();
+    }
 
-//    public static <T extends BeanEntity> long persist(T beanEntity, long dependentPK) {
-//        if (beanEntity.getId() != -1) {
-//            return beanEntity.getId();
-//        }
-//        String table = AnnotationStripper.getTable(beanEntity);
-//        long pk = 0;
-//        try {
-//            pk = persistenceContext.create(table, beanEntity.createRow(dependentPK));
-//            beanEntity.setId(pk);
-//        } catch (ORMException e) {
-//            e.printStackTrace();
-//        }
-//        return pk;
-//    }
+    public E findById(Class<? extends Model> entity, long id) {
+        return (E) persistenceContext.findById(entity, id);
+    }
 
-//    protected List<I> getAll(Class<E> beanEntity) {
-//        String table = AnnotationStripper.getTable(beanEntity);
-//        Cursor cursor = persistenceContext.read(table, null);
-//        return initAll(cursor);
-//    }
-//
-//    protected List<I> getAll(Class<E> beanEntity, String where, long id) {
-//        String table = AnnotationStripper.getTable(beanEntity);
-//        Cursor cursor = persistenceContext.read(table, where, id);
-//        return initAll(cursor);
-//    }
+    public List<E> getAll(Class<? extends Model> entity) {
+        CursorList list = persistenceContext.getAll(entity);
+        List evaluatedList = list.asList();
+        list.close();
+        return evaluatedList;
+    }
 
-//    private List<I> initAll(Cursor cursor) {
-//        List<I> allEntities = new ArrayList<>(cursor.getCount());
-//        while (cursor.moveToNext()) {
-//            final long pk = cursor.getLong(0);
-//            final I bean = initFromCursor(cursor, pk);
-//            bean.setId(pk);
-//            allEntities.add(bean);
-//        }
-//        cursor.close();
-//        return allEntities;
-//    }
-
-//    protected void makeTransient(I beanEntity) {
-//        String table = AnnotationStripper.getTable(beanEntity);
-//        try {
-//            persistenceContext.delete(table, beanEntity.getId());
-//        } catch (ORMException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-//    protected I findById(Class<E> beanClass, long id) {
-////        final Cursor cursor = persistenceContext.findById(AnnotationStripper.getTable(beanClass), id);
-////        cursor.moveToNext();
-////        final long pk = cursor.getLong(0);
-////        final I bean = initFromCursor(cursor, pk);
-////        bean.setId(pk);
-//        return null;
-//    }
-
-//    public abstract I findById(long id);
-
-//    protected abstract I initFromCursor(Cursor cursor, long pk);
+    protected abstract Class<E> getEntityBean();
 }

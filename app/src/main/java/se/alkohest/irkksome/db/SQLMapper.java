@@ -1,10 +1,8 @@
 package se.alkohest.irkksome.db;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import se.alkohest.irkksome.orm.AbstractBean;
@@ -25,7 +23,7 @@ public class SQLMapper {
         put(int.class, "INTEGER");
         put(long.class, "INTEGER");
         put(double.class, "DOUBLE");
-        put(Date.class, "THROW NEW ASSHOLEEXCEPTION()");
+        put(Date.class, "INTEGER");
     }};
 
     private static final Map<Class, SqlCreateStatement> sqlCreateCache = new HashMap<>();

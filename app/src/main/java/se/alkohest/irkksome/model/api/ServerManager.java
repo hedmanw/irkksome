@@ -3,12 +3,12 @@ package se.alkohest.irkksome.model.api;
 import java.util.ArrayList;
 import java.util.List;
 
-import se.alkohest.irkksome.irc.ConnectionData;
 import se.alkohest.irkksome.model.api.dao.IrcServerDAO;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
 import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
 import se.alkohest.irkksome.model.entity.IrcServer;
-import se.alkohest.irkksome.model.entity.IrkksomeConnection;
+import se.alkohest.irkksome.model.impl.IrcServerEB;
+import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
 public class ServerManager implements ServerDropAcidListener {
     public static final ServerManager INSTANCE = new ServerManager();
@@ -24,21 +24,21 @@ public class ServerManager implements ServerDropAcidListener {
     }
 
     public void loadPersisted() {
-//        List<IrcServer> persisted = serverDAO.getAll();
-//        for (IrcServer ircServer : persisted) {
-//            /* maybe later...
-//            Server server = new ServerImpl(ircServer, ircServer.getSelf().getName());
-//            server.setDropListener(this);
-//            servers.add(server);
-//            */
-//        }
-//        if (!persisted.isEmpty()) {
-//            setActiveServer(servers.get(0));
-//        }
+        List<IrcServerEB> persisted = serverDAO.getAll();
+        for (IrcServer ircServer : persisted) {
+            /* maybe later...
+            Server server = new ServerImpl(ircServer, ircServer.getSelf().getName());
+            server.setDropListener(this);
+            servers.add(server);
+            */
+        }
+        if (!persisted.isEmpty()) {
+            setActiveServer(servers.get(0));
+        }
     }
 
-    public Server addServer(IrkksomeConnection irkksomeConnection) {
-//        new IrkksomeConnectionDAO().makePersistent(irkksomeConnection); TODO: what now?
+    public Server addServer(IrkksomeConnectionEB irkksomeConnection) {
+        new IrkksomeConnectionDAO().persist(irkksomeConnection);
         final IrcServer ircServer = serverDAO.create(irkksomeConnection.getHost());
         Server server = new ServerImpl(ircServer, irkksomeConnection);
         server.setDropListener(this);

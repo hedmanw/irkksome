@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
+import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
 public class RegularConnectionFragment extends AbstractConnectionFragment {
 
@@ -46,8 +47,8 @@ public class RegularConnectionFragment extends AbstractConnectionFragment {
     }
 
     @Override
-    public IrkksomeConnection getConnection() {
-        IrkksomeConnection connection = connectionDAO.create();
+    public IrkksomeConnectionEB getConnection() {
+        IrkksomeConnectionEB connection = connectionDAO.create();
         connection.setHost(getFieldValue(R.id.server_connect_host));
         connection.setPort(Integer.parseInt(getFieldValue(R.id.server_connect_port)));
         connection.setNickname(getFieldValue(R.id.server_connect_nickname));

@@ -12,13 +12,13 @@ import android.widget.TextView;
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
 import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
-import se.alkohest.irkksome.model.entity.IrkksomeConnection;
+import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
 public abstract class AbstractConnectionFragment extends Fragment {
     public static final String CONNECTION_ARGUMENT = "CONNECTION";
 
     protected OnConnectPressedListener listener;
-    protected IrkksomeConnection templateConnection;
+    protected IrkksomeConnectionEB templateConnection;
     protected IrkksomeConnectionDAOLocal connectionDAO = new IrkksomeConnectionDAO();
 
     @Override
@@ -26,7 +26,7 @@ public abstract class AbstractConnectionFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         if (getArguments() != null) {
-//            templateConnection = connectionDAO.findById(getArguments().getLong(CONNECTION_ARGUMENT)); TODO: findById
+            templateConnection = connectionDAO.findById(getArguments().getLong(CONNECTION_ARGUMENT));
         }
     }
 
@@ -78,9 +78,9 @@ public abstract class AbstractConnectionFragment extends Fragment {
         ((TextView) view.findViewById(resourceId)).setText(text);
     }
 
-    public abstract IrkksomeConnection getConnection();
+    public abstract IrkksomeConnectionEB getConnection();
 
     public interface OnConnectPressedListener {
-        public void onConnectPressed(IrkksomeConnection irkksomeConnection);
+        public void onConnectPressed(IrkksomeConnectionEB irkksomeConnection);
     }
 }

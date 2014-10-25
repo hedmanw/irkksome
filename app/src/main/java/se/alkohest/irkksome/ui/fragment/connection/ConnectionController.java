@@ -11,7 +11,7 @@ import java.util.List;
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
 import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
-import se.alkohest.irkksome.model.entity.IrkksomeConnection;
+import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
 public class ConnectionController {
     public static List<ConnectionItem> CONNECTIONS = new ArrayList<>();
@@ -34,10 +34,10 @@ public class ConnectionController {
     }
 
     private static void addLegacyConnections() {
-//        List<IrkksomeConnection> connections = connectionDAO.getAll(); // TODO
-//        for (IrkksomeConnection connection : connections) {
-//            addConnectionItem(new LegacyConnection(connection));
-//        }
+        List<IrkksomeConnectionEB> connections = connectionDAO.getAll();
+        for (IrkksomeConnectionEB connection : connections) {
+            addConnectionItem(new LegacyConnection(connection));
+        }
     }
 
     private static void datasetChanged() {
@@ -80,9 +80,9 @@ public class ConnectionController {
     }
 
     public static class LegacyConnection extends ConnectionItem {
-        IrkksomeConnection connection;
+        IrkksomeConnectionEB connection;
 
-        public LegacyConnection(IrkksomeConnection connection) {
+        public LegacyConnection(IrkksomeConnectionEB connection) {
             super(ConnectionTypeEnum.OLD_CONNECTION, connectionDAO.getPresentation(connection));
             this.connection = connection;
         }
@@ -108,7 +108,7 @@ public class ConnectionController {
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    connectionDAO.remove(connection); // TODO: fixa remove
+                    connectionDAO.delete(connection);
                     datasetChanged();
                     listener.legacyConnectionRemoved();
                 }

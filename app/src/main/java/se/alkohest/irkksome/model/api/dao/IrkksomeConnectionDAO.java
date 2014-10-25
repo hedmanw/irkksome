@@ -1,23 +1,22 @@
 package se.alkohest.irkksome.model.api.dao;
 
-import android.database.Cursor;
-
 import java.util.List;
 
 import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
+import se.alkohest.irkksome.orm.GenericDAO;
 
 /**
  * Created by wilhelm 2014-07-29.
  */
-public class IrkksomeConnectionDAO implements IrkksomeConnectionDAOLocal {
+public class IrkksomeConnectionDAO extends GenericDAO<IrkksomeConnectionEB> implements IrkksomeConnectionDAOLocal {
     @Override
-    public IrkksomeConnection create() {
+    public IrkksomeConnectionEB create() {
         return new IrkksomeConnectionEB();
     }
 
-    public String getPresentation(IrkksomeConnection connection) {
+    public String getPresentation(IrkksomeConnectionEB connection) {
         if (connection.isUseSSH()) {
             if (connection.isIrssiProxyConnection()) {
                 return connection.getSshUser() + "@" + connection.getSshHost() + (connection.getSshPort() != 22 ? ":" + connection.getSshPort() : "") +
@@ -30,5 +29,20 @@ public class IrkksomeConnectionDAO implements IrkksomeConnectionDAOLocal {
         else {
             return connection.getNickname() + "@" + connection.getHost() + ":" + connection.getPort();
         }
+    }
+
+    @Override
+    public IrkksomeConnectionEB findById(long id) {
+        return findById(getEntityBean(), id);
+    }
+
+    @Override
+    protected Class<IrkksomeConnectionEB> getEntityBean() {
+        return IrkksomeConnectionEB.class;
+    }
+
+    @Override
+    public List<IrkksomeConnectionEB> getAll() {
+        return getAll(getEntityBean());
     }
 }

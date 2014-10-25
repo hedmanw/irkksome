@@ -32,13 +32,4 @@ public abstract class IrcMessageEB extends AbstractBean implements IrcMessage {
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
-
-//    @Override
-//    public ContentValues createRow(long dependentPK) {
-//        ContentValues contentValues = new ContentValues();
-//        contentValues.put("channel_id", dependentPK);
-//        contentValues.put("message", message);
-////        contentValues.put("timestamp", ); TODO: serialize/deserialize somehow (check SQLite)
-//        return contentValues;
-//    }
 }

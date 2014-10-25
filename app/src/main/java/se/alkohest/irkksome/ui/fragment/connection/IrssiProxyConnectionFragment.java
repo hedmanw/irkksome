@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
+import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
 public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
     public static AbstractConnectionFragment newInstance() {
@@ -52,8 +53,8 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
     }
 
     @Override
-    public IrkksomeConnection getConnection() {
-        IrkksomeConnection connection = connectionDAO.create();
+    public IrkksomeConnectionEB getConnection() {
+        IrkksomeConnectionEB connection = connectionDAO.create();
         connection.setHost(getFieldValue(R.id.server_connect_host));
         connection.setPort(Integer.parseInt(getFieldValue(R.id.server_connect_port)));
         final String userName = getFieldValue(R.id.server_connect_username);
