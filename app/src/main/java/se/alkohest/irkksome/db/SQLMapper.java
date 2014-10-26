@@ -14,23 +14,19 @@ import se.alkohest.irkksome.orm.OneToOne;
 import se.emilsjolander.sprinkles.annotations.Column;
 
 public class SQLMapper {
-    private static final Map<Class, String> sqlTypes = new HashMap<Class, String>() {{
-        put(String.class, "TEXT");
-        put(Integer.class, "INTEGER");
-        put(Long.class, "INTEGER");
-        put(Double.class, "DOUBLE");
-        put(boolean.class, "INTEGER");
-        put(int.class, "INTEGER");
-        put(long.class, "INTEGER");
-        put(double.class, "DOUBLE");
-        put(Date.class, "INTEGER");
+    private static final Map<Class, SqlTypeEnum> sqlTypes = new HashMap<Class, SqlTypeEnum>() {{
+        put(String.class, SqlTypeEnum.TEXT);
+        put(Integer.class, SqlTypeEnum.INTEGER);
+        put(Long.class, SqlTypeEnum.INTEGER);
+        put(Double.class, SqlTypeEnum.DOUBLE);
+        put(boolean.class, SqlTypeEnum.INTEGER);
+        put(int.class, SqlTypeEnum.INTEGER);
+        put(long.class, SqlTypeEnum.INTEGER);
+        put(double.class, SqlTypeEnum.DOUBLE);
+        put(Date.class, SqlTypeEnum.INTEGER);
     }};
 
     private static final Map<Class, SqlCreateStatement> sqlCreateCache = new HashMap<>();
-
-    public static String[] getFullCreateStatement(Class[] classes) {
-        return new String[0];
-    }
 
     public static String getCreateStatement(Class<? extends AbstractBean> bean) {
         return getCreateStatementGraph(bean).toString();
@@ -54,21 +50,21 @@ public class SQLMapper {
         for (Field field : fields) {
             if (field.isAnnotationPresent(Column.class)) {
                 String fieldName = field.getAnnotation(Column.class).value();
-                if (field.isAnnotationPresent(OneToMany.class)) {
+                if (field.isAnnotationPresent(OneToMany.class)) { // Kommer balla ur när OTM-klasser mappas tillbaka, i.o.m. att @Column ligger i "fel" klass. Kan man lösa med en typeserializer?
                     SqlCreateStatement childStatement = getCreateStatementGraph(field.getAnnotation(OneToMany.class).value());
                     childStatement.addColumn(", " + fieldName + " INTEGER NOT NULL");
                 }
                 else {
                     stringBuilder.append(", ");
                     stringBuilder.append(fieldName).append(" ");
-                    String type;
+                    SqlTypeEnum type;
                     if (field.isAnnotationPresent(OneToOne.class)) {
                         type = sqlTypes.get(long.class);
                     }
                     else {
                         type = getSQLType(field);
                     }
-                    stringBuilder.append(type);
+                    stringBuilder.append(type.toString());
                     if (!field.isAnnotationPresent(Nullable.class)) {
                         stringBuilder.append(" NOT NULL");
                     }
@@ -80,7 +76,7 @@ public class SQLMapper {
         return statement;
     }
 
-    private static String getSQLType(Field field) {
+    private static SqlTypeEnum getSQLType(Field field) {
         return sqlTypes.get(field.getType());
     }
 
@@ -101,5 +97,11 @@ public class SQLMapper {
         public String toString() {
             return "CREATE TABLE " + tableName + "(id INTEGER PRIMARY KEY AUTOINCREMENT" + columns.toString() + ");";
         }
+    }
+
+    enum SqlTypeEnum {
+        INTEGER,
+        TEXT,
+        DOUBLE
     }
 }
