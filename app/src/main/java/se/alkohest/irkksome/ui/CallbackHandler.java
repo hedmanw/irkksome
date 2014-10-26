@@ -17,6 +17,7 @@ import se.alkohest.irkksome.model.api.UnreadStack;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
+import se.alkohest.irkksome.ui.fragment.ServerInfoFragment;
 import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
 import se.alkohest.irkksome.ui.fragment.connection.ConnectionsListFragment;
 
