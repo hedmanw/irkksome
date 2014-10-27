@@ -20,6 +20,7 @@ public class SSHConnection implements Connection, HostKeyVerifier {
     private static final int MIN_PORT = 49152;
     private static final int MAX_PORT = 65535;
     private final int localPort = getLocalPort();
+    private final boolean sshKeyCreated;
     private String sshAddress;
     private String sshUser;
     private String sshPass;
@@ -32,14 +33,14 @@ public class SSHConnection implements Connection, HostKeyVerifier {
 
     private final Log LOG = Log.getInstance(this.getClass());
 
-    public SSHConnection(String sshAddress, String sshUser, String sshPass,
-                         String ircHost, int ircPort,
+    public SSHConnection(ConnectionData data,
                          Class<? extends Connection> socketConnection) {
-        this.sshAddress = sshAddress;
-        this.sshUser = sshUser;
-        this.sshPass = sshPass;
-        this.ircHost = ircHost;
-        this.ircPort = ircPort;
+        this.sshAddress = data.getSshHost();
+        this.sshUser = data.getSshUser();
+        this.sshPass = data.getSshPass();
+        this.ircHost = data.getHost();
+        this.ircPort = data.getPort();
+        this.sshKeyCreated = data.isSSHKeySaved();
         try {
             this.socketConnection = socketConnection.getConstructor(String.class, int.class)
                     .newInstance(LOCALHOST, localPort);
