@@ -2,10 +2,11 @@ package se.alkohest.irkksome.model.api.dao;
 
 import java.util.List;
 
+import se.alkohest.irkksome.db.SprinklesAdapter;
 import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
-import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 import se.alkohest.irkksome.orm.GenericDAO;
+import se.emilsjolander.sprinkles.CursorList;
 
 /**
  * Created by wilhelm 2014-07-29.
@@ -33,7 +34,7 @@ public class IrkksomeConnectionDAO extends GenericDAO<IrkksomeConnectionEB> impl
 
     @Override
     public IrkksomeConnectionEB findById(long id) {
-        return findById(getEntityBean(), id);
+        return getById(id);
     }
 
     @Override
@@ -43,6 +44,6 @@ public class IrkksomeConnectionDAO extends GenericDAO<IrkksomeConnectionEB> impl
 
     @Override
     public List<IrkksomeConnectionEB> getAll() {
-        return getAll(getEntityBean());
+        return super.getAll();
     }
 }

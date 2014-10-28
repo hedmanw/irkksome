@@ -4,19 +4,19 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import se.alkohest.irkksome.irc.Log;
-import se.alkohest.irkksome.model.entity.IrkksomeConnection;
-import se.alkohest.irkksome.model.impl.IrcServerEB;
-import se.alkohest.irkksome.model.impl.IrcUserEB;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
+import se.alkohest.irkksome.orm.AnnotationStripper;
+import se.emilsjolander.sprinkles.CursorList;
 import se.emilsjolander.sprinkles.Migration;
+import se.emilsjolander.sprinkles.Model;
 import se.emilsjolander.sprinkles.OneQuery;
 import se.emilsjolander.sprinkles.Query;
 import se.emilsjolander.sprinkles.Sprinkles;
 
 public class SprinklesAdapter {
-    Log log = Log.getInstance(getClass());
+    private static Log log = Log.getInstance(SprinklesAdapter.class);
 
-    public SprinklesAdapter(Context context) {
+    public static void initialize(Context context) {
         Sprinkles sprinkles = Sprinkles.init(context);
         sprinkles.addMigration(new Migration() {
             @Override
@@ -30,12 +30,20 @@ public class SprinklesAdapter {
         });
     }
 
-    private void execute(SQLiteDatabase sqLiteDatabase, String command) {
+    private static void execute(SQLiteDatabase sqLiteDatabase, String command) {
         log.i("Executing: " + command);
         sqLiteDatabase.execSQL(command);
     }
 
-    public OneQuery read(Class bean, String selection, String[] selectionArgs) {
+    public static <T extends Model> T findById(Class<T> entityBean, long id) {
+        return getSingle(entityBean, "SELECT * FROM " + AnnotationStripper.getTableName(entityBean) + " WHERE ID=?", new String[]{String.valueOf(id)}).get();
+    }
+
+    public static <T extends Model> CursorList<T> getAll(Class<T> entity) {
+        return Query.all(entity).get();
+    }
+
+    public static <T extends Model> OneQuery<T> getSingle(Class<T> bean, String selection, String[] selectionArgs) {
         return Query.one(bean, selection, selectionArgs);
     }
 }

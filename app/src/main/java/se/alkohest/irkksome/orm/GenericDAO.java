@@ -2,12 +2,11 @@ package se.alkohest.irkksome.orm;
 
 import java.util.List;
 
+import se.alkohest.irkksome.db.SprinklesAdapter;
 import se.emilsjolander.sprinkles.CursorList;
 import se.emilsjolander.sprinkles.Model;
 
 public abstract class GenericDAO<E extends Model> {
-    public static PersistenceContext persistenceContext;
-
     public void persist(E entityBean) {
         entityBean.save();
     }
@@ -16,15 +15,15 @@ public abstract class GenericDAO<E extends Model> {
         entityBean.delete();
     }
 
-    public E findById(Class<? extends Model> entity, long id) {
-        return (E) persistenceContext.findById(entity, id);
+    public E getById(long id) {
+        return SprinklesAdapter.findById(getEntityBean(), id);
     }
 
-    public List<E> getAll(Class<? extends Model> entity) {
-        CursorList list = persistenceContext.getAll(entity);
-        List evaluatedList = list.asList();
-        list.close();
-        return evaluatedList;
+    public List<E> getAll() {
+        final CursorList<E> databaseEntries = SprinklesAdapter.getAll(getEntityBean());
+        final List<E> entityBeans = databaseEntries.asList();
+        databaseEntries.close();
+        return entityBeans;
     }
 
     protected abstract Class<E> getEntityBean();

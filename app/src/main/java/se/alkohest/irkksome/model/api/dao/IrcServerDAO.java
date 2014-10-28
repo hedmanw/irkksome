@@ -68,7 +68,7 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB> implements IrcServerDA
 
     @Override
     public List<IrcServerEB> getAll() {
-        return getAll(IrcServerEB.class);
+        return super.getAll();
     }
 
     @Override
