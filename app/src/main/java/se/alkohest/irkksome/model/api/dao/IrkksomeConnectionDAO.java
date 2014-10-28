@@ -2,11 +2,9 @@ package se.alkohest.irkksome.model.api.dao;
 
 import java.util.List;
 
-import se.alkohest.irkksome.db.SprinklesAdapter;
 import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 import se.alkohest.irkksome.orm.GenericDAO;
-import se.emilsjolander.sprinkles.CursorList;
 
 /**
  * Created by wilhelm 2014-07-29.

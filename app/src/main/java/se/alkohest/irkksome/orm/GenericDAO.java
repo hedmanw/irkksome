@@ -4,9 +4,8 @@ import java.util.List;
 
 import se.alkohest.irkksome.db.SprinklesAdapter;
 import se.emilsjolander.sprinkles.CursorList;
-import se.emilsjolander.sprinkles.Model;
 
-public abstract class GenericDAO<E extends Model> {
+public abstract class GenericDAO<E extends AbstractBean> {
     public void persist(E entityBean) {
         entityBean.save();
     }
