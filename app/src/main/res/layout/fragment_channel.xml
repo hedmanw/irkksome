@@ -41,7 +41,7 @@
             android:background="@drawable/holo_background"
             android:padding="8dp"
             android:singleLine="true"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionSend"
             android:id="@+id/input_field"
             android:layout_toLeftOf="@id/send_button"
             android:clickable="false" />

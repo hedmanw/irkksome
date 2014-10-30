@@ -32,6 +32,9 @@ In irkksome, you can connect to an existing irssi session. There's no need to us
 ##Contact
 Want to contribute or have questions? Meet us at [`#irkksome` on irc.chalmers.it](ircs://irc.chalmers.it:9999/irkksome) 
 
+##Contributing
+Gaffel iväg!
+
 ##License
 This software is licensed under the Beerware license.
 
