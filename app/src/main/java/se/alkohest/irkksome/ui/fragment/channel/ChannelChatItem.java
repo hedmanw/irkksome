@@ -7,7 +7,11 @@ public abstract class ChannelChatItem extends AbstractListItem {
         RECEIVED, SENT, TRACKBAR, INFO
     }
 
-    protected ChatItemTypeEnum viewType;
+    private ChatItemTypeEnum viewType;
+
+    public ChannelChatItem(ChatItemTypeEnum viewType) {
+        this.viewType = viewType;
+    }
 
     public ChatItemTypeEnum getViewType() {
         return viewType;

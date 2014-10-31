@@ -1,6 +1,10 @@
 package se.alkohest.irkksome.model.impl;
 
 import android.content.ContentValues;
+import android.graphics.Color;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
@@ -11,6 +15,8 @@ import se.emilsjolander.sprinkles.annotations.Table;
 public class IrcUserEB extends AbstractBean implements IrcUser {
     @Column("name")
     private String name;
+    @Column("color")
+    private int color;
 
     @Override
     public String getName() {
@@ -20,6 +26,34 @@ public class IrcUserEB extends AbstractBean implements IrcUser {
     @Override
     public void setName(String name) {
         this.name = name;
+        generateColor();
+    }
+
+    @Override
+    public int getColor() {
+        return color;
+    }
+
+    private void generateColor() {
+        float hue = generateHue();
+        float[] hsv = {hue, 0.05f, 0.99f};
+        color = Color.HSVToColor(hsv);
+    }
+    private float generateHue() {
+        byte[] bytes = new byte[0];
+        MessageDigest md5 = null;
+        try {
+            md5 = MessageDigest.getInstance("MD5");
+            bytes = md5.digest(name.getBytes());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        float sum = 0;
+        for (byte value : bytes) {
+            sum += Math.abs(value);
+        }
+        return sum % 360;
     }
 
     @Override
@@ -35,12 +69,5 @@ public class IrcUserEB extends AbstractBean implements IrcUser {
     @Override
     public int hashCode() {
         return name.hashCode();
-    }
-
-//    @Override
-    public ContentValues createRow(long dependentPK) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("name", name);
-        return contentValues;
     }
 }

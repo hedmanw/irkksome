@@ -65,7 +65,7 @@ public class ServerImplTest extends Specification {
 
         then:
         1 * server.ircProtocol.sendChannelMessage("#fest", "Äre fest?")
-        1 * server.listener.messageReceived()
+        1 * server.listener.messageReceived(_)
         channel.messages.size() == 1
     }
 
@@ -156,7 +156,7 @@ public class ServerImplTest extends Specification {
         server.channelMessageReceived("#fest", "lars", "lalalala", new Date())
 
         then:
-        1 * server.listener.messageReceived()
+        1 * server.listener.messageReceived(_)
         serverDAO.getChannel(server.ircServer, "#fest").messages.size() == 2
     }
 

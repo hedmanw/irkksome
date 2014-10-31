@@ -1,7 +1,5 @@
 package se.alkohest.irkksome.model.impl;
 
-import android.content.ContentValues;
-
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.Inherits;
 import se.alkohest.irkksome.orm.OneToOne;
@@ -35,14 +33,5 @@ public class IrcChatMessageEB extends IrcMessageEB {
 
     public String toString() {
         return author.getName() + ": " + message;
-    }
-
-
-    public ContentValues createRow(long dependentPK) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("message_id", getId());
-        contentValues.put("author", author.getId());
-        contentValues.put("ishilight", hilight);
-        return contentValues;
     }
 }

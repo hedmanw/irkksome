@@ -6,11 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import java.util.List;
+
 public class ChannelArrayAdapter extends ArrayAdapter<ChannelChatItem> {
     private LayoutInflater inflater;
 
-    public ChannelArrayAdapter(Context context) {
-        super(context, 0, 0);
+    public ChannelArrayAdapter(Context context, List<ChannelChatItem> listItems) {
+        super(context, 0, listItems);
         inflater = LayoutInflater.from(context);
     }
 

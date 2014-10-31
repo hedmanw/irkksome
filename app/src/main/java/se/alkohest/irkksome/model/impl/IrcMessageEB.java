@@ -1,7 +1,7 @@
 package se.alkohest.irkksome.model.impl;
 
-import android.content.ContentValues;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import se.alkohest.irkksome.model.entity.IrcMessage;
@@ -10,6 +10,7 @@ import se.emilsjolander.sprinkles.annotations.Table;
 
 @Table("Message")
 public abstract class IrcMessageEB extends AbstractBean implements IrcMessage {
+    private static DateFormat dateFormat = new SimpleDateFormat("HH:mm");
     protected String message;
     protected Date timestamp;
 
@@ -31,5 +32,9 @@ public abstract class IrcMessageEB extends AbstractBean implements IrcMessage {
     @Override
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getDisplayTimestamp() {
+        return dateFormat.format(timestamp);
     }
 }

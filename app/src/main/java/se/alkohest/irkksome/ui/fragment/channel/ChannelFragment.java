@@ -13,14 +13,19 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
+import se.alkohest.irkksome.model.impl.IrcChatMessageEB;
 
 public class ChannelFragment extends Fragment {
-    private static ArrayAdapter<IrcMessage> arrayAdapter;
+    private static ArrayAdapter<ChannelChatItem> arrayAdapter;
+    private static List<ChannelChatItem> messageList;
     private static IrcChannel ircChannel;
-    private static ListView messageList;
+    private static ListView messageListView;
 
     public static ChannelFragment newInstance(IrcChannel ircChannel) {
         ChannelFragment fragment = new ChannelFragment();
@@ -40,14 +45,20 @@ public class ChannelFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ChannelFragment.arrayAdapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, ircChannel.getMessages());
+        messageList = new ArrayList<>(ircChannel.getMessages().size());
+        for (IrcMessage message : ircChannel.getMessages()) {
+            if (message instanceof IrcChatMessageEB) {
+                messageList.add(new MessageItem((IrcChatMessageEB) message));
+            }
+        }
+        ChannelFragment.arrayAdapter = new ChannelArrayAdapter(activity.getApplicationContext(), messageList);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_channel, container, false);
-        messageList = (ListView) inflatedView.findViewById(R.id.listView);
-        messageList.setAdapter(arrayAdapter);
+        messageListView = (ListView) inflatedView.findViewById(R.id.listView);
+        messageListView.setAdapter(arrayAdapter);
         EditText messageEditText = ((EditText) inflatedView.findViewById(R.id.input_field));
         messageEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -70,16 +81,20 @@ public class ChannelFragment extends Fragment {
     }
 
     private static boolean hasBacklog() {
-        return messageList.getLastVisiblePosition() < arrayAdapter.getCount()-1;
+        return messageListView.getLastVisiblePosition() < arrayAdapter.getCount()-1;
     }
 
     public static void scrollToBottom() {
         if (arrayAdapter != null) {
-            messageList.setSelection(arrayAdapter.getCount()-1);
+            messageListView.setSelection(arrayAdapter.getCount() - 1);
         }
     }
 
-    public static ArrayAdapter<IrcMessage> getAdapter() {
-        return arrayAdapter;
+    public static void receiveMessage(IrcMessage message) {
+        if (arrayAdapter != null) {
+            arrayAdapter.add(new MessageItem((IrcChatMessageEB) message));
+            arrayAdapter.notifyDataSetChanged();
+            scrollToBottom();
+        }
     }
 }

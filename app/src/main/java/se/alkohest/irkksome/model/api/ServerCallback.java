@@ -3,6 +3,7 @@ package se.alkohest.irkksome.model.api;
 import java.util.List;
 
 import se.alkohest.irkksome.model.entity.IrcChannel;
+import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
 
@@ -19,7 +20,7 @@ public interface ServerCallback {
 
     public void userJoinedChannel(IrcChannel channel, IrcUser user);
 
-    public void messageReceived();
+    public void messageReceived(IrcMessage message);
 
     public void nickChanged(String oldNick, IrcUser user);
 

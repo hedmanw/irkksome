@@ -11,4 +11,5 @@
     <color name="tip_font_color">#ff7d7d7d</color>
     <color name="holo_purple_light">#ffaa66cc</color>
     <color name="grayish">#FF58585B</color>
+    <color name="black">#FF000000</color>
 </resources>

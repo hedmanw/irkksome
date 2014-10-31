@@ -106,7 +106,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
         IrcMessage ircMessage = messageDAO.create(ircServer.getSelf(), message, new Date());
 
         channelDAO.addMessage(channel, ircMessage);
-        listener.messageReceived();
+        listener.messageReceived(ircMessage);
     }
 
     @Override
@@ -272,7 +272,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
         ircServer.setLastMessageTime(time);
         channelDAO.addMessage(ircChannel, ircMessage);
         if (ircChannel == activeChannel && !ircProtocol.isBacklogReplaying()) {
-            listener.messageReceived();
+            listener.messageReceived(ircMessage);
         }
     }
 
