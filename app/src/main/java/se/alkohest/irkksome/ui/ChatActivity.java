@@ -17,7 +17,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
-import se.alkohest.irkksome.db.SprinklesAdapter;
 import se.alkohest.irkksome.irc.Log;
 import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.api.ServerManager;
@@ -38,7 +37,6 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SprinklesAdapter.initialize(getApplicationContext());
         setContentView(R.layout.activity_main_drawers);
         ConnectionListAdapter.setInstance(this, serverManager.getServers());
         connectionsList = (ExpandableListView) findViewById(R.id.left_drawer_list);
