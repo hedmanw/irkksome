@@ -12,4 +12,5 @@
     <color name="holo_purple_light">#ffaa66cc</color>
     <color name="grayish">#FF58585B</color>
     <color name="black">#FF000000</color>
+    <color name="holo_background">#fff3f3f3</color>
 </resources>

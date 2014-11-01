@@ -3,9 +3,11 @@ package se.alkohest.irkksome.ui.fragment.connection;
 import android.app.Activity;
 import android.app.ListFragment;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 import se.alkohest.irkksome.R;
@@ -31,6 +33,12 @@ public class ConnectionsListFragment extends ListFragment implements ConnectionC
         setListAdapter(adapter);
         setHasOptionsMenu(true);
         getActivity().setTitle(R.string.title_connect_to_server);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getListView().setBackgroundColor(getResources().getColor(R.color.holo_background));
     }
 
     @Override

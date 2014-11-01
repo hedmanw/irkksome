@@ -1,6 +1,6 @@
 package se.alkohest.irkksome.model.impl;
 
-import android.content.ContentValues;
+import java.util.Date;
 
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.orm.AbstractBean;
@@ -42,7 +42,10 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
     private String sshPass = "";
     @Column("sshPort")
     private int sshPort = 22;
+    @Column("sshKeySaved")
     private boolean SSHKeySaved;
+    @Column("lastUsed")
+    private Date lastUsed;
 
     public String getPassword() {
         return password;
@@ -160,22 +163,6 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
         return host.equals("localhost");
     }
 
-//    @Override
-    public ContentValues createRow(long dependentPK) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("host", host);
-        contentValues.put("port", port);
-        contentValues.put("nickname", nickname);
-        contentValues.put("username", username);
-        contentValues.put("realname", realname);
-        contentValues.put("useSSL", useSSL);
-        contentValues.put("useSSH", useSSH);
-        contentValues.put("sshHost", sshHost);
-        contentValues.put("sshUser", sshUser);
-        contentValues.put("sshPort", sshPort);
-        return contentValues;
-    }
-
     @Override
     public String toString() {
         return "IrkksomeConnectionEB[ id = " + getId() + "\n" +
@@ -207,5 +194,13 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
         if (!username.equals(that.username)) return false;
 
         return true;
+    }
+
+    public Date getLastUsed() {
+        return lastUsed;
+    }
+
+    public void setLastUsed(Date lastUsed) {
+        this.lastUsed = lastUsed;
     }
 }

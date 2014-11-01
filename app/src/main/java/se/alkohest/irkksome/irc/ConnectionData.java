@@ -1,5 +1,7 @@
 package se.alkohest.irkksome.irc;
 
+import java.util.Date;
+
 public interface ConnectionData {
     public String getPassword();
 
@@ -52,4 +54,8 @@ public interface ConnectionData {
     public boolean isUseSSL();
 
     public void setUseSSL(boolean useSSL);
+
+    public Date getLastUsed();
+
+    public void setLastUsed(Date date);
 }

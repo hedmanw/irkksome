@@ -93,8 +93,12 @@ public class ConnectionController {
                 convertView = inflater.inflate(R.layout.server_connect_list_item, null);
             }
 
-            TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
-            tv.setText(toString());
+            TextView nick = (TextView) convertView.findViewById(android.R.id.title);
+            nick.setText(connection.getNickname());
+            TextView host = (TextView) convertView.findViewById(android.R.id.text1);
+            host.setText(connection.getHost());
+            TextView lastAccessed = (TextView) convertView.findViewById(android.R.id.text2);
+            lastAccessed.setText("2 hours ago");
 
             View mainClick = convertView.findViewById(R.id.server_connect_legacy);
             mainClick.setOnClickListener(new View.OnClickListener() {
