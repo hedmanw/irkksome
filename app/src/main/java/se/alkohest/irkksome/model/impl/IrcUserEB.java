@@ -1,10 +1,6 @@
 package se.alkohest.irkksome.model.impl;
 
-import android.content.ContentValues;
 import android.graphics.Color;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
@@ -35,25 +31,9 @@ public class IrcUserEB extends AbstractBean implements IrcUser {
     }
 
     private void generateColor() {
-        float hue = generateHue();
+        float hue = name.hashCode()%360;
         float[] hsv = {hue, 0.05f, 0.99f};
         color = Color.HSVToColor(hsv);
-    }
-    private float generateHue() {
-        byte[] bytes = new byte[0];
-        MessageDigest md5 = null;
-        try {
-            md5 = MessageDigest.getInstance("MD5");
-            bytes = md5.digest(name.getBytes());
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
-        float sum = 0;
-        for (byte value : bytes) {
-            sum += Math.abs(value);
-        }
-        return sum % 360;
     }
 
     @Override
