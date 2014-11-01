@@ -2,12 +2,14 @@ package se.alkohest.irkksome.ui.fragment.channel;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -20,6 +22,7 @@ import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.impl.IrcChatMessageEB;
+import se.alkohest.irkksome.ui.ChatActivity;
 
 public class ChannelFragment extends Fragment {
     private static ArrayAdapter<ChannelChatItem> arrayAdapter;
@@ -59,17 +62,20 @@ public class ChannelFragment extends Fragment {
         final View inflatedView = inflater.inflate(R.layout.fragment_channel, container, false);
         messageListView = (ListView) inflatedView.findViewById(R.id.listView);
         messageListView.setAdapter(arrayAdapter);
-        EditText messageEditText = ((EditText) inflatedView.findViewById(R.id.input_field));
+        final EditText messageEditText = ((EditText) inflatedView.findViewById(R.id.input_field));
         messageEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int keyCode, KeyEvent keyEvent) {
                 if (keyCode == EditorInfo.IME_ACTION_DONE) {
-                    // send message
+
                     return true;
                 }
                 return false;
             }
         });
+        InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(messageEditText, 0);
+        messageEditText.requestFocus();
         scrollToBottom();
         return inflatedView;
     }
