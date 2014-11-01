@@ -23,11 +23,12 @@ import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.api.UnreadEntity;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
+import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
 import se.alkohest.irkksome.ui.fragment.connection.AbstractConnectionFragment;
 import se.alkohest.irkksome.ui.fragment.connection.ConnectionItem;
 import se.alkohest.irkksome.ui.fragment.connection.ConnectionsListFragment;
 
-public class ChatActivity extends Activity implements ConnectionsListFragment.OnConnectionSelectedListener, AbstractConnectionFragment.OnConnectPressedListener {
+public class ChatActivity extends Activity implements ConnectionsListFragment.OnConnectionSelectedListener, AbstractConnectionFragment.OnConnectPressedListener, ChannelFragment.OnMessageSendListener {
     private static final Log LOG = Log.getInstance(ChatActivity.class);
     private static ServerManager serverManager = ServerManager.INSTANCE;
     private ExpandableListView connectionsList;

@@ -29,12 +29,14 @@ public class ChannelFragment extends Fragment {
     private static List<ChannelChatItem> messageList;
     private static IrcChannel ircChannel;
     private static ListView messageListView;
+    private static OnMessageSendListener activity;
 
     public static ChannelFragment newInstance(IrcChannel ircChannel) {
         ChannelFragment fragment = new ChannelFragment();
         ChannelFragment.ircChannel = ircChannel;
         return fragment;
     }
+
     public ChannelFragment() {
 
     }
@@ -54,6 +56,7 @@ public class ChannelFragment extends Fragment {
                 messageList.add(new MessageItem((IrcChatMessageEB) message));
             }
         }
+        ChannelFragment.activity = (OnMessageSendListener) activity;
         ChannelFragment.arrayAdapter = new ChannelArrayAdapter(activity.getApplicationContext(), messageList);
     }
 
@@ -66,8 +69,8 @@ public class ChannelFragment extends Fragment {
         messageEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int keyCode, KeyEvent keyEvent) {
-                if (keyCode == EditorInfo.IME_ACTION_DONE) {
-
+                if (keyCode == EditorInfo.IME_ACTION_SEND) {
+                    activity.sendMessage(null);
                     return true;
                 }
                 return false;
@@ -102,5 +105,9 @@ public class ChannelFragment extends Fragment {
             arrayAdapter.notifyDataSetChanged();
             scrollToBottom();
         }
+    }
+
+    public interface OnMessageSendListener {
+        public void sendMessage(View view);
     }
 }
