@@ -22,6 +22,7 @@ import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.api.UnreadEntity;
 import se.alkohest.irkksome.model.entity.IrcChannel;
+import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
 import se.alkohest.irkksome.ui.fragment.connection.AbstractConnectionFragment;
@@ -190,7 +191,7 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
     }
 
     @Override
-    public void onConnectPressed(IrkksomeConnectionEB irkksomeConnection) {
+    public void onConnectPressed(IrkksomeConnection irkksomeConnection) {
         serverManager.setActiveServer(serverManager.addServer(irkksomeConnection));
         serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
         ConnectionListAdapter.getInstance().notifyDataSetChanged();

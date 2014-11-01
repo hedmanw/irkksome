@@ -9,16 +9,19 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.Date;
+
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
 import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
+import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
 public abstract class AbstractConnectionFragment extends Fragment {
     public static final String CONNECTION_ARGUMENT = "CONNECTION";
 
     protected OnConnectPressedListener listener;
-    protected IrkksomeConnectionEB templateConnection;
+    protected IrkksomeConnection templateConnection;
     protected IrkksomeConnectionDAOLocal connectionDAO = new IrkksomeConnectionDAO();
 
     @Override
@@ -40,7 +43,9 @@ public abstract class AbstractConnectionFragment extends Fragment {
 
     public void connectPressed() {
         if (listener != null) {
-            listener.onConnectPressed(getConnection());
+            IrkksomeConnection connection = getConnection();
+            connection.setLastUsed(new Date());
+            listener.onConnectPressed(connection);
         }
     }
 
@@ -78,9 +83,9 @@ public abstract class AbstractConnectionFragment extends Fragment {
         ((TextView) view.findViewById(resourceId)).setText(text);
     }
 
-    public abstract IrkksomeConnectionEB getConnection();
+    public abstract IrkksomeConnection getConnection();
 
     public interface OnConnectPressedListener {
-        public void onConnectPressed(IrkksomeConnectionEB irkksomeConnection);
+        public void onConnectPressed(IrkksomeConnection irkksomeConnection);
     }
 }

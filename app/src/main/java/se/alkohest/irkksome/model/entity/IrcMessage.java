@@ -12,4 +12,6 @@ public interface IrcMessage extends BeanEntity {
     public Date getTimestamp();
 
     public void setTimestamp(Date timestamp);
+
+    public String getDisplayTimestamp();
 }

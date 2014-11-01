@@ -116,8 +116,8 @@ public class ServerImplTest extends Specification {
         server.userJoined("#fest", "pelle", new Date())
 
         then:
-        1 * server.listener.userJoinedChannel(serverDAO.getChannel(server.ircServer, "#fest"),
-                                            userDAO.create("pelle"))
+        1 * server.listener.userJoinedChannel(
+        )
         1 * server.listener.setActiveChannel(serverDAO.getChannel(server.ircServer, "#fest"))
         server.activeChannel == serverDAO.getChannel(server.ircServer, "#fest")
     }
@@ -128,8 +128,8 @@ public class ServerImplTest extends Specification {
         server.userParted("#fest", "palle", new Date())
 
         then:
-        1 * server.listener.userLeftChannel(serverDAO.getChannel(server.ircServer, "#fest"),
-                                            serverDAO.getUser(server.ircServer, "palle"))
+        1 * server.listener.userLeftChannel(,
+        )
     }
 
     def "user quit"() {

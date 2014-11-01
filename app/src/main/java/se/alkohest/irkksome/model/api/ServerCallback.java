@@ -18,19 +18,13 @@ public interface ServerCallback {
 
     public void setActiveChannel(IrcChannel channel);
 
-    public void userJoinedChannel(IrcChannel channel, IrcUser user);
-
     public void messageReceived(IrcMessage message);
-
-    public void nickChanged(String oldNick, IrcUser user);
-
-    public void userLeftChannel(IrcChannel channel, IrcUser user);
-
-    public void userQuit(IrcUser user, List<IrcChannel> channels);
 
     public void error(String message);
 
     public void updateUserList();
 
     public void updateHilights();
+
+    public void postInfoMessage(IrcMessage message, int color);
 }

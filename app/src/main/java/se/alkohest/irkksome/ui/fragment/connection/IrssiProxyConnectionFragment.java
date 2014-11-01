@@ -53,7 +53,7 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
     }
 
     @Override
-    public IrkksomeConnectionEB getConnection() {
+    public IrkksomeConnection getConnection() {
         IrkksomeConnectionEB connection = connectionDAO.create();
         connection.setHost(getFieldValue(R.id.server_connect_host));
         connection.setPort(Integer.parseInt(getFieldValue(R.id.server_connect_port)));

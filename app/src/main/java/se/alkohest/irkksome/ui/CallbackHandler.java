@@ -136,11 +136,6 @@ public class CallbackHandler implements ServerCallback {
     }
 
     @Override
-    public void userJoinedChannel(IrcChannel channel, IrcUser user) {
-        updateUserList();
-    }
-
-    @Override
     public void messageReceived(final IrcMessage message) {
         context.runOnUiThread(new Runnable() {
             @Override
@@ -148,21 +143,6 @@ public class CallbackHandler implements ServerCallback {
                 ChannelFragment.receiveMessage(message);
             }
         });
-    }
-
-    @Override
-    public void nickChanged(String oldNick, IrcUser user) {
-        updateUserList();
-    }
-
-    @Override
-    public void userLeftChannel(IrcChannel channel, IrcUser user) {
-        updateUserList();
-    }
-
-    @Override
-    public void userQuit(IrcUser user, List<IrcChannel> channels) {
-        updateUserList();
     }
 
     @Override
@@ -175,4 +155,13 @@ public class CallbackHandler implements ServerCallback {
         });
     }
 
+    public void postInfoMessage(final IrcMessage message, final int color) {
+        context.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ChannelFragment.putInfoMessage(message, color);
+            }
+        });
+        updateUserList();
+    }
 }

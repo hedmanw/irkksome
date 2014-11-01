@@ -7,6 +7,7 @@ import se.alkohest.irkksome.model.api.dao.IrcServerDAO;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
 import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
 import se.alkohest.irkksome.model.entity.IrcServer;
+import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.impl.IrcServerEB;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
@@ -37,8 +38,8 @@ public class ServerManager implements ServerDropAcidListener {
         }
     }
 
-    public Server addServer(IrkksomeConnectionEB irkksomeConnection) {
-        new IrkksomeConnectionDAO().persist(irkksomeConnection);
+    public Server addServer(IrkksomeConnection irkksomeConnection) {
+        new IrkksomeConnectionDAO().persist((IrkksomeConnectionEB) irkksomeConnection);
         final IrcServer ircServer = serverDAO.create(irkksomeConnection.getHost());
         Server server = new ServerImpl(ircServer, irkksomeConnection);
         server.setDropListener(this);

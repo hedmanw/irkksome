@@ -21,6 +21,7 @@ import java.util.List;
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
+import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.model.impl.IrcChatMessageEB;
 import se.alkohest.irkksome.ui.ChatActivity;
 
@@ -102,8 +103,13 @@ public class ChannelFragment extends Fragment {
     public static void receiveMessage(IrcMessage message) {
         if (arrayAdapter != null) {
             arrayAdapter.add(new MessageItem((IrcChatMessageEB) message));
-            arrayAdapter.notifyDataSetChanged();
             scrollToBottom();
+        }
+    }
+
+    public static void putInfoMessage(IrcMessage message, int color) {
+        if (arrayAdapter != null) {
+            arrayAdapter.add(new InfoItem(message, color));
         }
     }
 

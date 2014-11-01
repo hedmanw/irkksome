@@ -168,7 +168,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
         } else {
             IrcUser user = serverDAO.getUser(ircServer, oldNick);
             user.setName(newNick);
-            listener.nickChanged(oldNick, user);
+            listener.postInfoMessage(messageDAO.create(oldNick + " is now known as " + newNick, time), user.getColor());
         }
         ircServer.setLastMessageTime(time);
     }
@@ -213,7 +213,8 @@ public class ServerImpl implements Server, IrcProtocolListener {
         } else {
             IrcUser user = serverDAO.getUser(ircServer, nick);
             channelDAO.addUser(channel, user, "");
-            listener.userJoinedChannel(channel, user);
+            IrcMessage message = messageDAO.create(nick + " joined the channel.", time);
+            listener.postInfoMessage(message, user.getColor());
         }
         checkUserUpdate(channel);
         ircServer.setLastMessageTime(time);
@@ -225,7 +226,8 @@ public class ServerImpl implements Server, IrcProtocolListener {
         if (!userDAO.compare(ircServer.getSelf(), nick)) {
             IrcUser user = serverDAO.getUser(ircServer, nick);
             channelDAO.removeUser(channel, user);
-            listener.userLeftChannel(channel, user);
+            IrcMessage message = messageDAO.create(nick + " left the channel.", time);
+            listener.postInfoMessage(message, user.getColor());
             checkUserUpdate(channel);
         } else {
             leaveChannel(channel);
@@ -245,7 +247,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
             }
         }
         ircServer.setLastMessageTime(time);
-        listener.userQuit(user, channels);
+        listener.postInfoMessage(messageDAO.create(nick + " quit. (" + quitMessage + ")", time), user.getColor());
     }
 
     @Override

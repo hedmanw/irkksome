@@ -9,7 +9,7 @@ import se.alkohest.irkksome.orm.AbstractBean;
 import se.emilsjolander.sprinkles.annotations.Table;
 
 @Table("Message")
-public abstract class IrcMessageEB extends AbstractBean implements IrcMessage {
+public class IrcMessageEB extends AbstractBean implements IrcMessage {
     private static DateFormat dateFormat = new SimpleDateFormat("HH:mm");
     protected String message;
     protected Date timestamp;
@@ -34,6 +34,7 @@ public abstract class IrcMessageEB extends AbstractBean implements IrcMessage {
         this.timestamp = timestamp;
     }
 
+    @Override
     public String getDisplayTimestamp() {
         return dateFormat.format(timestamp);
     }
