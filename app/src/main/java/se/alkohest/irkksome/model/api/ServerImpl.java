@@ -42,7 +42,6 @@ public class ServerImpl implements Server, IrcProtocolListener {
         ircProtocol = IrcProtocolFactory.getIrcProtocol(data);
         ircProtocol.setListener(this);
         ircProtocol.connect(data.getNickname(), data.getUsername(), data.getRealname(), data.getPassword());
-        ircServer.setSelf(serverDAO.getUser(ircServer, data.getNickname()));
         hilightHelper = new HilightHelper();
         // TODO - fix dynamic hilights
         hilightHelper.addHilight(data.getNickname());

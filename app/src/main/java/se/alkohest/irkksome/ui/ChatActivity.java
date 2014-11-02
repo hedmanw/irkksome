@@ -198,7 +198,6 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
     public void onConnectPressed(IrkksomeConnection irkksomeConnection) {
         serverManager.setActiveServer(serverManager.addServer(irkksomeConnection));
         serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
-        ConnectionListAdapter.getInstance().notifyDataSetChanged();
         connectionsList.expandGroup(serverManager.getServers().indexOf(serverManager.getActiveServer()));
     }
 }
