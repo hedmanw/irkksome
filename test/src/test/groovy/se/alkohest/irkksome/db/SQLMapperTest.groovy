@@ -43,7 +43,7 @@ public class SQLMapperTest extends Specification {
         String userEB = SQLMapper.getCreateStatement(IrcUserEB.class)
 
         then:
-        userEB == "CREATE TABLE User(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL);"
+        userEB == "CREATE TABLE User(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, color INTEGER NOT NULL);"
     }
 
     def "getCreateStatement works for multiple types/nullable"() {
@@ -51,7 +51,7 @@ public class SQLMapperTest extends Specification {
         String irkksomeConnectionEB = SQLMapper.getCreateStatement(IrkksomeConnectionEB.class)
 
         then:
-        irkksomeConnectionEB == "CREATE TABLE Connection(id INTEGER PRIMARY KEY AUTOINCREMENT, host TEXT NOT NULL, port INTEGER NOT NULL, nickname TEXT NOT NULL, username TEXT, realname TEXT, useSSL INTEGER NOT NULL, useSSH INTEGER NOT NULL, sshHost TEXT, sshUser TEXT, sshPort INTEGER NOT NULL);"
+        irkksomeConnectionEB == "CREATE TABLE Connection(id INTEGER PRIMARY KEY AUTOINCREMENT, host TEXT NOT NULL, port INTEGER NOT NULL, nickname TEXT NOT NULL, username TEXT, realname TEXT, useSSL INTEGER NOT NULL, useSSH INTEGER NOT NULL, sshHost TEXT, sshUser TEXT, sshPort INTEGER NOT NULL, sshKeySaved INTEGER NOT NULL, lastUsed INTEGER NOT NULL);"
     }
 
     def "getCreateStatement works for one to one"() {

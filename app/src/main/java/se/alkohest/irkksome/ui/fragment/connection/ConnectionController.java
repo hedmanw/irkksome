@@ -12,6 +12,7 @@ import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
 import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
+import se.alkohest.irkksome.util.DateFormatUtil;
 
 public class ConnectionController {
     public static List<ConnectionItem> CONNECTIONS = new ArrayList<>();
@@ -34,7 +35,7 @@ public class ConnectionController {
     }
 
     private static void addLegacyConnections() {
-        List<IrkksomeConnectionEB> connections = connectionDAO.getAll();
+        List<IrkksomeConnectionEB> connections = connectionDAO.getConnectionsForDisplay();
         for (IrkksomeConnectionEB connection : connections) {
             addConnectionItem(new LegacyConnection(connection));
         }
@@ -98,7 +99,7 @@ public class ConnectionController {
             TextView host = (TextView) convertView.findViewById(android.R.id.text1);
             host.setText(connection.getHost());
             TextView lastAccessed = (TextView) convertView.findViewById(android.R.id.text2);
-            lastAccessed.setText("2 hours ago");
+            lastAccessed.setText("Last synced " + DateFormatUtil.getTimePassed(connection.getLastUsed()));
 
             View mainClick = convertView.findViewById(R.id.server_connect_legacy);
             mainClick.setOnClickListener(new View.OnClickListener() {

@@ -6,11 +6,11 @@ import java.util.Date;
 
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.orm.AbstractBean;
+import se.alkohest.irkksome.util.DateFormatUtil;
 import se.emilsjolander.sprinkles.annotations.Table;
 
 @Table("Message")
 public class IrcMessageEB extends AbstractBean implements IrcMessage {
-    private static DateFormat dateFormat = new SimpleDateFormat("HH:mm");
     protected String message;
     protected Date timestamp;
 
@@ -36,6 +36,6 @@ public class IrcMessageEB extends AbstractBean implements IrcMessage {
 
     @Override
     public String getDisplayTimestamp() {
-        return dateFormat.format(timestamp);
+        return DateFormatUtil.getTimestamp(timestamp);
     }
 }

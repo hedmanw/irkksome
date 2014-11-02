@@ -94,7 +94,7 @@ public class ServerImplTest extends Specification {
 
         then:
         server.ircServer.getSelf().name == "slutfest"
-        1 * server.listener.nickChanged("old", {it.name == "new"})
+        1 * server.listener.postInfoMessage(*_)
     }
 
     def "users in channel"() {
@@ -116,8 +116,7 @@ public class ServerImplTest extends Specification {
         server.userJoined("#fest", "pelle", new Date())
 
         then:
-        1 * server.listener.userJoinedChannel(
-        )
+        1 * server.listener.postInfoMessage(*_)
         1 * server.listener.setActiveChannel(serverDAO.getChannel(server.ircServer, "#fest"))
         server.activeChannel == serverDAO.getChannel(server.ircServer, "#fest")
     }
@@ -128,8 +127,7 @@ public class ServerImplTest extends Specification {
         server.userParted("#fest", "palle", new Date())
 
         then:
-        1 * server.listener.userLeftChannel(,
-        )
+        1 * server.listener.postInfoMessage(*_)
     }
 
     def "user quit"() {
@@ -144,8 +142,7 @@ public class ServerImplTest extends Specification {
         server.userQuit("palle", "bye..", new Date())
 
         then:
-        1 * server.listener.userQuit(serverDAO.getUser(server.ircServer, "palle"),
-                {it.size() == 2})
+        1 * server.listener.postInfoMessage(*_)
     }
 
     def "channel message received"() {
