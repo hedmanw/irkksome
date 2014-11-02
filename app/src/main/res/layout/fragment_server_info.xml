@@ -1,0 +1,56 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.ServerInfoFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+        <TextView
+            style="@style/list_heading"
+            android:text="BASICS" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grayish"/>
+
+        <TextView
+            style="@style/list_item.hint"
+            android:text="@string/hint_hostname" />
+        <TextView
+            style="@style/list_item"
+            android:id="@+id/server_info_hostname" />
+
+        <TextView
+            style="@style/list_item.hint"
+            android:text="@string/hint_nickname" />
+        <TextView
+            style="@style/list_item"
+            android:id="@+id/server_info_nickname" />
+
+        <TextView
+            style="@style/list_item.hint"
+            android:text="@string/hint_motd" />
+        <TextView
+            style="@style/list_item"
+            android:id="@+id/server_motd" />
+
+
+        <TextView
+            style="@style/list_heading"
+            android:text="CHANNELS" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grayish"/>
+    </LinearLayout>
+    <!--<ListView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/server_info_connected_channels"/>-->
+</LinearLayout>

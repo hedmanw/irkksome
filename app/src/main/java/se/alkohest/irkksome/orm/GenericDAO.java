@@ -1,14 +1,29 @@
 package se.alkohest.irkksome.orm;
 
-public abstract class GenericDAO<E extends AbstractBean, I extends BeanEntity> {
+import java.util.List;
 
-    protected boolean save(I bean) {
-        // perform save to DB
-        return true;
+import se.alkohest.irkksome.db.SprinklesAdapter;
+import se.emilsjolander.sprinkles.CursorList;
+
+public abstract class GenericDAO<E extends AbstractBean> {
+    public void persist(E entityBean) {
+        entityBean.save();
     }
 
-    protected boolean update(I bean) {
-        // perform update
-        return true;
+    public void delete(E entityBean) {
+        entityBean.delete();
     }
+
+    public E getById(long id) {
+        return SprinklesAdapter.findById(getEntityBean(), id);
+    }
+
+    public List<E> getAll() {
+        final CursorList<E> databaseEntries = SprinklesAdapter.getAll(getEntityBean());
+        final List<E> entityBeans = databaseEntries.asList();
+        databaseEntries.close();
+        return entityBeans;
+    }
+
+    protected abstract Class<E> getEntityBean();
 }

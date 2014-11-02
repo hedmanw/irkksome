@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".ui.ChannelFragment">
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_alignParentTop="true"
+        android:layout_above="@android:id/custom"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#FFC0C0C0"
+        android:id="@android:id/custom"
+        android:layout_above="@android:id/inputArea"/>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@android:id/inputArea"
+        android:layout_alignParentBottom="true">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/send_button"
+            android:padding="4dp"
+            android:src="@drawable/ic_menu_send"
+            android:background="@drawable/states_split_list"
+            android:layout_alignParentRight="true"
+            android:onClick="sendMessage" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/send_message"
+            android:textColorHint="#FFC0C0C0"
+            android:inputType="textCapSentences"
+            android:textSize="18sp"
+            android:background="@drawable/holo_background"
+            android:padding="8dp"
+            android:singleLine="true"
+            android:imeOptions="actionSend"
+            android:id="@+id/input_field"
+            android:layout_toLeftOf="@id/send_button"
+            android:clickable="false" />
+    </RelativeLayout>
+</RelativeLayout>
