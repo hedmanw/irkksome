@@ -172,8 +172,10 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
 
     public void sendMessage(View view) {
         EditText editText = (EditText) findViewById(R.id.input_field);
-        serverManager.getActiveServer().sendMessage(serverManager.getActiveServer().getActiveChannel(), editText.getText().toString());
-        editText.getText().clear();
+        if (!editText.getText().toString().isEmpty()) {
+            serverManager.getActiveServer().sendMessage(serverManager.getActiveServer().getActiveChannel(), editText.getText().toString());
+            editText.getText().clear();
+        }
     }
 
     public void startQuery(String nickname) {
