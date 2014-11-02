@@ -224,7 +224,7 @@ public class IrcProtocolAdapter implements IrcProtocol {
 
     @Override
     public void connect(String nick, String login, String realName, String password) {
-        if (password != null) {
+        if (password != null && !password.isEmpty()) {
             setPassword(password);
         }
         connect(nick, login, realName);
