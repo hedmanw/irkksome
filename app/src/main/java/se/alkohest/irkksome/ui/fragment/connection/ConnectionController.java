@@ -97,7 +97,11 @@ public class ConnectionController {
             TextView nick = (TextView) convertView.findViewById(android.R.id.title);
             nick.setText(connection.getNickname());
             TextView host = (TextView) convertView.findViewById(android.R.id.text1);
-            host.setText(connection.getHost());
+            if (connection.isIrssiProxyConnection()) {
+                host.setText(connection.getSshUser() + "@" + connection.getSshHost());
+            } else {
+                host.setText(connection.getHost());
+            }
             TextView lastAccessed = (TextView) convertView.findViewById(android.R.id.text2);
             lastAccessed.setText("Last synced " + DateFormatUtil.getTimePassed(connection.getLastUsed()));
 
