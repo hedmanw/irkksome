@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +22,7 @@ import java.util.List;
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
-import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.model.impl.IrcChatMessageEB;
-import se.alkohest.irkksome.ui.ChatActivity;
 
 public class ChannelFragment extends Fragment {
     private static ArrayAdapter<ChannelChatItem> arrayAdapter;
@@ -53,9 +52,7 @@ public class ChannelFragment extends Fragment {
         super.onAttach(activity);
         messageList = new ArrayList<>(ircChannel.getMessages().size());
         for (IrcMessage message : ircChannel.getMessages()) {
-            if (message instanceof IrcChatMessageEB) {
-                messageList.add(new MessageItem((IrcChatMessageEB) message));
-            }
+            addMessage(message);
         }
         ChannelFragment.activity = (OnMessageSendListener) activity;
         ChannelFragment.arrayAdapter = new ChannelArrayAdapter(activity.getApplicationContext(), messageList);
@@ -102,14 +99,18 @@ public class ChannelFragment extends Fragment {
 
     public static void receiveMessage(IrcMessage message) {
         if (arrayAdapter != null) {
-            arrayAdapter.add(new MessageItem((IrcChatMessageEB) message));
+            addMessage(message);
+            arrayAdapter.notifyDataSetChanged();
             scrollToBottom();
         }
     }
 
-    public static void putInfoMessage(IrcMessage message, int color) {
-        if (arrayAdapter != null) {
-            arrayAdapter.add(new InfoItem(message, color));
+    private static void addMessage(IrcMessage message) {
+        if (message instanceof IrcChatMessageEB) {
+            messageList.add(new MessageItem((IrcChatMessageEB) message));
+        }
+        else {
+            messageList.add(new InfoItem(message, 0xffffffff));
         }
     }
 

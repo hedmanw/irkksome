@@ -154,14 +154,4 @@ public class CallbackHandler implements ServerCallback {
             }
         });
     }
-
-    public void postInfoMessage(final IrcMessage message, final int color) {
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ChannelFragment.putInfoMessage(message, color);
-            }
-        });
-        updateUserList();
-    }
 }

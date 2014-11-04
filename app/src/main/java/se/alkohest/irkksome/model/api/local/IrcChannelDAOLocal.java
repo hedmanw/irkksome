@@ -1,7 +1,5 @@
 package se.alkohest.irkksome.model.api.local;
 
-import java.util.List;
-
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcUser;
@@ -15,5 +13,7 @@ public interface IrcChannelDAOLocal {
 
     public void addUser(IrcChannel channel, IrcUser user, String flag);
 
-    public String removeUser(IrcChannel channel, IrcUser user);
+    public boolean hasUser(IrcChannel channel, IrcUser user);
+
+    public boolean removeUser(IrcChannel channel, IrcUser user);
 }

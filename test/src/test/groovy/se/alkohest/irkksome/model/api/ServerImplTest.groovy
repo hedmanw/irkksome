@@ -7,7 +7,7 @@ import se.alkohest.irkksome.model.api.dao.*
 public class ServerImplTest extends ColorProviderMockSpecification {
     def backingServer = new IrcServerDAO().create("localhost")
     def data = new IrkksomeConnectionDAO().create()
-    Server server
+    ServerImpl server
     def serverDAO = new IrcServerDAO()
     def channelDAO = new IrcChannelDAO()
     def messageDAO = new IrcMessageDAO()
@@ -43,15 +43,38 @@ public class ServerImplTest extends ColorProviderMockSpecification {
         server.changeNick("fest")
 
         then:
-        server.ircProtocol.setNick("fest")
+        1 * server.ircProtocol.setNick("fest")
     }
 
-    def "leave channel"() {
+    def "leave last channel"() {
         when:
         server.leaveChannel(channelDAO.create("#fest"))
 
         then:
         1 * server.ircProtocol.partChannel("#fest")
+        server.activeChannel == null
+        1 * server.listener.showServerInfo(server.getBackingBean(), _)
+    }
+
+    def "leave some channel"() {
+        setup:
+        server.serverRegistered("irc.chalmers.it", "Heissman")
+        server.userJoined("#asdf", "Heissman", new Date())
+        when:
+        server.leaveChannel(channelDAO.create("#fest"))
+
+        then:
+        1 * server.ircProtocol.partChannel("#fest")
+        server.activeChannel == serverDAO.getChannel(server.getBackingBean(), "#asdf")
+        1 * server.listener.setActiveChannel(serverDAO.getChannel(server.getBackingBean(), "#asdf"))
+    }
+
+    def "leave query"() {
+        when:
+        server.leaveChannel(channelDAO.create("oed"))
+
+        then:
+        0 * server.ircProtocol.partChannel(_)
     }
 
     def "send message"() {
@@ -82,15 +105,53 @@ public class ServerImplTest extends ColorProviderMockSpecification {
         1 * server.listener.showServerInfo(server.ircServer, server.motd)
     }
 
-    def "nick changed"() {
+    def "When your nick changes, post a message to all channels you're in"() {
+        setup:
+        server.serverRegistered("irc.chalmers.it", "Heissman")
+        server.userJoined("#asdf", "Heissman", new Date())
+        def channel = serverDAO.getChannel(server.ircServer, "#asdf")
+
         when:
-        server.ircServer.self = userDAO.create("fest")
-        server.nickChanged("fest", "slutfest", new Date())
-        server.nickChanged("old", "new", new Date())
+        server.nickChanged("Heissman", "Hajsman", new Date())
 
         then:
-        server.ircServer.getSelf().name == "slutfest"
-        1 * server.listener.postInfoMessage(*_)
+        server.ircServer.getSelf().name == "Hajsman"
+        channel.messages.size() == 1
+        channel.messages.get(0).message == "You are now known as Hajsman"
+        1 * server.listener.messageReceived(_)
+    }
+
+    def "When some nick changes, a message is received in the correct channel"() {
+        setup:
+        server.serverRegistered("irc.chalmers.it", "Heissman")
+        server.userJoined("#asdf", "Heissman", new Date())
+        server.userJoined("#asdf", "apa", new Date())
+        def channel = serverDAO.getChannel(server.ircServer, "#asdf")
+
+        when:
+        server.nickChanged("apa", "loloped", new Date())
+
+        then:
+        channel.messages.size() == 2
+        channel.messages.get(1).message == "apa is now known as loloped"
+        1 * server.listener.messageReceived(_)
+    }
+
+    def "When nicks change in a non-active channel, you're not notified"() {
+        setup:
+        server.serverRegistered("irc.chalmers.it", "Heissman")
+        server.userJoined("#asdf", "Heissman", new Date())
+        server.userJoined("#hest", "Heissman", new Date())
+        server.userJoined("#asdf", "apa", new Date())
+        def channel = serverDAO.getChannel(server.ircServer, "#asdf")
+
+        when:
+        server.nickChanged("apa", "loloped", new Date())
+
+        then:
+        channel.messages.size() == 2
+        channel.messages.get(1).message == "apa is now known as loloped"
+        0 * server.listener.messageReceived(_)
     }
 
     def "users in channel"() {
@@ -105,40 +166,100 @@ public class ServerImplTest extends ColorProviderMockSpecification {
         users.get(serverDAO.getUser(server.ircServer, "hej")) == "%"
     }
 
-    def "user joined" () {
+    def "When you join a channel, it is the active channel"() {
+        setup:
+        server.serverRegistered("irc.chalmers.it", "Heissman")
+
         when:
-        server.ircServer.self = userDAO.create("palle")
-        server.userJoined("#fest", "palle", new Date())
-        server.userJoined("#fest", "pelle", new Date())
+        server.userJoined("#asdf", "Heissman", new Date())
 
         then:
-        1 * server.listener.postInfoMessage(*_)
-        1 * server.listener.setActiveChannel(serverDAO.getChannel(server.ircServer, "#fest"))
-        server.activeChannel == serverDAO.getChannel(server.ircServer, "#fest")
+        1 * server.listener.setActiveChannel(serverDAO.getChannel(server.ircServer, "#asdf"))
+        server.activeChannel == serverDAO.getChannel(server.ircServer, "#asdf")
     }
 
-    def "user parted"() {
+    def "When someone joins an active channel, a notification is sent"() {
+        setup:
+        server.serverRegistered("irc.chalmers.it", "Heissman")
+        server.userJoined("#asdf", "Heissman", new Date())
+        def channel = serverDAO.getChannel(server.ircServer, "#asdf")
+
         when:
-        server.backingBean.setSelf(userDAO.create("erland"));
-        server.userParted("#fest", "palle", new Date())
+        server.userJoined("#asdf", "apa", new Date())
 
         then:
-        1 * server.listener.postInfoMessage(*_)
+        channel.messages.size() == 1
+        channel.messages.get(0).message == "apa joined the channel."
+        1 * server.listener.messageReceived(_)
     }
 
-    def "user quit"() {
+    def "When someone joins a channel, messages are sent"() {
+        setup:
+        server.serverRegistered("irc.chalmers.it", "Heissman")
+        server.userJoined("#asdf", "Heissman", new Date())
+        server.userJoined("#hest", "Heissman", new Date())
+        def channel = serverDAO.getChannel(server.ircServer, "#asdf")
+
         when:
-        def channel1 = channelDAO.create("#fest")
-        def channel2 = channelDAO.create("#pep")
-        def channel3 = channelDAO.create("#irkksome")
-        def user = userDAO.create("palle")
-        channel1.users.put(user, "")
-        channel2.users.put(user, "@")
-        server.ircServer.connectedChannels = [channel1, channel2, channel3]
-        server.userQuit("palle", "bye..", new Date())
+        server.userJoined("#asdf", "apa", new Date())
 
         then:
-        1 * server.listener.postInfoMessage(*_)
+        channel.messages.size() == 1
+        channel.messages.get(0).message == "apa joined the channel."
+        0 * server.listener.messageReceived(_)
+    }
+
+    def "User parted in active channel sends notification"() {
+        setup:
+        server.serverRegistered("irc.chalmers.it", "Heissman")
+        server.userJoined("#asdf", "Heissman", new Date())
+
+        when:
+        server.userParted("#asdf", "palle", new Date())
+
+        then:
+        1 * server.listener.messageReceived(_)
+    }
+
+    def "User parted in inactive channel posts message"() {
+        setup:
+        server.serverRegistered("irc.chalmers.it", "Heissman")
+        server.userJoined("#asdf", "Heissman", new Date())
+        server.userJoined("#hest", "Heissman", new Date())
+
+        when:
+        server.userParted("#asdf", "palle", new Date())
+
+        then:
+        0 * server.listener.messageReceived(_)
+    }
+
+    def "User quit in active channel sends notification"() {
+        setup:
+        server.serverRegistered("irc.chalmers.it", "Heissman")
+        server.userJoined("#asdf", "Heissman", new Date())
+        server.userJoined("#hest", "Heissman", new Date())
+        server.userJoined("#hest", "hullebulle", new Date())
+
+        when:
+        server.userQuit("hullebulle", "No more bulle!", new Date())
+
+        then:
+        1 * server.listener.messageReceived(_)
+    }
+
+    def "User quit in inactive channel posts message"() {
+        setup:
+        server.serverRegistered("irc.chalmers.it", "Heissman")
+        server.userJoined("#asdf", "Heissman", new Date())
+        server.userJoined("#asdf", "hullebulle", new Date())
+        server.userJoined("#hest", "Heissman", new Date())
+
+        when:
+        server.userQuit("hullebulle", "No more bulle!", new Date())
+
+        then:
+        0 * server.listener.messageReceived(_)
     }
 
     def "channel message received"() {
