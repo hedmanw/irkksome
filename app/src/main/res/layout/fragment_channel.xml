@@ -38,7 +38,7 @@
             android:textColorHint="#FFC0C0C0"
             android:inputType="textCapSentences"
             android:textSize="18sp"
-            android:background="@drawable/holo_background"
+            android:background="@drawable/transparent"
             android:padding="8dp"
             android:singleLine="true"
             android:imeOptions="actionSend"
