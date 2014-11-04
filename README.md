@@ -26,8 +26,8 @@ In irkksome, you can connect to an existing irssi session. There's no need to us
 ##Specifics
 - Android SDK - API 20
 - sshj 0.10.0
-- Groovy 1.8.6
-- Spock 0.6-groovy-1.8
+- Groovy 2.2.3
+- Spock 0.7-groovy-2.0
 
 ##Contact
 Want to contribute or have questions? Meet us at [`#irkksome` on irc.chalmers.it](ircs://irc.chalmers.it:9999/irkksome) 
