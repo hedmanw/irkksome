@@ -27,9 +27,9 @@ public class MessageItem extends ChannelChatItem {
         timestamp.setText(message.getDisplayTimestamp() + " ");
         TextView author = (TextView) convertView.findViewById(R.id.chat_message_author);
         author.setText(message.getAuthor().getName() + ": ");
+        author.setTextColor(message.getAuthor().getColor());
         TextView messageTextView = (TextView) convertView.findViewById(R.id.chat_message_messagecontent);
         messageTextView.setText(message.getMessage());
-        convertView.setBackgroundColor(message.getAuthor().getColor());
         return convertView;
     }
 }

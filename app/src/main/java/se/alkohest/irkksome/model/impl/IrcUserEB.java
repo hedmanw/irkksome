@@ -30,8 +30,8 @@ public class IrcUserEB extends AbstractBean implements IrcUser {
     }
 
     private void generateColor() {
-        float hue = name.hashCode()%360;
-        float[] hsv = {hue, 0.05f, 0.99f};
+        float hue = Math.abs(name.hashCode()%360);
+        float[] hsv = {hue, 0.90f, 0.90f};
         color = ColorProvider.getInstance().getColor(hsv);
     }
 
