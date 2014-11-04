@@ -24,7 +24,9 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
     @Column("realname")
     @Nullable
     private String realname = "";
-//    @Transient
+
+    @Column("irssiPassword")
+    @Nullable
     private String password = "";
 
     @Column("useSSL")
