@@ -70,12 +70,4 @@ public class SQLMapperTest extends Specification {
         then:
         channelEB == "CREATE TABLE Channel(id INTEGER PRIMARY KEY AUTOINCREMENT, topic TEXT NOT NULL, name TEXT NOT NULL, server_id INTEGER NOT NULL);"
     }
-
-    def "getCreateStatement works for IS A"() {
-        when:
-        String chatMessageEB = SQLMapper.getCreateStatement(IrcChatMessageEB)
-
-        then:
-        chatMessageEB == "CREATE TABLE ChatMessage(id INTEGER PRIMARY KEY AUTOINCREMENT, message_id INTEGER NOT NULL, author_id INTEGER NOT NULL, hilight INTEGER NOT NULL);"
-    }
 }

@@ -103,7 +103,7 @@ public class ConnectionController {
                 host.setText(connection.getHost());
             }
             TextView lastAccessed = (TextView) convertView.findViewById(android.R.id.text2);
-            lastAccessed.setText("Last synced " + DateFormatUtil.getTimePassed(connection.getLastUsed()));
+            lastAccessed.setText("Last synced " + DateFormatUtil.getTimeDay(connection.getLastUsed()));
 
             View mainClick = convertView.findViewById(R.id.server_connect_legacy);
             mainClick.setOnClickListener(new View.OnClickListener() {

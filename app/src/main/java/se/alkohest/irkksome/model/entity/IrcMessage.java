@@ -5,6 +5,10 @@ import java.util.Date;
 import se.alkohest.irkksome.orm.BeanEntity;
 
 public interface IrcMessage extends BeanEntity {
+    enum MessageTypeEnum {
+        SENT, RECEIVED, JOIN, PART, QUIT, NICKCHANGE
+    }
+
     public String getMessage();
 
     public void setMessage(String message);
@@ -13,5 +17,15 @@ public interface IrcMessage extends BeanEntity {
 
     public void setTimestamp(Date timestamp);
 
-    public String getDisplayTimestamp();
+    public IrcUser getAuthor();
+
+    public void setAuthor(IrcUser author);
+
+    public boolean isHilight();
+
+    public void setHilight(boolean hilight);
+
+    public MessageTypeEnum getMessageType();
+
+    public void setMessageType(MessageTypeEnum messageTypeEnum);
 }

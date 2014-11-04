@@ -3,6 +3,9 @@ package se.alkohest.irkksome.model.api
 import se.alkohest.irkksome.ColorProviderMockSpecification
 import se.alkohest.irkksome.irc.IrcProtocol
 import se.alkohest.irkksome.model.api.dao.*
+import se.alkohest.irkksome.model.entity.IrcMessage
+import se.alkohest.irkksome.model.entity.IrcMessage.MessageTypeEnum
+import se.alkohest.irkksome.model.entity.IrcUser
 
 public class ServerImplTest extends ColorProviderMockSpecification {
     def backingServer = new IrcServerDAO().create("localhost")
@@ -78,14 +81,17 @@ public class ServerImplTest extends ColorProviderMockSpecification {
     }
 
     def "send message"() {
-        def channel = channelDAO.create("#fest")
+        setup:
+        server.serverRegistered("irc.chalmers.it", "Heissman")
+        server.userJoined("#asdf", "Heissman", new Date())
+        def channel = serverDAO.getChannel(server.ircServer, "#asdf")
+
         when:
         server.sendMessage(channel, "Äre fest?")
 
         then:
-        1 * server.ircProtocol.sendChannelMessage("#fest", "Äre fest?")
-        1 * server.listener.messageReceived(_)
-        channel.messages.size() == 1
+        1 * server.ircProtocol.sendChannelMessage("#asdf", "Äre fest?")
+        1 * server.listener.messageReceived( { it.toString() == "SENT:Heissman: Äre fest?" } )
     }
 
     def "server connected"() {
@@ -118,7 +124,7 @@ public class ServerImplTest extends ColorProviderMockSpecification {
         server.ircServer.getSelf().name == "Hajsman"
         channel.messages.size() == 1
         channel.messages.get(0).message == "You are now known as Hajsman"
-        1 * server.listener.messageReceived(_)
+        1 * server.listener.messageReceived( { it.toString() == "NICKCHANGE:Hajsman: You are now known as Hajsman" } )
     }
 
     def "When some nick changes, a message is received in the correct channel"() {
@@ -133,8 +139,7 @@ public class ServerImplTest extends ColorProviderMockSpecification {
 
         then:
         channel.messages.size() == 2
-        channel.messages.get(1).message == "apa is now known as loloped"
-        1 * server.listener.messageReceived(_)
+        1 * server.listener.messageReceived({ it.toString() == "NICKCHANGE:loloped: apa is now known as loloped" })
     }
 
     def "When nicks change in a non-active channel, you're not notified"() {
@@ -189,8 +194,7 @@ public class ServerImplTest extends ColorProviderMockSpecification {
 
         then:
         channel.messages.size() == 1
-        channel.messages.get(0).message == "apa joined the channel."
-        1 * server.listener.messageReceived(_)
+        1 * server.listener.messageReceived({ it.toString() == "JOIN:apa: apa joined the channel." })
     }
 
     def "When someone joins a channel, messages are sent"() {
@@ -218,7 +222,7 @@ public class ServerImplTest extends ColorProviderMockSpecification {
         server.userParted("#asdf", "palle", new Date())
 
         then:
-        1 * server.listener.messageReceived(_)
+        1 * server.listener.messageReceived({ it.toString() == "PART:palle: palle left the channel." })
     }
 
     def "User parted in inactive channel posts message"() {
@@ -245,7 +249,7 @@ public class ServerImplTest extends ColorProviderMockSpecification {
         server.userQuit("hullebulle", "No more bulle!", new Date())
 
         then:
-        1 * server.listener.messageReceived(_)
+        1 * server.listener.messageReceived({ it.toString() == "QUIT:hullebulle: hullebulle quit. (No more bulle!)" })
     }
 
     def "User quit in inactive channel posts message"() {
@@ -262,16 +266,32 @@ public class ServerImplTest extends ColorProviderMockSpecification {
         0 * server.listener.messageReceived(_)
     }
 
-    def "channel message received"() {
+    def "channel message received in active channel"() {
+        setup:
+        server.serverRegistered("irc.chalmers.it", "Heissman")
+        server.userJoined("#hest", "Heissman", new Date())
+        server.userJoined("#asdf", "Heissman", new Date())
+        server.userJoined("#asdf", "Korvryttarn", new Date())
+
         when:
-        server.backingBean.setSelf(userDAO.create("erland"));
-        server.channelMessageReceived("#fest", "lars", "lalalala", new Date())
-        server.setActiveChannel(serverDAO.getChannel(server.ircServer, "#fest"))
-        server.channelMessageReceived("#fest", "lars", "lalalala", new Date())
+        server.channelMessageReceived("#asdf", "Korvryttarn", "lalalala", new Date())
 
         then:
-        1 * server.listener.messageReceived(_)
-        serverDAO.getChannel(server.ircServer, "#fest").messages.size() == 2
+        1 * server.listener.messageReceived({ it.toString() == "RECEIVED:Korvryttarn: lalalala" })
+    }
+
+    def "channel message received in inactive channel"() {
+        setup:
+        server.serverRegistered("irc.chalmers.it", "Heissman")
+        server.userJoined("#asdf", "Heissman", new Date())
+        server.userJoined("#hest", "Heissman", new Date())
+        server.userJoined("#asdf", "Korvryttarn", new Date())
+
+        when:
+        server.channelMessageReceived("#asdf", "Korvryttarn", "lalalala", new Date())
+
+        then:
+        0 * server.listener.messageReceived(_)
     }
 
     def "show server"() {

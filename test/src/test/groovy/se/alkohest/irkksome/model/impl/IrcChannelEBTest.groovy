@@ -31,9 +31,9 @@ public class IrcChannelEBTest extends ColorProviderMockSpecification {
 
     def "getSetMessages"() {
         when:
-        def fest = new IrcChatMessageEB()
+        def fest = new IrcMessageEB()
         fest.setMessage("fest?")
-        def ligga = new IrcChatMessageEB()
+        def ligga = new IrcMessageEB()
         ligga.setMessage("ligga!")
 
         def messages = new ArrayList<IrcMessage>()

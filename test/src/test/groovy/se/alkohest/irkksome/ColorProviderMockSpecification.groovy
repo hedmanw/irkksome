@@ -9,4 +9,9 @@ public class ColorProviderMockSpecification extends Specification {
         ColorProvider.INSTANCE = mock
         mock.getColor(_) >> 0
     }
+
+    def happyTest() {
+        expect:
+        true
+    }
 }

@@ -22,7 +22,6 @@ import java.util.List;
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
-import se.alkohest.irkksome.model.impl.IrcChatMessageEB;
 
 public class ChannelFragment extends Fragment {
     private static ArrayAdapter<ChannelChatItem> arrayAdapter;
@@ -106,11 +105,12 @@ public class ChannelFragment extends Fragment {
     }
 
     private static void addMessage(IrcMessage message) {
-        if (message instanceof IrcChatMessageEB) {
-            messageList.add(new MessageItem((IrcChatMessageEB) message));
+        final IrcMessage.MessageTypeEnum messageType = message.getMessageType();
+        if (messageType == IrcMessage.MessageTypeEnum.RECEIVED || messageType == IrcMessage.MessageTypeEnum.SENT) {
+            messageList.add(new MessageItem(message));
         }
         else {
-            messageList.add(new InfoItem(message, 0xffffffff));
+            messageList.add(new InfoItem(message));
         }
     }
 

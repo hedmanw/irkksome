@@ -17,12 +17,11 @@ public class DateFormatUtil {
         return timestampFormat.format(date);
     }
 
-    public static String getTimePassed(Date date) {
+    public static String getTimeDay(Date date) {
         Calendar today = Calendar.getInstance();
-//        today.add(Calendar.DAY_OF_YEAR, -1);
-
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
+
         if (today.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) && today.get(Calendar.DAY_OF_YEAR) > calendar.get(Calendar.DAY_OF_YEAR)) {
             return timestampDayFormat.format(date);
         } else {

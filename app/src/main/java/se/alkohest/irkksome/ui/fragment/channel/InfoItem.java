@@ -6,18 +6,17 @@ import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcMessage;
+import se.alkohest.irkksome.util.DateFormatUtil;
 
 /**
  * Created by wilhelm 2014-11-01.
  */
 public class InfoItem extends ChannelChatItem {
     private final IrcMessage message;
-    private final int backgroundColor;
 
-    public InfoItem(IrcMessage message, int backgroundColor) {
+    public InfoItem(IrcMessage message) {
         super(ChatItemTypeEnum.INFO);
         this.message = message;
-        this.backgroundColor = backgroundColor;
     }
 
     @Override
@@ -26,10 +25,10 @@ public class InfoItem extends ChannelChatItem {
             convertView = inflater.inflate(R.layout.chat_info_message, null);
         }
         TextView timestamp = (TextView) convertView.findViewById(R.id.chat_message_timestamp);
-        timestamp.setText(message.getDisplayTimestamp() + " ");
+        timestamp.setText(DateFormatUtil.getTimeDay(message.getTimestamp()) + " ");
         TextView messageTextView = (TextView) convertView.findViewById(R.id.chat_message_messagecontent);
         messageTextView.setText(message.getMessage());
-        convertView.setBackgroundColor(backgroundColor);
+        convertView.setBackgroundColor(message.getAuthor().getColor());
         return convertView;
     }
 }
