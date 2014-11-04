@@ -1,8 +1,8 @@
 package se.alkohest.irkksome.model.impl
 
-import spock.lang.Specification
+import se.alkohest.irkksome.ColorProviderMockSpecification
 
-public class IrcMessageEBTest extends Specification {
+public class IrcMessageEBTest extends ColorProviderMockSpecification {
     def "getSetMessage"() {
         when:
         def message = new IrcChatMessageEB()

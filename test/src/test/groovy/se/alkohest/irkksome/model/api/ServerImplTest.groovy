@@ -1,14 +1,10 @@
 package se.alkohest.irkksome.model.api
 
+import se.alkohest.irkksome.ColorProviderMockSpecification
 import se.alkohest.irkksome.irc.IrcProtocol
-import se.alkohest.irkksome.model.api.dao.IrcChannelDAO
-import se.alkohest.irkksome.model.api.dao.IrcMessageDAO
-import se.alkohest.irkksome.model.api.dao.IrcServerDAO
-import se.alkohest.irkksome.model.api.dao.IrcUserDAO
-import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO
-import spock.lang.Specification
+import se.alkohest.irkksome.model.api.dao.*
 
-public class ServerImplTest extends Specification {
+public class ServerImplTest extends ColorProviderMockSpecification {
     def backingServer = new IrcServerDAO().create("localhost")
     def data = new IrkksomeConnectionDAO().create()
     Server server

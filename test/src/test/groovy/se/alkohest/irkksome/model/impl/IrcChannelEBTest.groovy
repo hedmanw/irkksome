@@ -1,10 +1,10 @@
 package se.alkohest.irkksome.model.impl
 
+import se.alkohest.irkksome.ColorProviderMockSpecification
 import se.alkohest.irkksome.model.entity.IrcMessage
 import se.alkohest.irkksome.model.entity.IrcUser
-import spock.lang.Specification
 
-public class IrcChannelEBTest extends Specification {
+public class IrcChannelEBTest extends ColorProviderMockSpecification {
     def "getSetUsers"() {
         when:
         def ircChannel = new IrcChannelEB()

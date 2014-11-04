@@ -1,8 +1,8 @@
 package se.alkohest.irkksome.model.api.dao
 
-import spock.lang.Specification
+import se.alkohest.irkksome.ColorProviderMockSpecification
 
-public class IrcMessageDAOTest extends Specification {
+public class IrcMessageDAOTest extends ColorProviderMockSpecification {
     def ircMessageDAO = new IrcMessageDAO();
     def ircUserDAO = new IrcUserDAO();
 

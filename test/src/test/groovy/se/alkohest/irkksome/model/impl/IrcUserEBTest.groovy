@@ -1,16 +1,9 @@
 package se.alkohest.irkksome.model.impl
 
-import android.graphics.Color
+import se.alkohest.irkksome.ColorProviderMockSpecification
 import se.alkohest.irkksome.model.entity.IrcUser
-import spock.lang.Specification
 
-public class IrcUserEBTest extends Specification {
-
-    def setup() {
-        def color = Mock(Color)
-        color.HSVToColor(_) >> null
-    }
-
+public class IrcUserEBTest extends ColorProviderMockSpecification {
     def "getSetName"() {
         when:
         IrcUser user = new IrcUserEB();
