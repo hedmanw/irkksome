@@ -4,7 +4,7 @@ import se.alkohest.irkksome.ui.AbstractListItem;
 
 public abstract class ChannelChatItem extends AbstractListItem {
     public enum ChatItemTypeEnum {
-        RECEIVED, SENT, TRACKBAR, INFO
+        MESSAGE, TRACKBAR, INFO
     }
 
     private ChatItemTypeEnum viewType;

@@ -15,7 +15,7 @@ public class MessageItem extends ChannelChatItem {
     private final IrcMessage message;
 
     public MessageItem(IrcMessage message) {
-        super(ChatItemTypeEnum.RECEIVED);
+        super(ChatItemTypeEnum.MESSAGE);
         this.message = message;
     }
 
