@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,12 +21,13 @@ import java.util.List;
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
+import se.alkohest.irkksome.ui.view.ChatListView;
 
 public class ChannelFragment extends Fragment {
     private static ArrayAdapter<ChannelChatItem> arrayAdapter;
     private static List<ChannelChatItem> messageList;
     private static IrcChannel ircChannel;
-    private static ListView messageListView;
+    private static ChatListView messageListView;
     private static OnMessageSendListener activity;
 
     public static ChannelFragment newInstance(IrcChannel ircChannel) {
@@ -73,7 +72,7 @@ public class ChannelFragment extends Fragment {
             }
         });
 
-        messageListView = (ListView) inflatedView.findViewById(R.id.listView);
+        messageListView = (ChatListView) inflatedView.findViewById(R.id.listView);
         messageListView.setAdapter(arrayAdapter);
         messageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -84,18 +83,20 @@ public class ChannelFragment extends Fragment {
                 }
             }
         });
+        messageListView.setOnSizeChangedListener(new ChatListView.OnSizeChangedListener() {
+            @Override
+            public void onSizeChanged(int newWidth, int newHeight, int oldWidth, int oldHeight) {
+                if (oldHeight > newHeight) {
+                    scrollToBottom();
+                }
+            }
+        });
 
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(messageEditText, 0);
         messageEditText.requestFocus();
         scrollToBottom();
         return inflatedView;
-    }
-
-    public static void scrollWhenAtBottom() {
-        if (!hasBacklog()) {
-            scrollToBottom();
-        }
     }
 
     private static boolean hasBacklog() {

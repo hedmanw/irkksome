@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     tools:context=".ui.ChannelFragment">
 
-    <ListView
+    <se.alkohest.irkksome.ui.view.ChatListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listView"
