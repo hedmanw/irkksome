@@ -11,7 +11,7 @@ import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.impl.IrcServerEB;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
-public class ServerManager implements ServerDropAcidListener {
+public class ServerManager implements ServerDisconnectionListener, HilightListener {
     public static final ServerManager INSTANCE = new ServerManager();
     private IrcServerDAOLocal serverDAO;
     private List<Server> servers;
@@ -29,7 +29,7 @@ public class ServerManager implements ServerDropAcidListener {
         for (IrcServer ircServer : persisted) {
             /* maybe later...
             Server server = new ServerImpl(ircServer, ircServer.getSelf().getName());
-            server.setDropListener(this);
+            server.setServerDisconnectionListener(this);
             servers.add(server);
             */
         }
@@ -42,7 +42,8 @@ public class ServerManager implements ServerDropAcidListener {
         new IrkksomeConnectionDAO().persist((IrkksomeConnectionEB) irkksomeConnection);
         final IrcServer ircServer = serverDAO.create(irkksomeConnection.getHost());
         Server server = new ServerImpl(ircServer, irkksomeConnection);
-        server.setDropListener(this);
+        server.setServerDisconnectionListener(this);
+        server.setHilightListener(this);
         servers.add(server);
         return server;
     }
@@ -82,7 +83,7 @@ public class ServerManager implements ServerDropAcidListener {
     }
 
     @Override
-    public void dropServer(Server server) {
+    public void connectionDropped(Server server) {
         servers.remove(server);
     }
 }

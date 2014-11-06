@@ -3,9 +3,6 @@ package se.alkohest.irkksome.model.api
 import se.alkohest.irkksome.ColorProviderMockSpecification
 import se.alkohest.irkksome.irc.IrcProtocol
 import se.alkohest.irkksome.model.api.dao.*
-import se.alkohest.irkksome.model.entity.IrcMessage
-import se.alkohest.irkksome.model.entity.IrcMessage.MessageTypeEnum
-import se.alkohest.irkksome.model.entity.IrcUser
 
 public class ServerImplTest extends ColorProviderMockSpecification {
     def backingServer = new IrcServerDAO().create("localhost")
@@ -22,7 +19,8 @@ public class ServerImplTest extends ColorProviderMockSpecification {
         server = new ServerImpl(backingServer, data)
         server.ircProtocol = Mock(IrcProtocol)
         server.listener = Mock(ServerCallback)
-        server.dropListener = Mock(ServerDropAcidListener)
+        server.serverDisconnectionListener = Mock(ServerDisconnectionListener)
+        server.hilightListener = Mock(HilightListener)
     }
 
     def "prepends hash on channel name"() {

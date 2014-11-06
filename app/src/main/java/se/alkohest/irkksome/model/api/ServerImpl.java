@@ -33,7 +33,8 @@ public class ServerImpl implements Server, IrcProtocolListener {
     private String motd = "";
 
     private IrcChannel activeChannel;
-    private ServerDropAcidListener dropListener;
+    private ServerDisconnectionListener dropListener;
+    private HilightListener hilightListener;
 
     public ServerImpl(IrcServer ircServer, ConnectionData data) {
         this.ircServer = ircServer;
@@ -77,8 +78,13 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
-    public void setDropListener(ServerDropAcidListener listener) {
+    public void setServerDisconnectionListener(ServerDisconnectionListener listener) {
         dropListener = listener;
+    }
+
+    @Override
+    public void setHilightListener(HilightListener listener) {
+        hilightListener = listener;
     }
 
     @Override
@@ -302,7 +308,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
         if (!ircChannel.equals(activeChannel)) {
             UnreadEntity entity = new UnreadEntity(ircChannel, ircServer);
-            dropListener.addUnread(entity, ircMessage.isHilight());
+            hilightListener.addUnread(entity, ircMessage.isHilight());
             listener.updateHilights();
         }
 
@@ -341,7 +347,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public void serverDisconnected() {
         // TODO - this method should try to reconnect if its appropriate?
-        dropListener.dropServer(this);
+        dropListener.connectionDropped(this);
         listener.serverDisconnected();
     }
 
