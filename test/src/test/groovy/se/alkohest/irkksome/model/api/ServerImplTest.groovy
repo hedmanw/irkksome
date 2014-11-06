@@ -298,6 +298,7 @@ public class ServerImplTest extends ColorProviderMockSpecification {
 
         then:
         1 * server.listener.showServerInfo(server.ircServer, server.motd)
+        server.getActiveChannel() == null
     }
 
     def "test error msg"() {

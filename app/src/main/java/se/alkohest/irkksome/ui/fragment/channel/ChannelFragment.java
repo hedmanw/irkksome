@@ -61,6 +61,7 @@ public class ChannelFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_channel, container, false);
         final EditText messageEditText = ((EditText) inflatedView.findViewById(R.id.input_field));
+        messageEditText.setHint("Send message to " + ircChannel.getName());
         messageEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int keyCode, KeyEvent keyEvent) {

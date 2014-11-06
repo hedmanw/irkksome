@@ -72,7 +72,9 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-
+                if (serverManager.getActiveServer() != null && serverManager.getActiveServer().getActiveChannel() != null) {
+                    findViewById(R.id.input_field).requestFocus();
+                }
             }
         };
         drawerLayout.setDrawerListener(drawerToggle);
