@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -60,8 +61,6 @@ public class ChannelFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_channel, container, false);
-        messageListView = (ListView) inflatedView.findViewById(R.id.listView);
-        messageListView.setAdapter(arrayAdapter);
         final EditText messageEditText = ((EditText) inflatedView.findViewById(R.id.input_field));
         messageEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -73,6 +72,19 @@ public class ChannelFragment extends Fragment {
                 return false;
             }
         });
+
+        messageListView = (ListView) inflatedView.findViewById(R.id.listView);
+        messageListView.setAdapter(arrayAdapter);
+        messageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final ChannelChatItem chatItem = messageList.get(i);
+                if (chatItem.getViewType() == ChannelChatItem.ChatItemTypeEnum.MESSAGE) {
+                    messageEditText.append(((MessageItem) chatItem).getMessage().getAuthor().getName() + ": ");
+                }
+            }
+        });
+
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(messageEditText, 0);
         messageEditText.requestFocus();

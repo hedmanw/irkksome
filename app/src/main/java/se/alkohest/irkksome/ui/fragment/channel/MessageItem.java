@@ -33,4 +33,8 @@ public class MessageItem extends ChannelChatItem {
         messageTextView.setText(message.getMessage());
         return convertView;
     }
+
+    public IrcMessage getMessage() {
+        return message;
+    }
 }
