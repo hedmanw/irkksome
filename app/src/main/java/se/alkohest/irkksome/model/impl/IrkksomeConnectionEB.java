@@ -188,7 +188,7 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
         if (host != null ? !host.equals(that.host) : that.host != null) return false;
         if (nickname != null ? !nickname.equals(that.nickname) : that.nickname != null)
             return false;
-//        if (!password.equals(that.password)) return false;
+        if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (!realname.equals(that.realname)) return false;
         if (sshHost != null ? !sshHost.equals(that.sshHost) : that.sshHost != null) return false;
 //        if (sshPass != null ? !sshPass.equals(that.sshPass) : that.sshPass != null) return false;
