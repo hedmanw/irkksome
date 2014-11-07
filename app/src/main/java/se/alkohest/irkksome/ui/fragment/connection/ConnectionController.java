@@ -1,6 +1,8 @@
 package se.alkohest.irkksome.ui.fragment.connection;
 
 import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -52,13 +54,15 @@ public class ConnectionController {
     }
 
     public static class ConnectionMethod extends ConnectionItem {
-        private int icon;
-        private int representationID;
+        @StringRes
+        private int connectionNameRes;
+        @DrawableRes
+        private int iconRes;
 
-        public ConnectionMethod(int representation, int color) {
-            super(ConnectionTypeEnum.NEW_CONNECTION, "");
-            representationID = representation;
-            this.icon = color;
+        public ConnectionMethod(@StringRes int representation, @DrawableRes int color) {
+            super(ConnectionTypeEnum.NEW_CONNECTION);
+            this.connectionNameRes = representation;
+            this.iconRes = color;
         }
 
         @Override
@@ -66,17 +70,17 @@ public class ConnectionController {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.server_connect_list_new_item, null);
             }
-            Drawable icon = inflater.getContext().getResources().getDrawable(this.icon);
-            View view = convertView.findViewById(R.id.server_connect_icon);
-            view.setBackground(icon);
-            TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
-            tv.setText(representationID);
+            Drawable icon = inflater.getContext().getResources().getDrawable(this.iconRes);
+            View iconContainer = convertView.findViewById(R.id.server_connect_icon);
+            iconContainer.setBackground(icon);
+            TextView description = (TextView) convertView.findViewById(android.R.id.text1);
+            description.setText(connectionNameRes);
             return convertView;
         }
 
         @Override
         public AbstractConnectionFragment getConnectionFragment() {
-            return AbstractConnectionFragment.newInstance(icon);
+            return AbstractConnectionFragment.newInstance(iconRes);
         }
     }
 
@@ -84,7 +88,7 @@ public class ConnectionController {
         IrkksomeConnectionEB connection;
 
         public LegacyConnection(IrkksomeConnectionEB connection) {
-            super(ConnectionTypeEnum.OLD_CONNECTION, connectionDAO.getPresentation(connection));
+            super(ConnectionTypeEnum.OLD_CONNECTION);
             this.connection = connection;
         }
 

@@ -10,21 +10,14 @@ public abstract class ConnectionItem extends AbstractListItem {
         NEW_CONNECTION, OLD_CONNECTION
     }
 
-    private String representation;
     private ConnectionTypeEnum viewType;
 
-    public ConnectionItem(ConnectionTypeEnum viewType, String representation) {
-        this.representation = representation;
+    public ConnectionItem(ConnectionTypeEnum viewType) {
         this.viewType = viewType;
     }
 
     public abstract View getView(LayoutInflater inflater, View convertView);
     public abstract AbstractConnectionFragment getConnectionFragment();
-
-    @Override
-    public String toString() {
-        return representation;
-    }
 
     public ConnectionTypeEnum getViewType() {
         return viewType;
