@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.view.Gravity;
+import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,7 +25,7 @@ import se.alkohest.irkksome.ui.fragment.connection.ConnectionsListFragment;
 
 public class CallbackHandler implements ServerCallback {
     private final ConnectionListAdapter connectionListAdapter;
-    private final ListView connectionListView;
+    private final ExpandableListView connectionListView;
     private UserAdapter userAdapter;
     private final Activity context;
     private final FragmentManager fragmentManager;
@@ -34,7 +35,7 @@ public class CallbackHandler implements ServerCallback {
         this.context = context;
         fragmentManager = context.getFragmentManager();
         connectionListAdapter = ConnectionListAdapter.getInstance();
-        connectionListView = (ListView) context.findViewById(R.id.left_drawer_list);
+        connectionListView = (ExpandableListView) context.findViewById(R.id.left_drawer_list);
         this.unreadStack = unreadStack;
     }
 
@@ -54,6 +55,7 @@ public class CallbackHandler implements ServerCallback {
                 connectionListAdapter.notifyDataSetChanged(); // We don't need to reload the dataset unless it's a NEW connection, fix this!
                 connectionListView.setItemChecked(0, true);
                 connectionListView.setSelection(0);
+                connectionListView.expandGroup(0);
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
             }
         });

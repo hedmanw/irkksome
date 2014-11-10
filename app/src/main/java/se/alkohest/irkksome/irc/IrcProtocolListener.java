@@ -12,7 +12,7 @@ public interface IrcProtocolListener {
     /**
      * Called when connection to the server has been established.
      */
-    public void serverConnected();
+    public void serverConnectionEstablished();
 
     /**
      * Called when the user has been registered with the server.
@@ -93,7 +93,19 @@ public interface IrcProtocolListener {
      */
     public void channelListResponse(String name, String topic, String users);
 
+    /**
+     * This is sent when a motd is received.
+     * @param motd - the message of the day
+     */
+    public void motdReceived(String motd);
+
     // ERRORS
+
+    /**
+     * The connection could not be established
+     * @param techMessage    Message from exception
+     */
+    public void couldNotEstablish(String techMessage);
 
     /**
      * The server was disconnected.
@@ -109,9 +121,4 @@ public interface IrcProtocolListener {
      */
     public void ircError(String errorCode, String message);
 
-    /**
-     * This is sent when a motd is received.
-     * @param motd - the message of the day
-     */
-    public void motdReceived(String motd);
 }

@@ -1,6 +1,7 @@
 package se.alkohest.irkksome.model.api;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import se.alkohest.irkksome.model.api.dao.IrcServerDAO;
@@ -11,15 +12,17 @@ import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.impl.IrcServerEB;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
-public class ServerManager implements ServerDisconnectionListener, HilightListener {
+public class ServerManager implements ServerConnectionListener, HilightListener {
     public static final ServerManager INSTANCE = new ServerManager();
     private IrcServerDAOLocal serverDAO;
+    private IrkksomeConnectionDAO connectionDAO;
     private List<Server> servers;
     private Server activeServer;
     private UnreadStack unreadStack;
 
     protected ServerManager() {
         serverDAO = new IrcServerDAO();
+        connectionDAO = new IrkksomeConnectionDAO();
         servers = new ArrayList<>();
         unreadStack = new UnreadStack();
     }
@@ -38,13 +41,12 @@ public class ServerManager implements ServerDisconnectionListener, HilightListen
         }
     }
 
-    public Server addServer(IrkksomeConnection irkksomeConnection) {
-        new IrkksomeConnectionDAO().persist((IrkksomeConnectionEB) irkksomeConnection);
+    public Server establishConnection(IrkksomeConnection irkksomeConnection) {
         final IrcServer ircServer = serverDAO.create(irkksomeConnection.getHost());
         Server server = new ServerImpl(ircServer, irkksomeConnection);
         server.setServerDisconnectionListener(this);
         server.setHilightListener(this);
-        servers.add(server);
+
         return server;
     }
 
@@ -83,7 +85,15 @@ public class ServerManager implements ServerDisconnectionListener, HilightListen
     }
 
     @Override
+    public void connectionEstablished(Server server) {
+        servers.add(server);
+        setActiveServer(server);
+        server.getConnectionData().setLastUsed(new Date());
+        connectionDAO.persist((IrkksomeConnectionEB) server.getConnectionData());
+    }
+
+    @Override
     public void connectionDropped(Server server) {
-        servers.remove(server);
+        servers.remove(server); // Kommer inte finnas i listan. Byt till tentativ lista.
     }
 }

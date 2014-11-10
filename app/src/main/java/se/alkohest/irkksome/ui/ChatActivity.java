@@ -162,7 +162,7 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
                 ChatActivityStatic.showNickChangeDialog(this, serverManager.getActiveServer());
                 break;
             case R.id.action_drop_server:
-                serverManager.getActiveServer().disconnect();
+                serverManager.shutDownServer(serverManager.getActiveServer());
                 break;
         }
         return true;
@@ -204,8 +204,8 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
 
     @Override
     public void onConnectPressed(IrkksomeConnection irkksomeConnection) {
-        serverManager.setActiveServer(serverManager.addServer(irkksomeConnection));
-        serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
-        connectionsList.expandGroup(serverManager.getServers().indexOf(serverManager.getActiveServer()));
+        final Server pendingServer = serverManager.establishConnection(irkksomeConnection);
+        pendingServer.setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
+//        connectionsList.expandGroup(serverManager.getServers().indexOf(serverManager.getActiveServer()));
     }
 }

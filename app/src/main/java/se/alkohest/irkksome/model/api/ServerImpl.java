@@ -20,10 +20,12 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
+import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
 public class ServerImpl implements Server, IrcProtocolListener {
     private IrcProtocol ircProtocol;
     private IrcServer ircServer;
+    private ConnectionData connectionData;
     private HilightHelper hilightHelper;
     private IrcChannelDAOLocal channelDAO = new IrcChannelDAO();
     private IrcMessageDAOLocal messageDAO = new IrcMessageDAO();
@@ -33,10 +35,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
     private String motd = "";
 
     private IrcChannel activeChannel;
-    private ServerDisconnectionListener dropListener;
+    private ServerConnectionListener connectionListener;
     private HilightListener hilightListener;
 
     public ServerImpl(IrcServer ircServer, ConnectionData data) {
+        this.connectionData = data;
         this.ircServer = ircServer;
         ircProtocol = IrcProtocolFactory.getIrcProtocol(data);
         ircProtocol.setListener(this);
@@ -49,6 +52,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public IrcServer getBackingBean() {
         return ircServer;
+    }
+
+    @Override
+    public ConnectionData getConnectionData() {
+        return connectionData;
     }
 
     @Override
@@ -78,8 +86,8 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
-    public void setServerDisconnectionListener(ServerDisconnectionListener listener) {
-        dropListener = listener;
+    public void setServerDisconnectionListener(ServerConnectionListener listener) {
+        connectionListener = listener;
     }
 
     @Override
@@ -149,16 +157,17 @@ public class ServerImpl implements Server, IrcProtocolListener {
     //    ---------------------------------------------------------
 
     @Override
-    public void serverConnected() {
-        // TODO - this should only be done when we know we connect to irrsi?
-        ircProtocol.sendBacklogRequest(ircServer.getLastMessageTime().getTime()/1000);
+    public void serverConnectionEstablished() {
+        connectionListener.connectionEstablished(this);
+        // this should perhaps only be done when we know we connect to irrsi or another backlog provider
+        ircProtocol.sendBacklogRequest(ircServer.getLastMessageTime().getTime() / 1000);
     }
 
     @Override
     public void serverRegistered(String server, String nick) {
         // TODO - this should maybe check if your nick has changed and change it instead of creating new
         ircServer.setSelf(serverDAO.getUser(ircServer, nick));
-        listener.showServerInfo(ircServer, motd);
+        showServer();
         for (IrcChannel channel : getBackingBean().getConnectedChannels()) {
             joinChannel(channel.getName());
         }
@@ -345,9 +354,14 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
+    public void couldNotEstablish(String techMessage) {
+        connectionListener.connectionDropped(this);
+    }
+
+    @Override
     public void serverDisconnected() {
         // TODO - this method should try to reconnect if its appropriate?
-        dropListener.connectionDropped(this);
+        connectionListener.connectionDropped(this);
         listener.serverDisconnected();
     }
 

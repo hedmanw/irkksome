@@ -1,5 +1,6 @@
 package se.alkohest.irkksome.model.api;
 
+import se.alkohest.irkksome.irc.ConnectionData;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
@@ -27,11 +28,13 @@ public interface Server {
 
     public void showServer();
 
-    public void setServerDisconnectionListener(ServerDisconnectionListener listener);
+    public void setServerDisconnectionListener(ServerConnectionListener listener);
 
     public void setHilightListener(HilightListener listener);
 
     public void startQuery(String nick);
 
     public String getMotd();
+
+    public ConnectionData getConnectionData();
 }

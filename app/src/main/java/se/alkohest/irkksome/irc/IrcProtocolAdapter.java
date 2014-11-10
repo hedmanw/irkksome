@@ -187,11 +187,10 @@ public class IrcProtocolAdapter implements IrcProtocol {
                     for (String s : writeWaitList) {
                         write(s);
                     }
-                    listener.serverConnected();
+                    listener.serverConnectionEstablished();
                     start();
                 } catch (IOException e) {
-                    e.printStackTrace();
-                    listener.serverDisconnected();
+                    listener.couldNotEstablish(e.getMessage());
                 }
             }
         }).start();

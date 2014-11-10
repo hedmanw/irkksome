@@ -19,7 +19,7 @@ public class ServerImplTest extends ColorProviderMockSpecification {
         server = new ServerImpl(backingServer, data)
         server.ircProtocol = Mock(IrcProtocol)
         server.listener = Mock(ServerCallback)
-        server.serverDisconnectionListener = Mock(ServerDisconnectionListener)
+        server.serverDisconnectionListener = Mock(ServerConnectionListener)
         server.hilightListener = Mock(HilightListener)
     }
 
@@ -94,10 +94,11 @@ public class ServerImplTest extends ColorProviderMockSpecification {
 
     def "server connected"() {
         when:
-        server.serverConnected()
+        server.serverConnectionEstablished()
 
         then:
         0 * server.listener._
+        1 * server.connectionListener.connectionEstablished(server)
     }
 
     def "server Registered"() {

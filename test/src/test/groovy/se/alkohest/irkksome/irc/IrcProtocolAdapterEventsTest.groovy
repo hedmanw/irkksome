@@ -42,7 +42,7 @@ class IrcProtocolAdapterEventsTest extends Specification {
         user << ["oed", "Heissman", "Rascal"]
     }
 
-    def "test userQuited event sent"() {
+    def "test userQuit event sent"() {
         when:
         def command ="!~banned@smurf-BC4B6572.eduroam.chalmers.se QUIT :"
         ipa.handleReply(":" + user + command + quitMessage)
@@ -184,7 +184,7 @@ class IrcProtocolAdapterEventsTest extends Specification {
 
         where:
         code << ["433", "465"]
-        msg1 << ["fest :nick already in use", ":your fucking banned"]
-        msg2 << ["nick already in use", "your fucking banned"]
+        msg1 << ["fest :nick already in use", ":you're fucking banned"]
+        msg2 << ["nick already in use", "you're fucking banned"]
     }
 }
