@@ -28,11 +28,12 @@ import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
 import se.alkohest.irkksome.ui.fragment.connection.AbstractConnectionFragment;
 import se.alkohest.irkksome.ui.fragment.connection.ConnectionItem;
 import se.alkohest.irkksome.ui.fragment.connection.ConnectionsListFragment;
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class ChatActivity extends Activity implements ConnectionsListFragment.OnConnectionSelectedListener, AbstractConnectionFragment.OnConnectPressedListener, ChannelFragment.OnMessageSendListener {
     private static final Log LOG = Log.getInstance(ChatActivity.class);
     private static ServerManager serverManager = ServerManager.INSTANCE;
-    private ExpandableListView connectionsList;
+    private StickyListHeadersListView connectionsList;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
 
@@ -41,7 +42,7 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_drawers);
         ConnectionListAdapter.setInstance(this, serverManager.getServers());
-        connectionsList = (ExpandableListView) findViewById(R.id.left_drawer_list);
+        connectionsList = (StickyListHeadersListView) findViewById(R.id.left_drawer_list);
 
         if (savedInstanceState == null) {
 //            serverManager.loadPersisted(); Either load from DB, or make connections static. Can we ensure all connections are kept alive?
@@ -83,33 +84,29 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
         connectionsList.setEmptyView(findViewById(android.R.id.empty));
         final ConnectionListAdapter listAdapter = ConnectionListAdapter.getInstance();
         connectionsList.setAdapter(listAdapter);
-        for (int i = 0, serversSize = serverManager.getServers().size(); i < serversSize; i++) {
-            connectionsList.expandGroup(i);
-        }
-        connectionsList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+        connectionsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPos, int childPos, long id) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 drawerLayout.closeDrawer(leftDrawer);
-                final Server selectedServer = listAdapter.getGroup(groupPos);
-                if (selectedServer != serverManager.getActiveServer()) {
-                    serverManager.setActiveServer(selectedServer);
-                }
-                IrcChannel channel = listAdapter.getChild(groupPos, childPos);
+//                final Server selectedServer = listAdapter.getHeader(position);
+//                if (selectedServer != serverManager.getActiveServer()) {
+//                    serverManager.setActiveServer(selectedServer);
+//                }
+                IrcChannel channel = listAdapter.getItem(position);
                 serverManager.getUnreadStack().remove(channel, serverManager.getActiveServer().getBackingBean());
                 serverManager.getActiveServer().setActiveChannel(channel);
-                return true;
             }
         });
-        connectionsList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+        connectionsList.setOnHeaderClickListener(new StickyListHeadersListView.OnHeaderClickListener() {
             @Override
-            public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPos, long id) {
+            public void onHeaderClick(StickyListHeadersListView stickyListHeadersListView, View view, int position, long id, boolean currentlySticky) {
                 drawerLayout.closeDrawer(leftDrawer);
-                final Server selectedServer = listAdapter.getGroup(groupPos);
-                if (selectedServer != serverManager.getActiveServer()) {
-                    serverManager.setActiveServer(selectedServer);
-                }
+//                final Server selectedServer = listAdapter.getGroup(groupPos);
+//                if (selectedServer != serverManager.getActiveServer()) {
+//                    serverManager.setActiveServer(selectedServer);
+//                }
                 serverManager.getActiveServer().showServer();
-                return true;
             }
         });
 

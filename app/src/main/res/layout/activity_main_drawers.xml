@@ -18,10 +18,9 @@
             android:orientation="vertical"
             android:id="@+id/left_drawer"
             android:background="#EEE">
-        <ExpandableListView
+        <se.emilsjolander.stickylistheaders.StickyListHeadersListView
                 android:id="@+id/left_drawer_list"
                 android:layout_width="280dp"
-                android:groupIndicator="@null"
                 android:layout_height="match_parent"
                 android:choiceMode="singleChoice"
                 android:divider="#DCDCDC"

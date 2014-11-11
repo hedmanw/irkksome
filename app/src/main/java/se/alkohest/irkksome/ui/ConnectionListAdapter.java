@@ -6,21 +6,17 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.entity.IrcChannel;
-import se.alkohest.irkksome.model.entity.IrcServer;
+import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
-/**
- * Look into optimizing the getChild and getGroup calls.
- * They get called a lot, so they could benefit from some sort of caching.
- */
-public class ConnectionListAdapter extends BaseExpandableListAdapter {
+public class ConnectionListAdapter extends BaseAdapter implements StickyListHeadersAdapter {
     private static ConnectionListAdapter INSTANCE;
-    private Context context;
+    private LayoutInflater inflater;
     private List<Server> servers;
 
     public static ConnectionListAdapter getInstance() {
@@ -32,94 +28,52 @@ public class ConnectionListAdapter extends BaseExpandableListAdapter {
     }
 
     private ConnectionListAdapter(Context context, List<Server> servers) {
-        this.context = context;
+        this.inflater = LayoutInflater.from(context);
         this.servers = servers;
         notifyDataSetChanged();
     }
 
     @Override
-    public IrcChannel getChild(int groupPosition, int childPosition) {
-        final IrcServer backingBean = getGroup(groupPosition).getBackingBean();
-        return backingBean.getConnectedChannels().get(childPosition);
+    public long getHeaderId(int position) {
+        return servers.get(0).getBackingBean().getId();
     }
 
     @Override
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
+    public int getCount() {
+        return servers.isEmpty() ? 0 : servers.get(0).getBackingBean().getConnectedChannels().size();
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final IrcChannel channel = getChild(groupPosition, childPosition);
+    public IrcChannel getItem(int position) {
+        return servers.get(0).getBackingBean().getConnectedChannels().get(position);
+    }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.connection_list_channel, null);
+            convertView = inflater.inflate(R.layout.connection_list_channel, parent, false);
         }
 
-        TextView txtListChild = (TextView) convertView.findViewById(R.id.drawer_label_channel);
-
-        txtListChild.setText(channel.getName());
-        return convertView;
-    }
-
-    @Override
-    public int getChildrenCount(int groupPosition) {
-        final IrcServer backingBean = getGroup(groupPosition).getBackingBean();
-        return backingBean.getConnectedChannels().size();
-    }
-
-    @Override
-    public Server getGroup(int groupPosition) {
-        return servers.get(groupPosition);
-    }
-
-    @Override
-    public int getGroupCount() {
-        return servers.size();
-    }
-
-    @Override
-    public long getGroupId(int groupPosition) {
-        return groupPosition;
-    }
-
-    @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        Server server = getGroup(groupPosition);
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.connection_list_server, null);
-        }
-
-        TextView lblListHeader = (TextView) convertView.findViewById(R.id.drawer_label_server);
-        lblListHeader.setText(server.getBackingBean().getHost().toUpperCase());
+        TextView textView = (TextView) convertView.findViewById(R.id.drawer_label_channel);
+        textView.setText(getItem(position).getName());
 
         return convertView;
     }
 
     @Override
-    public boolean hasStableIds() {
-        return false;
-    }
-
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
-    }
-
-    public int getPosition(IrcChannel channel) {
-        int cummulativePosition = 0;
-        for (Server server : servers) {
-            cummulativePosition++;
-            IrcServer bean = server.getBackingBean();
-            final int indexOfChannel = bean.getConnectedChannels().indexOf(channel);
-            if (indexOfChannel >= 0) {
-                cummulativePosition += indexOfChannel;
-                return cummulativePosition;
-            }
-            cummulativePosition += bean.getConnectedChannels().size();
+    public View getHeaderView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.connection_list_server, parent, false);
         }
-        return 0;
+
+        TextView textView = (TextView) convertView.findViewById(R.id.drawer_label_server);
+        textView.setText(servers.get(0).getBackingBean().getHost());
+        convertView.setBackgroundColor(0xfff3f3f3);
+        return convertView;
     }
 }

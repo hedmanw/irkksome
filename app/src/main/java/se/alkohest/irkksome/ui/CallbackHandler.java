@@ -4,13 +4,10 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.view.Gravity;
-import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.List;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.ServerCallback;
@@ -18,14 +15,14 @@ import se.alkohest.irkksome.model.api.UnreadStack;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
-import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.ui.fragment.ServerInfoFragment;
 import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
 import se.alkohest.irkksome.ui.fragment.connection.ConnectionsListFragment;
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class CallbackHandler implements ServerCallback {
     private final ConnectionListAdapter connectionListAdapter;
-    private final ExpandableListView connectionListView;
+    private final StickyListHeadersListView connectionListView;
     private UserAdapter userAdapter;
     private final Activity context;
     private final FragmentManager fragmentManager;
@@ -35,7 +32,7 @@ public class CallbackHandler implements ServerCallback {
         this.context = context;
         fragmentManager = context.getFragmentManager();
         connectionListAdapter = ConnectionListAdapter.getInstance();
-        connectionListView = (ExpandableListView) context.findViewById(R.id.left_drawer_list);
+        connectionListView = (StickyListHeadersListView) context.findViewById(R.id.left_drawer_list);
         this.unreadStack = unreadStack;
     }
 
@@ -54,8 +51,8 @@ public class CallbackHandler implements ServerCallback {
 
                 connectionListAdapter.notifyDataSetChanged(); // We don't need to reload the dataset unless it's a NEW connection, fix this!
                 connectionListView.setItemChecked(0, true);
+                connectionListView.setItemChecked(0, false);
                 connectionListView.setSelection(0);
-                connectionListView.expandGroup(0);
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
             }
         });
@@ -130,9 +127,9 @@ public class CallbackHandler implements ServerCallback {
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
 
                 connectionListAdapter.notifyDataSetChanged(); // We don't need to reload the dataset unless it's a NEW channel, fix this!
-                final int position = connectionListAdapter.getPosition(channel);
-                connectionListView.setItemChecked(position, true);
-                connectionListView.setSelection(position);
+
+//                connectionListView.setItemChecked(position, true);
+//                connectionListView.setSelection(position);
             }
         });
     }
