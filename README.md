@@ -1,8 +1,7 @@
 irkksome ![asdf](app/src/main/res/drawable-mdpi/ic_launcher.png)
 ========
 
-Android IRC client. New and improved!
-We aim to bring an actually usable client to the platform.
+Android Material Design IRC client.
 
 [![Stories in Ready](https://badge.waffle.io/ircsex/irkksome.svg?label=ready&title=Ready for impl)](http://waffle.io/ircsex/irkksome)
 ##Introduction
@@ -24,7 +23,7 @@ are in need for change - and we’re determined to do that!
 In irkksome, you can connect to an existing irssi session. There's no need to use Irssi ConnectBot anymore! Set up irssi proxy and hook up our magical irssi script, and you will have rich access to your irssi session from your phone or tablet.
 
 ##Specifics
-- Android SDK - API 20
+- Android SDK - API 21 - compile and min sdk.
 - sshj 0.10.0
 - Groovy 2.2.3
 - Spock 0.7-groovy-2.0
