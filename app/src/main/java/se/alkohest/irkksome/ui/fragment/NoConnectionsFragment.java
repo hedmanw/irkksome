@@ -24,7 +24,7 @@ public class NoConnectionsFragment extends Fragment {
         newConnections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), NewConnectionActivity.class));
+                startActivityForResult(new Intent(getActivity(), NewConnectionActivity.class), NewConnectionActivity.MAKE_CONNECTION);
             }
         });
         return inflatedView;

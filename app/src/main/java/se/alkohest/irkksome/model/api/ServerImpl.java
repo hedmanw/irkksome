@@ -1,5 +1,6 @@
 package se.alkohest.irkksome.model.api;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +21,6 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
-import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
 public class ServerImpl implements Server, IrcProtocolListener {
     private IrcProtocol ircProtocol;
@@ -35,7 +35,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     private String motd = "";
 
     private IrcChannel activeChannel;
-    private ServerConnectionListener connectionListener;
+    private List<ServerConnectionListener> connectionListeners = new ArrayList<>();
     private HilightListener hilightListener;
 
     public ServerImpl(IrcServer ircServer, ConnectionData data) {
@@ -86,8 +86,8 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
-    public void setServerDisconnectionListener(ServerConnectionListener listener) {
-        connectionListener = listener;
+    public void addServerConnectionListener(ServerConnectionListener listener) {
+        connectionListeners.add(listener);
     }
 
     @Override
@@ -158,7 +158,10 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void serverConnectionEstablished() {
-        connectionListener.connectionEstablished(this);
+        for (ServerConnectionListener serverConnectionListener : connectionListeners) {
+            serverConnectionListener.connectionEstablished(this);
+        }
+
         // this should perhaps only be done when we know we connect to irrsi or another backlog provider
         ircProtocol.sendBacklogRequest(ircServer.getLastMessageTime().getTime() / 1000);
     }
@@ -355,13 +358,17 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void couldNotEstablish(String techMessage) {
-        connectionListener.connectionDropped(this);
+        for (ServerConnectionListener connectionListener : connectionListeners) {
+            connectionListener.connectionDropped(this);
+        }
     }
 
     @Override
     public void serverDisconnected() {
         // TODO - this method should try to reconnect if its appropriate?
-        connectionListener.connectionDropped(this);
+        for (ServerConnectionListener connectionListener : connectionListeners) {
+            connectionListener.connectionDropped(this);
+        }
         listener.serverDisconnected();
     }
 

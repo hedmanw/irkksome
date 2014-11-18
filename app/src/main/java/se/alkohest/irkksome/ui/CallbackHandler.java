@@ -15,6 +15,7 @@ import se.alkohest.irkksome.model.api.UnreadStack;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
+import se.alkohest.irkksome.ui.fragment.NoConnectionsFragment;
 import se.alkohest.irkksome.ui.fragment.ServerInfoFragment;
 import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
 import se.alkohest.irkksome.ui.fragment.connection.ConnectionsListFragment;
@@ -67,8 +68,7 @@ public class CallbackHandler implements ServerCallback {
 
             @Override
             public void run() {
-                ConnectionsListFragment connectionsListFragment = ConnectionsListFragment.newInstance();
-                fragmentTransaction.replace(R.id.fragment_container, connectionsListFragment);
+                fragmentTransaction.replace(R.id.fragment_container, new NoConnectionsFragment());
                 fragmentTransaction.commit();
                 connectionListAdapter.notifyDataSetChanged();
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(null);

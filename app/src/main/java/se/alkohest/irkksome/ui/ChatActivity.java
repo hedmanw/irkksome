@@ -24,7 +24,6 @@ import se.alkohest.irkksome.model.api.UnreadEntity;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.ui.fragment.NoConnectionsFragment;
 import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
-import se.alkohest.irkksome.ui.fragment.connection.ConnectionsListFragment;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class ChatActivity extends Activity implements ChannelFragment.OnMessageSendListener {
@@ -47,20 +46,20 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 NoConnectionsFragment emptynessFragment = new NoConnectionsFragment();
-                fragmentTransaction.add(R.id.fragment_container, emptynessFragment, ConnectionsListFragment.TAG);
+                fragmentTransaction.add(R.id.fragment_container, emptynessFragment);
                 fragmentTransaction.commit();
 
-                startActivity(new Intent(this, NewConnectionActivity.class));
+                startActivityForResult(new Intent(this, NewConnectionActivity.class), NewConnectionActivity.MAKE_CONNECTION);
             }
             else { // Back stack was emptied with sessions running, resume them (eller?)
-                serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
-                serverManager.getActiveServer().showServer();
+//                serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
+//                serverManager.getActiveServer().showServer();
             }
         }
         else { // Device was tilted
             // This might require us to loop through all servers and set new CallbackHandlers
             if (serverManager.getActiveServer() != null) {
-                serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
+//                serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
             }
         }
 
@@ -185,5 +184,15 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
     public void startQuery(String nickname) {
         serverManager.getActiveServer().startQuery(nickname);
         drawerLayout.closeDrawer(findViewById(R.id.right_drawer));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == NewConnectionActivity.MAKE_CONNECTION) {
+            if (resultCode == NewConnectionActivity.CONNECTION_ESTABLISHED) {
+                serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
+            }
+        }
     }
 }

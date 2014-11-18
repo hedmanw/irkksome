@@ -28,7 +28,7 @@ public interface Server {
 
     public void showServer();
 
-    public void setServerDisconnectionListener(ServerConnectionListener listener);
+    public void addServerConnectionListener(ServerConnectionListener listener);
 
     public void setHilightListener(HilightListener listener);
 

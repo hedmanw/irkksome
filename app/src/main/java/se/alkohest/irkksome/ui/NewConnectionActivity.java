@@ -6,6 +6,8 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 
 import se.alkohest.irkksome.R;
+import se.alkohest.irkksome.model.api.Server;
+import se.alkohest.irkksome.model.api.ServerConnectionListener;
 import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.ui.fragment.connection.AbstractConnectionFragment;
@@ -15,7 +17,10 @@ import se.alkohest.irkksome.ui.fragment.connection.ConnectionsListFragment;
 /**
  * Created by wilhelm 2014-11-18.
  */
-public class NewConnectionActivity extends Activity implements ConnectionsListFragment.OnConnectionSelectedListener, AbstractConnectionFragment.OnConnectPressedListener {
+public class NewConnectionActivity extends Activity implements ConnectionsListFragment.OnConnectionSelectedListener, AbstractConnectionFragment.OnConnectPressedListener, ServerConnectionListener {
+    public static final int MAKE_CONNECTION = 1336;
+    public static final int CONNECTION_ESTABLISHED = 1337;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,10 +47,18 @@ public class NewConnectionActivity extends Activity implements ConnectionsListFr
     @Override
     public void onConnectPressed(IrkksomeConnection irkksomeConnection) {
         ServerManager serverManager = ServerManager.INSTANCE;
+        final Server pendingServer = serverManager.establishConnection(irkksomeConnection);
+        pendingServer.addServerConnectionListener(this);
+    }
 
-        // TODO: gör saker och ting
-//        final Server pendingServer = serverManager.establishConnection(irkksomeConnection);
-//        pendingServer.setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
-//        connectionsList.expandGroup(serverManager.getServers().indexOf(serverManager.getActiveServer()));
+    @Override
+    public void connectionEstablished(Server server) {
+        setResult(CONNECTION_ESTABLISHED);
+        finish();
+    }
+
+    @Override
+    public void connectionDropped(Server server) {
+
     }
 }
