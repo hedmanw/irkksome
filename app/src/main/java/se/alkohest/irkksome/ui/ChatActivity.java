@@ -3,6 +3,7 @@ package se.alkohest.irkksome.ui;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,18 +19,15 @@ import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.irc.Log;
-import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.api.UnreadEntity;
 import se.alkohest.irkksome.model.entity.IrcChannel;
-import se.alkohest.irkksome.model.entity.IrkksomeConnection;
+import se.alkohest.irkksome.ui.fragment.NoConnectionsFragment;
 import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
-import se.alkohest.irkksome.ui.fragment.connection.AbstractConnectionFragment;
-import se.alkohest.irkksome.ui.fragment.connection.ConnectionItem;
 import se.alkohest.irkksome.ui.fragment.connection.ConnectionsListFragment;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class ChatActivity extends Activity implements ConnectionsListFragment.OnConnectionSelectedListener, AbstractConnectionFragment.OnConnectPressedListener, ChannelFragment.OnMessageSendListener {
+public class ChatActivity extends Activity implements ChannelFragment.OnMessageSendListener {
     private static final Log LOG = Log.getInstance(ChatActivity.class);
     private static ServerManager serverManager = ServerManager.INSTANCE;
     private StickyListHeadersListView connectionsList;
@@ -48,9 +46,11 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
             if (serverManager.getServers().isEmpty()) { // No sessions are running, cold start
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                ConnectionsListFragment connectFragment = ConnectionsListFragment.newInstance();
-                fragmentTransaction.add(R.id.fragment_container, connectFragment, ConnectionsListFragment.TAG);
+                NoConnectionsFragment emptynessFragment = new NoConnectionsFragment();
+                fragmentTransaction.add(R.id.fragment_container, emptynessFragment, ConnectionsListFragment.TAG);
                 fragmentTransaction.commit();
+
+                startActivity(new Intent(this, NewConnectionActivity.class));
             }
             else { // Back stack was emptied with sessions running, resume them (eller?)
                 serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
@@ -185,23 +185,5 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
     public void startQuery(String nickname) {
         serverManager.getActiveServer().startQuery(nickname);
         drawerLayout.closeDrawer(findViewById(R.id.right_drawer));
-    }
-
-    @Override
-    public void onConnectionSelected(ConnectionItem connectionItem) {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        AbstractConnectionFragment connectFragment = connectionItem.getConnectionFragment();
-        fragmentTransaction.replace(R.id.fragment_container, connectFragment);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-    @Override
-    public void onConnectPressed(IrkksomeConnection irkksomeConnection) {
-        final Server pendingServer = serverManager.establishConnection(irkksomeConnection);
-        pendingServer.setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
-//        connectionsList.expandGroup(serverManager.getServers().indexOf(serverManager.getActiveServer()));
     }
 }

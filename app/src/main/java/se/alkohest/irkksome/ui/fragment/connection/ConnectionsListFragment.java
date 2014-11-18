@@ -31,22 +31,6 @@ public class ConnectionsListFragment extends ListFragment implements ConnectionC
         adapter = new ConnectionsArrayAdapter(getActivity());
         ConnectionController.listener = this;
         setListAdapter(adapter);
-        setHasOptionsMenu(true);
-        getActivity().setTitle(R.string.title_connect_to_server);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getListView().setBackgroundColor(getResources().getColor(R.color.holo_background));
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.findItem(R.id.action_join_channel).setEnabled(false);
-        menu.findItem(R.id.action_leave_channel).setEnabled(false);
-        menu.findItem(R.id.action_change_nick).setEnabled(false);
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

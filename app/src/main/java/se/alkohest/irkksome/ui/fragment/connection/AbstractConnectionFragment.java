@@ -27,18 +27,9 @@ public abstract class AbstractConnectionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         if (getArguments() != null) {
             templateConnection = connectionDAO.findById(getArguments().getLong(CONNECTION_ARGUMENT));
         }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.findItem(R.id.action_join_channel).setEnabled(false);
-        menu.findItem(R.id.action_leave_channel).setEnabled(false);
-        menu.findItem(R.id.action_change_nick).setEnabled(false);
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     public void connectPressed() {
