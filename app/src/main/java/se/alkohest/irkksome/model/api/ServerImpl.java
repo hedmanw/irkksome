@@ -91,6 +91,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
+    public void removeServerConnectionListener() {
+        connectionListeners.remove(1);
+    }
+
+    @Override
     public void setHilightListener(HilightListener listener) {
         hilightListener = listener;
     }

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.Server;
@@ -49,6 +51,10 @@ public class NewConnectionActivity extends Activity implements ConnectionsListFr
         ServerManager serverManager = ServerManager.INSTANCE;
         final Server pendingServer = serverManager.establishConnection(irkksomeConnection);
         pendingServer.addServerConnectionListener(this);
+        final Button button = (Button) findViewById(R.id.server_connect_button);
+        button.setText("Connecting...");
+        button.setEnabled(false);
+        findViewById(R.id.server_connect_progress).setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -59,6 +65,17 @@ public class NewConnectionActivity extends Activity implements ConnectionsListFr
 
     @Override
     public void connectionDropped(Server server) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final Button button = (Button) findViewById(R.id.server_connect_button);
+                if (button != null) {
+                    button.setText("Connect");
+                    button.setEnabled(true);
+                    findViewById(R.id.server_connect_progress).setVisibility(View.GONE);
+                }
 
+            }
+        });
     }
 }

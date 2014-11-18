@@ -37,4 +37,6 @@ public interface Server {
     public String getMotd();
 
     public ConnectionData getConnectionData();
+
+    public void removeServerConnectionListener();
 }

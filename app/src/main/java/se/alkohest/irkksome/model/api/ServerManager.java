@@ -94,6 +94,6 @@ public class ServerManager implements ServerConnectionListener, HilightListener 
 
     @Override
     public void connectionDropped(Server server) {
-        servers.remove(server); // Kommer inte finnas i listan. Byt till tentativ lista.
+        servers.remove(server);
     }
 }

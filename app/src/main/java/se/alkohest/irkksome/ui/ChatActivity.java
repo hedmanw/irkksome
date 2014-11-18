@@ -192,6 +192,7 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
         if (requestCode == NewConnectionActivity.MAKE_CONNECTION) {
             if (resultCode == NewConnectionActivity.CONNECTION_ESTABLISHED) {
                 serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
+                serverManager.getActiveServer().removeServerConnectionListener();
             }
         }
     }
