@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/server_connect_legacy"
-        android:background="@drawable/states_split_list">
+        android:background="?android:attr/selectableItemBackground">
 
         <TextView
             android:layout_width="wrap_content"
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_menu_remove"
-        android:background="@drawable/states_split_list"
+        android:background="?android:attr/selectableItemBackground"
         android:layout_alignParentRight="true"
         android:id="@+id/server_connect_legacy_remove"
         android:padding="@dimen/activity_horizontal_margin"/>

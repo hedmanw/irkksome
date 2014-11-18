@@ -13,4 +13,8 @@
     <color name="grayish">#FF58585B</color>
     <color name="black">#FF000000</color>
     <color name="holo_background">#fff3f3f3</color>
+
+    <color name="primary">#ff34a5dd</color>
+    <color name="primary_dark">#ff0678be</color>
+    <color name="text_color">#ffffffff</color>
 </resources>
