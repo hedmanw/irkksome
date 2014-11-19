@@ -18,10 +18,10 @@ import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.ui.fragment.NoConnectionsFragment;
 import se.alkohest.irkksome.ui.fragment.ServerInfoFragment;
 import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
-import se.alkohest.irkksome.ui.fragment.connection.ConnectionsListFragment;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class CallbackHandler implements ServerCallback {
+    private static CallbackHandler instance;
     private final ConnectionListAdapter connectionListAdapter;
     private final StickyListHeadersListView connectionListView;
     private UserAdapter userAdapter;
@@ -29,7 +29,18 @@ public class CallbackHandler implements ServerCallback {
     private final FragmentManager fragmentManager;
     private UnreadStack unreadStack;
 
-    public CallbackHandler(Activity context, UnreadStack unreadStack) {
+    public static CallbackHandler getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("No CallbackHandler has been initialized.");
+        }
+        return instance;
+    }
+
+    public static void setInstance(Activity context, UnreadStack unreadStack) {
+        instance = new CallbackHandler(context, unreadStack);
+    }
+
+    private CallbackHandler(Activity context, UnreadStack unreadStack) {
         this.context = context;
         fragmentManager = context.getFragmentManager();
         connectionListAdapter = ConnectionListAdapter.getInstance();

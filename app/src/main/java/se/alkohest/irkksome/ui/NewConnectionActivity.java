@@ -51,6 +51,7 @@ public class NewConnectionActivity extends Activity implements ConnectionsListFr
         ServerManager serverManager = ServerManager.INSTANCE;
         final Server pendingServer = serverManager.establishConnection(irkksomeConnection);
         pendingServer.addServerConnectionListener(this);
+        pendingServer.setListener(CallbackHandler.getInstance());
         final Button button = (Button) findViewById(R.id.server_connect_button);
         button.setText("Connecting...");
         button.setEnabled(false);

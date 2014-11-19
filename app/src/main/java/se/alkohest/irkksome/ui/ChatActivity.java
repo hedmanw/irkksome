@@ -6,9 +6,9 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +43,8 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
         if (savedInstanceState == null) {
 //            serverManager.loadPersisted(); Either load from DB, or make connections static. Can we ensure all connections are kept alive?
             if (serverManager.getServers().isEmpty()) { // No sessions are running, cold start
+                CallbackHandler.setInstance(this, serverManager.getUnreadStack());
+
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 NoConnectionsFragment emptynessFragment = new NoConnectionsFragment();
@@ -189,11 +191,10 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == NewConnectionActivity.MAKE_CONNECTION) {
-            if (resultCode == NewConnectionActivity.CONNECTION_ESTABLISHED) {
-                serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
-                serverManager.getActiveServer().removeServerConnectionListener();
-            }
-        }
+//        if (requestCode == NewConnectionActivity.MAKE_CONNECTION) {
+//            if (resultCode == NewConnectionActivity.CONNECTION_ESTABLISHED) {
+//                serverManager.getActiveServer().setListener(callbackHandler);
+//            }
+//        }
     }
 }
