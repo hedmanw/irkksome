@@ -31,8 +31,8 @@
             android:id="@+id/new_connection_irssi" />
     </LinearLayout>
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/legacy_connection_listView"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/legacy_connection_listView"/>
+        android:layout_height="match_parent"/>
 </LinearLayout>

@@ -4,17 +4,25 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+
+import java.util.List;
 
 import se.alkohest.irkksome.R;
+import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
+import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
+import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
-public class ConnectionsListFragment extends Fragment implements ConnectionController.LegacyConnectionListener {
+public class ConnectionsListFragment extends Fragment implements ConnectionsRecyclerAdapter.LegacyConnectionListener {
     public static final String TAG = "CONNECTION_LIST";
+    private final IrkksomeConnectionDAOLocal connectionDAO = new IrkksomeConnectionDAO();
     private OnConnectionSelectedListener listener;
-    private ConnectionsArrayAdapter adapter;
+    private ConnectionsRecyclerAdapter adapter;
+    private List<IrkksomeConnectionEB> connectionsForDisplay;
 
     public static ConnectionsListFragment newInstance() {
         ConnectionsListFragment fragment = new ConnectionsListFragment();
@@ -27,16 +35,21 @@ public class ConnectionsListFragment extends Fragment implements ConnectionContr
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ConnectionController connectionController = new ConnectionController(this);
-        adapter = new ConnectionsArrayAdapter(getActivity(), connectionController);
+        connectionsForDisplay = connectionDAO.getConnectionsForDisplay();
+        adapter = new ConnectionsRecyclerAdapter(this, connectionsForDisplay);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_new_connection_list, container, false);
-        ListView listView = (ListView) inflatedView.findViewById(R.id.legacy_connection_listView);
-        listView.setAdapter(adapter);
+        RecyclerView recyclerView = (RecyclerView) inflatedView.findViewById(R.id.legacy_connection_listView);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
+
         View regularConnectionButton = inflatedView.findViewById(R.id.new_connection_regular);
         regularConnectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,12 +90,19 @@ public class ConnectionsListFragment extends Fragment implements ConnectionContr
     }
 
     @Override
-    public void legacyConnectionClicked(ConnectionItem connectionItem) {
-        sendCallback(connectionItem.getConnectionFragment());
+    public void legacyConnectionClicked(IrkksomeConnectionEB connectionItem) {
+        if (connectionItem.isIrssiProxyConnection()) {
+            sendCallback(IrssiProxyConnectionFragment.newInstance(connectionItem));
+        }
+        else {
+            sendCallback(RegularConnectionFragment.newInstance(connectionItem));
+        }
     }
 
     @Override
-    public void legacyConnectionRemoved() {
+    public void legacyConnectionRemoved(IrkksomeConnectionEB connectionItem) {
+        connectionDAO.delete(connectionItem);
+        connectionsForDisplay.remove(connectionItem);
         adapter.notifyDataSetChanged();
     }
 
