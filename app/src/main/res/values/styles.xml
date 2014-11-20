@@ -43,4 +43,11 @@
         <item name="android:minHeight">10dp</item>
         <item name="android:minWidth">10dp</item>
     </style>
+
+    <style name="connection_type_button">
+        <item name="android:elevation">2dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_margin">@dimen/small_horizontal_margin</item>
+        <item name="android:padding">@dimen/activity_horizontal_margin</item>
+    </style>
 </resources>

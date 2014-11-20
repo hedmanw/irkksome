@@ -56,16 +56,6 @@ public abstract class AbstractConnectionFragment extends Fragment {
         listener = null;
     }
 
-    public static AbstractConnectionFragment newInstance(int id) {
-        switch (id) {
-            case R.drawable.connection_icon_blue:
-                return RegularConnectionFragment.newInstance();
-            case R.drawable.connection_icon_purple:
-                return IrssiProxyConnectionFragment.newInstance();
-        }
-        return null;
-    }
-
     protected String getFieldValue(@IdRes int resourceId) {
         return ((TextView)getActivity().findViewById(resourceId)).getText().toString().trim();
     }

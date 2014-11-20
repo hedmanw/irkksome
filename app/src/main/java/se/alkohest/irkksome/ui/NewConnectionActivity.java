@@ -13,7 +13,6 @@ import se.alkohest.irkksome.model.api.ServerConnectionListener;
 import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.ui.fragment.connection.AbstractConnectionFragment;
-import se.alkohest.irkksome.ui.fragment.connection.ConnectionItem;
 import se.alkohest.irkksome.ui.fragment.connection.ConnectionsListFragment;
 
 /**
@@ -36,11 +35,10 @@ public class NewConnectionActivity extends Activity implements ConnectionsListFr
     }
 
     @Override
-    public void onConnectionSelected(ConnectionItem connectionItem) {
+    public void onConnectionSelected(AbstractConnectionFragment connectionFragment) {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        AbstractConnectionFragment connectFragment = connectionItem.getConnectionFragment();
-        fragmentTransaction.replace(R.id.fragment_container, connectFragment);
+        fragmentTransaction.replace(R.id.fragment_container, connectionFragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();

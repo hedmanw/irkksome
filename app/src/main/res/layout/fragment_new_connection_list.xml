@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="@dimen/activity_horizontal_margin">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_drawer"
+            android:text="@string/connection_type_regular"
+            style="@style/connection_type_button"
+            android:background="@drawable/connection_icon_blue"
+            android:id="@+id/new_connection_regular" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/connection_type_irssi"
+            style="@style/connection_type_button"
+            android:drawableLeft="@drawable/ic_drawer"
+            android:background="@drawable/connection_icon_purple"
+            android:id="@+id/new_connection_irssi" />
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/legacy_connection_listView"/>
+</LinearLayout>

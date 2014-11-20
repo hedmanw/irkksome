@@ -1,8 +1,5 @@
 package se.alkohest.irkksome.ui.fragment.connection;
 
-import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -17,78 +14,31 @@ import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 import se.alkohest.irkksome.util.DateFormatUtil;
 
 public class ConnectionController {
-    public static List<ConnectionItem> CONNECTIONS = new ArrayList<>();
-    public static List<ConnectionItem> PERMANENT_CONNECTIONS = new ArrayList<>();
-    private static final IrkksomeConnectionDAOLocal connectionDAO = new IrkksomeConnectionDAO();
-    public static LegacyConnectionListener listener;
+    private final IrkksomeConnectionDAOLocal connectionDAO = new IrkksomeConnectionDAO();
+    public LegacyConnectionListener listener;
+    private List<ConnectionItem> dataset;
 
-    static {
-        addPermanentConnection(new ConnectionMethod(R.string.connection_type_regular, R.drawable.connection_icon_blue));
-        addPermanentConnection(new ConnectionMethod(R.string.connection_type_irssi, R.drawable.connection_icon_purple));
+    public ConnectionController(LegacyConnectionListener listener) {
+        dataset = new ArrayList<>();
+        loadConnectionBeans();
+        this.listener = listener;
     }
 
-    private static void addConnectionItem(ConnectionItem item) {
-        CONNECTIONS.add(item);
+    public List<ConnectionItem> getDataset() {
+        return dataset;
     }
 
-    private static void addPermanentConnection(ConnectionItem item) {
-        PERMANENT_CONNECTIONS.add(item);
-        addConnectionItem(item);
-    }
-
-    private static void addLegacyConnections() {
-        List<IrkksomeConnectionEB> connections = connectionDAO.getConnectionsForDisplay();
-        for (IrkksomeConnectionEB connection : connections) {
-            addConnectionItem(new LegacyConnection(connection));
+    private void loadConnectionBeans() {
+        final List<IrkksomeConnectionEB> connectionsForDisplay = connectionDAO.getConnectionsForDisplay();
+        for (IrkksomeConnectionEB connection : connectionsForDisplay) {
+            dataset.add(new LegacyConnection(connection));
         }
     }
 
-    private static void datasetChanged() {
-        CONNECTIONS.retainAll(PERMANENT_CONNECTIONS);
-        addLegacyConnections();
-    }
-
-    public static List<ConnectionItem> getDataset() {
-        datasetChanged();
-        return CONNECTIONS;
-    }
-
-    public static class ConnectionMethod extends ConnectionItem {
-        @StringRes
-        private int connectionNameRes;
-        @DrawableRes
-        private int iconRes;
-
-        public ConnectionMethod(@StringRes int representation, @DrawableRes int color) {
-            super(ConnectionTypeEnum.NEW_CONNECTION);
-            this.connectionNameRes = representation;
-            this.iconRes = color;
-        }
-
-        @Override
-        public View getView(LayoutInflater inflater, View convertView) {
-            if (convertView == null) {
-                convertView = inflater.inflate(R.layout.server_connect_list_new_item, null);
-            }
-            Drawable icon = inflater.getContext().getResources().getDrawable(this.iconRes);
-            View iconContainer = convertView.findViewById(R.id.server_connect_icon);
-            iconContainer.setBackground(icon);
-            TextView description = (TextView) convertView.findViewById(android.R.id.text1);
-            description.setText(connectionNameRes);
-            return convertView;
-        }
-
-        @Override
-        public AbstractConnectionFragment getConnectionFragment() {
-            return AbstractConnectionFragment.newInstance(iconRes);
-        }
-    }
-
-    public static class LegacyConnection extends ConnectionItem {
+    public class LegacyConnection extends ConnectionItem {
         IrkksomeConnectionEB connection;
 
         public LegacyConnection(IrkksomeConnectionEB connection) {
-            super(ConnectionTypeEnum.OLD_CONNECTION);
             this.connection = connection;
         }
 
@@ -122,7 +72,7 @@ public class ConnectionController {
                 @Override
                 public void onClick(View view) {
                     connectionDAO.delete(connection);
-                    datasetChanged();
+                    dataset.remove(LegacyConnection.this);
                     listener.legacyConnectionRemoved();
                 }
             });

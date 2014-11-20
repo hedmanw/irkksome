@@ -1,18 +1,17 @@
 package se.alkohest.irkksome.ui.fragment.connection;
 
 import android.app.Activity;
-import android.app.ListFragment;
+import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import se.alkohest.irkksome.R;
 
-public class ConnectionsListFragment extends ListFragment implements ConnectionController.LegacyConnectionListener {
+public class ConnectionsListFragment extends Fragment implements ConnectionController.LegacyConnectionListener {
     public static final String TAG = "CONNECTION_LIST";
     private OnConnectionSelectedListener listener;
     private ConnectionsArrayAdapter adapter;
@@ -28,9 +27,37 @@ public class ConnectionsListFragment extends ListFragment implements ConnectionC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new ConnectionsArrayAdapter(getActivity());
-        ConnectionController.listener = this;
-        setListAdapter(adapter);
+        ConnectionController connectionController = new ConnectionController(this);
+        adapter = new ConnectionsArrayAdapter(getActivity(), connectionController);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View inflatedView = inflater.inflate(R.layout.fragment_new_connection_list, container, false);
+        ListView listView = (ListView) inflatedView.findViewById(R.id.legacy_connection_listView);
+        listView.setAdapter(adapter);
+        View regularConnectionButton = inflatedView.findViewById(R.id.new_connection_regular);
+        regularConnectionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendCallback(RegularConnectionFragment.newInstance());
+            }
+        });
+        View irssiConnectionButton = inflatedView.findViewById(R.id.new_connection_irssi);
+        irssiConnectionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendCallback(IrssiProxyConnectionFragment.newInstance());
+            }
+        });
+        return inflatedView;
+    }
+
+    public void sendCallback(AbstractConnectionFragment abstractConnectionFragment) {
+        if (listener != null) {
+            listener.onConnectionSelected(abstractConnectionFragment);
+        }
     }
 
     @Override
@@ -50,20 +77,8 @@ public class ConnectionsListFragment extends ListFragment implements ConnectionC
     }
 
     @Override
-    public void onListItemClick(ListView listView, View view, int position, long id) {
-        super.onListItemClick(listView, view, position, id);
-
-        if (listener != null) {
-            final ConnectionItem connectionItem = ConnectionController.CONNECTIONS.get(position);
-            listener.onConnectionSelected(connectionItem);
-        }
-    }
-
-    @Override
     public void legacyConnectionClicked(ConnectionItem connectionItem) {
-        if (listener != null) {
-            listener.onConnectionSelected(connectionItem);
-        }
+        sendCallback(connectionItem.getConnectionFragment());
     }
 
     @Override
@@ -72,7 +87,7 @@ public class ConnectionsListFragment extends ListFragment implements ConnectionC
     }
 
     public interface OnConnectionSelectedListener {
-        public void onConnectionSelected(ConnectionItem connectionItem);
+        public void onConnectionSelected(AbstractConnectionFragment connectionFragment);
     }
 
 }
