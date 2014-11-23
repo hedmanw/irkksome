@@ -14,6 +14,7 @@
     <color name="primary">#ff34a5dd</color>
     <color name="primary_dark">#ff0678be</color>
     <color name="secondary">#ff9236F4</color>
+    <color name="secondary_dark">#ff6409d5</color>
     <color name="tertiary">#ffEA3E34</color>
     <color name="quarternary">#ff43F45B</color>
     <color name="text_color">#ffffffff</color>

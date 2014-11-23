@@ -106,16 +106,13 @@ public class CallbackHandler implements ServerCallback {
             @Override
             public void run() {
                 // Controller?
-//                TextView number = (TextView) context.findViewById(R.id.actionbar_notifcation_textview);
+//                TextView number = (TextView) context.findViewById()
 //                if (unreadStack.getHilightCount() > 0) {
 //                    number.setText(unreadStack.getHilightCount() + "");
-//                    ((LinearLayout) number.getParent()).setBackground(context.getResources().getDrawable(R.drawable.highlightbadge_background_highlight));
 //                } else if (unreadStack.getMessageCount() > 0) {
 //                    number.setText(unreadStack.getMessageCount() + "");
-//                    ((LinearLayout) number.getParent()).setBackground(context.getResources().getDrawable(R.drawable.highlightbadge_background));
 //                } else {
 //                    number.setText("0");
-//                    ((LinearLayout) number.getParent()).setBackground(context.getResources().getDrawable(R.drawable.highlightbadge_background_disabled));
 //                }
             }
         });
