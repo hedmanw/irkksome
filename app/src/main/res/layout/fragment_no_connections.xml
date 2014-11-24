@@ -15,4 +15,12 @@
         android:layout_gravity="center"
         android:id="@+id/button_new_connections"
         android:text="make new connection"/>
+    <Button
+        android:text="1"
+        style="@style/hilight_button"
+        android:background="@drawable/highlightbadge_background_highlight"/>
+    <Button
+        android:text="2"
+        style="@style/hilight_button"
+        android:background="@drawable/highlightbadge_background"/>
 </LinearLayout>

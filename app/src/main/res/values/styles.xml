@@ -50,4 +50,12 @@
         <item name="android:layout_margin">@dimen/small_horizontal_margin</item>
         <item name="android:padding">@dimen/activity_horizontal_margin</item>
     </style>
+
+    <style name="hilight_button">
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:elevation">5dp</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">30sp</item>
+    </style>
 </resources>
