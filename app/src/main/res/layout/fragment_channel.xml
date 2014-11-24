@@ -16,6 +16,12 @@
         android:background="#FFC0C0C0"
         android:id="@android:id/custom"
         android:layout_above="@android:id/inputArea"/>
+    <ImageButton
+        style="@style/hilight_button"
+        android:id="@+id/hilight_button"
+        android:layout_above="@android:id/custom"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"/>
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -105,15 +108,21 @@ public class CallbackHandler implements ServerCallback {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // Controller?
-//                TextView number = (TextView) context.findViewById()
-//                if (unreadStack.getHilightCount() > 0) {
-//                    number.setText(unreadStack.getHilightCount() + "");
-//                } else if (unreadStack.getMessageCount() > 0) {
-//                    number.setText(unreadStack.getMessageCount() + "");
-//                } else {
-//                    number.setText("0");
-//                }
+            ImageButton number = (ImageButton) context.findViewById(R.id.hilight_button);
+            if (number != null) {
+                if (unreadStack.getHilightCount() > 0) {
+                    number.setVisibility(View.VISIBLE);
+                    number.setBackground(context.getDrawable(R.drawable.highlightbadge_background_highlight));
+                }
+                else if (unreadStack.getMessageCount() > 0) {
+                    number.setVisibility(View.VISIBLE);
+                    number.setBackground(context.getDrawable(R.drawable.highlightbadge_background));
+                }
+                else {
+                    number.setVisibility(View.GONE);
+                }
+            }
+
             }
         });
     }

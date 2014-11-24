@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -165,7 +166,7 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
         return true;
     }
 
-    public void showHilight(View view) {
+    public static void showHilight() {
         if (serverManager.getUnreadStack().hasUnread()) {
             UnreadEntity entity = serverManager.getUnreadStack().pop();
             if (serverManager.getActiveServer() != entity.getServer()) {

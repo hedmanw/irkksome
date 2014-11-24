@@ -57,5 +57,9 @@
         <item name="android:elevation">5dp</item>
         <item name="android:textColor">@color/text_color</item>
         <item name="android:textSize">30sp</item>
+        <item name="android:gravity">end|bottom</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:tint">@android:color/white</item>
     </style>
 </resources>
