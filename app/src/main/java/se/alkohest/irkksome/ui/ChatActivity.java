@@ -39,12 +39,12 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_drawers);
         ConnectionListAdapter.setInstance(this, serverManager.getServers());
+        CallbackHandler.setInstance(this, serverManager.getUnreadStack());
         connectionsList = (StickyListHeadersListView) findViewById(R.id.left_drawer_list);
 
         if (savedInstanceState == null) {
 //            serverManager.loadPersisted(); Either load from DB, or make connections static. Can we ensure all connections are kept alive?
             if (serverManager.getServers().isEmpty()) { // No sessions are running, cold start
-                CallbackHandler.setInstance(this, serverManager.getUnreadStack());
 
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -55,8 +55,8 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
                 startActivityForResult(new Intent(this, NewConnectionActivity.class), NewConnectionActivity.MAKE_CONNECTION);
             }
             else { // Back stack was emptied with sessions running, resume them (eller?)
-//                serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
-//                serverManager.getActiveServer().showServer();
+                serverManager.getActiveServer().setListener(CallbackHandler.getInstance());
+                serverManager.getActiveServer().showServer();
             }
         }
         else { // Device was tilted
