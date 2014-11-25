@@ -4,17 +4,11 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.ServerCallback;
-import se.alkohest.irkksome.model.api.UnreadStack;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
@@ -30,7 +24,6 @@ public class CallbackHandler implements ServerCallback {
     private UserAdapter userAdapter;
     private final Activity context;
     private final FragmentManager fragmentManager;
-    private UnreadStack unreadStack;
 
     public static CallbackHandler getInstance() {
         if (instance == null) {
@@ -39,16 +32,16 @@ public class CallbackHandler implements ServerCallback {
         return instance;
     }
 
-    public static void setInstance(Activity context, UnreadStack unreadStack) {
-        instance = new CallbackHandler(context, unreadStack);
+    public static void setInstance(Activity context) {
+        instance = new CallbackHandler(context);
     }
 
-    private CallbackHandler(Activity context, UnreadStack unreadStack) {
+    private CallbackHandler(Activity context) {
         this.context = context;
         fragmentManager = context.getFragmentManager();
         connectionListAdapter = ConnectionListAdapter.getInstance();
         connectionListView = (StickyListHeadersListView) context.findViewById(R.id.left_drawer_list);
-        this.unreadStack = unreadStack;
+
     }
 
     @Override
@@ -108,21 +101,7 @@ public class CallbackHandler implements ServerCallback {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-            ImageButton number = (ImageButton) context.findViewById(R.id.hilight_button);
-            if (number != null) {
-                if (unreadStack.getHilightCount() > 0) {
-                    number.setVisibility(View.VISIBLE);
-                    number.setBackground(context.getDrawable(R.drawable.highlightbadge_background_highlight));
-                }
-                else if (unreadStack.getMessageCount() > 0) {
-                    number.setVisibility(View.VISIBLE);
-                    number.setBackground(context.getDrawable(R.drawable.highlightbadge_background));
-                }
-                else {
-                    number.setVisibility(View.GONE);
-                }
-            }
-
+                HilightManager.getInstance().updateHilightButton();
             }
         });
     }

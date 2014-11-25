@@ -23,6 +23,7 @@ import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.ui.ChatActivity;
+import se.alkohest.irkksome.ui.HilightManager;
 import se.alkohest.irkksome.ui.view.ChatListView;
 
 public class ChannelFragment extends Fragment {
@@ -110,6 +111,12 @@ public class ChannelFragment extends Fragment {
             });
         }
         return inflatedView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        HilightManager.getInstance().updateHilightButton();
     }
 
     private static boolean hasBacklog() {
