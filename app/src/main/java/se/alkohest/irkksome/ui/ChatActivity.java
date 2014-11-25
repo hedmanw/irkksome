@@ -62,7 +62,13 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
         else { // Device was tilted
             // This might require us to loop through all servers and set new CallbackHandlers
             if (serverManager.getActiveServer() != null) {
-//                serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
+                serverManager.getActiveServer().setListener(CallbackHandler.getInstance());
+                if (serverManager.getActiveServer().getActiveChannel() == null) {
+                    serverManager.getActiveServer().showServer();
+                }
+                else {
+                    serverManager.getActiveServer().setActiveChannel(serverManager.getActiveServer().getActiveChannel());
+                }
             }
         }
 

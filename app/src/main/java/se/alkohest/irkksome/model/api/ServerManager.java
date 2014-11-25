@@ -73,6 +73,7 @@ public class ServerManager implements ServerConnectionListener, HilightListener 
 
     public void shutDownServer(Server server) {
         server.disconnect();
+        this.activeServer = null; // Change this when we allow multiple conns
     }
 
     public UnreadStack getUnreadStack() {
