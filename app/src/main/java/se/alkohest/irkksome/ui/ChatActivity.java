@@ -173,16 +173,6 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
         return true;
     }
 
-    public static void showHilight() {
-        if (serverManager.getUnreadStack().hasUnread()) {
-            UnreadEntity entity = serverManager.getUnreadStack().pop();
-            if (serverManager.getActiveServer() != entity.getServer()) {
-                serverManager.setActiveServer(entity.getServer());
-            }
-            serverManager.getActiveServer().setActiveChannel(entity.getChannel());
-        }
-    }
-
     public void sendMessage(View view) {
         EditText editText = (EditText) findViewById(R.id.input_field);
         if (!editText.getText().toString().isEmpty()) {

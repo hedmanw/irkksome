@@ -24,9 +24,10 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.ui.ChatActivity;
 import se.alkohest.irkksome.ui.HilightManager;
+import se.alkohest.irkksome.ui.fragment.HilightContainedFragment;
 import se.alkohest.irkksome.ui.view.ChatListView;
 
-public class ChannelFragment extends Fragment {
+public class ChannelFragment extends HilightContainedFragment {
     private static ArrayAdapter<ChannelChatItem> arrayAdapter;
     private static List<ChannelChatItem> messageList;
     private static IrcChannel ircChannel;
@@ -101,22 +102,7 @@ public class ChannelFragment extends Fragment {
         messageEditText.requestFocus();
         scrollToBottom();
 
-        ImageButton hilights = (ImageButton) inflatedView.findViewById(R.id.hilight_button);
-        if (hilights != null) {
-            hilights.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ChatActivity.showHilight();
-                }
-            });
-        }
         return inflatedView;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        HilightManager.getInstance().updateHilightButton();
     }
 
     private static boolean hasBacklog() {

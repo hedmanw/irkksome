@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import se.alkohest.irkksome.R;
+import se.alkohest.irkksome.model.api.ServerManager;
+import se.alkohest.irkksome.model.api.UnreadEntity;
 import se.alkohest.irkksome.model.api.UnreadStack;
 
 public class HilightManager {
@@ -26,6 +28,19 @@ public class HilightManager {
     private HilightManager(Activity context, UnreadStack unreadStack) {
         this.context = context;
         this.unreadStack = unreadStack;
+    }
+
+
+
+    public void showHilight() {
+        ServerManager serverManager = ServerManager.INSTANCE;
+        if (serverManager.getUnreadStack().hasUnread()) {
+            UnreadEntity entity = serverManager.getUnreadStack().pop();
+            if (serverManager.getActiveServer() != entity.getServer()) {
+                serverManager.setActiveServer(entity.getServer());
+            }
+            serverManager.getActiveServer().setActiveChannel(entity.getChannel());
+        }
     }
 
     public void updateHilightButton() {
