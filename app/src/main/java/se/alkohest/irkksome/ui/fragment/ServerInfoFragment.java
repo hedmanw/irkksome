@@ -12,7 +12,7 @@ import android.widget.TextView;
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcServer;
 
-public class ServerInfoFragment extends Fragment {
+public class ServerInfoFragment extends HilightContainedFragment {
     private static IrcServer ircServer;
     private static String motd;
 
