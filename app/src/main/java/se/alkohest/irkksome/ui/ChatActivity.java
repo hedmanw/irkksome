@@ -45,7 +45,7 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
 
         if (savedInstanceState == null) {
 //            serverManager.loadPersisted(); Either load from DB, or make connections static. Can we ensure all connections are kept alive?
-            if (serverManager.getServers().isEmpty()) { // No sessions are running, cold start
+            if (serverManager.getServers().isEmpty()) { // No sessions are running, cold start => "Fresh startup"
 
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -53,7 +53,7 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
                 fragmentTransaction.add(R.id.fragment_container, emptynessFragment);
                 fragmentTransaction.commit();
 
-                startActivityForResult(new Intent(this, NewConnectionActivity.class), NewConnectionActivity.MAKE_CONNECTION);
+                startActivityForResult(new Intent(this, NewConnectionActivity.class), NewConnectionActivity.FRESH_STARTUP_CONNECTION);
             }
             else { // Back stack was emptied with sessions running, resume them (eller?)
                 serverManager.getActiveServer().setListener(CallbackHandler.getInstance());
@@ -189,10 +189,10 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == NewConnectionActivity.MAKE_CONNECTION) {
-//            if (resultCode == NewConnectionActivity.CONNECTION_ESTABLISHED) {
-//                serverManager.getActiveServer().setListener(callbackHandler);
-//            }
-//        }
+        if (requestCode == NewConnectionActivity.FRESH_STARTUP_CONNECTION) {
+            if (resultCode == Activity.RESULT_CANCELED) {
+                finish();
+            }
+        }
     }
 }

@@ -19,7 +19,8 @@ import se.alkohest.irkksome.ui.fragment.connection.ConnectionsListFragment;
  * Created by wilhelm 2014-11-18.
  */
 public class NewConnectionActivity extends Activity implements ConnectionsListFragment.OnConnectionSelectedListener, AbstractConnectionFragment.OnConnectPressedListener, ServerConnectionListener {
-    public static final int MAKE_CONNECTION = 1336;
+    public static final int MAKE_CONNECTION = 11;
+    public static final int FRESH_STARTUP_CONNECTION = 1;
     public static final int CONNECTION_ESTABLISHED = 1337;
 
     @Override
