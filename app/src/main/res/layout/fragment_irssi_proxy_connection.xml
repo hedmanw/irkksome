@@ -1,34 +1,16 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    tools:context=".ui.fragment.IrssiProxyConnectionFragment">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <View
-            style="@style/new_connection_icon"
-            android:background="@drawable/connection_icon_purple"
-            android:id="@+id/server_connect_icon" />
-
-        <TextView
-            style="@style/list_item"
-            android:text="@string/connection_type_irssi"
-            android:layout_centerInParent="true"
-            android:layout_toRightOf="@id/server_connect_icon"/>
-    </RelativeLayout>
+    android:layout_height="wrap_content">
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/server_connect_host"
         android:hint="@string/hint_hostname"
-        android:inputType="textUri"/>
+        android:inputType="textUri" />
 
     <EditText
         android:layout_width="match_parent"
@@ -56,14 +38,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/server_connect_sshHost"
         android:hint="@string/hint_sshHost"
-        android:inputType="textUri"/>
+        android:inputType="textUri" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/server_connect_sshUser"
         android:hint="@string/hint_sshUser"
-        android:inputType="textUri"/>
+        android:inputType="textUri" />
 
     <EditText
         android:layout_width="match_parent"
@@ -71,17 +53,5 @@
         android:id="@+id/server_connect_sshPass"
         android:hint="@string/hint_sshPass"
         android:inputType="textPassword" />
+</merge>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hint_connect"
-        android:id="@+id/server_connect_button" />
-
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        android:id="@+id/server_connect_progress"/>
-</LinearLayout>

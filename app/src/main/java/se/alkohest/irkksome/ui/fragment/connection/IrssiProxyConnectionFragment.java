@@ -26,30 +26,30 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected int getIcon() {
+        return R.drawable.connection_icon_purple;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View inflatedView = inflater.inflate(R.layout.fragment_irssi_proxy_connection, container, false);
-        inflatedView.findViewById(R.id.server_connect_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                connectPressed();
-            }
-        });
-        if (templateConnection != null) {
-            setFieldValue(inflatedView, R.id.server_connect_host, templateConnection.getHost());
-            setFieldValue(inflatedView, R.id.server_connect_port, String.valueOf(templateConnection.getPort()));
-            setFieldValue(inflatedView, R.id.server_connect_username, templateConnection.getUsername());
-            setFieldValue(inflatedView, R.id.server_connect_password, templateConnection.getPassword());
-            setFieldValue(inflatedView, R.id.server_connect_sshHost, templateConnection.getSshHost());
-            setFieldValue(inflatedView, R.id.server_connect_sshUser, templateConnection.getSshUser());
-//            setFieldValue(inflatedView, R.id.server_connect_sshPass, templateConnection.getSshPass());
+    protected int getHeadingStringId() {
+        return R.string.connection_type_irssi;
+    }
 
+    @Override
+    protected int getLayout() {
+        return R.layout.fragment_irssi_proxy_connection;
+    }
+
+    @Override
+    public void inflateConnectionView(ViewGroup parent) {
+        if (templateConnection != null) {
+            setFieldValue(parent, R.id.server_connect_host, templateConnection.getHost());
+            setFieldValue(parent, R.id.server_connect_port, String.valueOf(templateConnection.getPort()));
+            setFieldValue(parent, R.id.server_connect_username, templateConnection.getUsername());
+            setFieldValue(parent, R.id.server_connect_password, templateConnection.getPassword());
+            setFieldValue(parent, R.id.server_connect_sshHost, templateConnection.getSshHost());
+            setFieldValue(parent, R.id.server_connect_sshUser, templateConnection.getSshUser());
         }
-        return inflatedView;
     }
 
     @Override

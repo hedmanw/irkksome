@@ -27,23 +27,30 @@ public class RegularConnectionFragment extends AbstractConnectionFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View inflatedView = inflater.inflate(R.layout.fragment_regular_connection, container, false);
-        inflatedView.findViewById(R.id.server_connect_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                connectPressed();
-            }
-        });
+    protected int getIcon() {
+        return R.drawable.connection_icon_blue;
+    }
+
+    @Override
+    protected int getHeadingStringId() {
+        return R.string.connection_type_regular;
+    }
+
+    @Override
+    protected int getLayout() {
+        return R.layout.fragment_regular_connection;
+    }
+
+    @Override
+    public void inflateConnectionView(ViewGroup parent) {
         if (templateConnection != null) {
-            setFieldValue(inflatedView, R.id.server_connect_host, templateConnection.getHost());
-            setFieldValue(inflatedView, R.id.server_connect_port, String.valueOf(templateConnection.getPort()));
-            setFieldValue(inflatedView, R.id.server_connect_nickname, templateConnection.getNickname());
-            setFieldValue(inflatedView, R.id.server_connect_realname, templateConnection.getRealname());
-            setFieldValue(inflatedView, R.id.server_connect_username, templateConnection.getUsername());
-            setFieldValue(inflatedView, R.id.server_connect_password, templateConnection.getPassword());
+            setFieldValue(parent, R.id.server_connect_host, templateConnection.getHost());
+            setFieldValue(parent, R.id.server_connect_port, String.valueOf(templateConnection.getPort()));
+            setFieldValue(parent, R.id.server_connect_nickname, templateConnection.getNickname());
+            setFieldValue(parent, R.id.server_connect_realname, templateConnection.getRealname());
+            setFieldValue(parent, R.id.server_connect_username, templateConnection.getUsername());
+            setFieldValue(parent, R.id.server_connect_password, templateConnection.getPassword());
         }
-        return inflatedView;
     }
 
     @Override
