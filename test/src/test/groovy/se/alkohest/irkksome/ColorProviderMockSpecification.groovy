@@ -7,7 +7,7 @@ public class ColorProviderMockSpecification extends Specification {
     def setup() {
         ColorProvider mock = Mock(ColorProvider)
         ColorProvider.INSTANCE = mock
-        mock.getColor(_) >> 0
+        mock.getColor() >> 0
     }
 
     def happyTest() {
