@@ -20,7 +20,8 @@
             android:background="#EEE">
         <Button
             style="@style/list_item_button"
-            android:text="New connection (TODO)"/>
+            android:text="All servers"
+            android:id="@+id/drawer_label_all_servers"/>
         <Button
             style="@style/list_item_button"
             android:id="@+id/drawer_label_server"/>

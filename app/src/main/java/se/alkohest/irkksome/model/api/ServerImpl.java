@@ -138,8 +138,9 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public void setActiveChannel(IrcChannel ircChannel) {
         if (activeChannel != ircChannel) {
-            listener.setActiveChannel(ircChannel);
-//            listener.updateHilights();
+            if (ircChannel != null) {
+                listener.setActiveChannel(ircChannel);
+            }
             activeChannel = ircChannel;
         }
     }

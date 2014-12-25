@@ -73,7 +73,7 @@ public class ServerManager implements ServerConnectionListener, HilightListener 
 
     public void shutDownServer(Server server) {
         server.disconnect();
-        this.activeServer = null; // Change this when we allow multiple conns
+        this.activeServer = null; // TODO: Change this when we allow multiple conns
     }
 
     public UnreadStack getUnreadStack() {
@@ -96,5 +96,11 @@ public class ServerManager implements ServerConnectionListener, HilightListener 
     @Override
     public void connectionDropped(Server server) {
         servers.remove(server);
+    }
+
+    public void clearActiveChannel() {
+        if (activeServer != null) {
+            activeServer.setActiveChannel(null);
+        }
     }
 }

@@ -14,8 +14,8 @@ import se.alkohest.irkksome.model.api.ServerCallback;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
-import se.alkohest.irkksome.ui.fragment.NoConnectionsFragment;
 import se.alkohest.irkksome.ui.fragment.ServerInfoFragment;
+import se.alkohest.irkksome.ui.fragment.ServerListFragment;
 import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
 
 public class CallbackHandler implements ServerCallback {
@@ -80,7 +80,7 @@ public class CallbackHandler implements ServerCallback {
                     // Show some other stuff
                 } else {
                     context.findViewById(R.id.drawer_label_server).setVisibility(View.GONE);
-                    fragmentTransaction.replace(R.id.fragment_container, new NoConnectionsFragment());
+                    fragmentTransaction.replace(R.id.fragment_container, new ServerListFragment());
                     fragmentTransaction.commit();
                     ConnectionListAdapter.getInstance().notifyDataSetChanged();
                     ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(null);

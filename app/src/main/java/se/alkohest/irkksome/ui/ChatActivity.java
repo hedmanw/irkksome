@@ -21,7 +21,7 @@ import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.irc.Log;
 import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.entity.IrcChannel;
-import se.alkohest.irkksome.ui.fragment.NoConnectionsFragment;
+import se.alkohest.irkksome.ui.fragment.ServerListFragment;
 import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
 
 public class ChatActivity extends Activity implements ChannelFragment.OnMessageSendListener {
@@ -46,7 +46,7 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
 
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                NoConnectionsFragment emptynessFragment = new NoConnectionsFragment();
+                ServerListFragment emptynessFragment = new ServerListFragment();
                 fragmentTransaction.add(R.id.fragment_container, emptynessFragment);
                 fragmentTransaction.commit();
 
@@ -78,8 +78,11 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                if (serverManager.getActiveServer() != null && serverManager.getActiveServer().getActiveChannel() != null) {
-                    findViewById(R.id.input_field).requestFocus();
+                final View inputField = findViewById(R.id.input_field);
+                if (serverManager.getActiveServer() != null &&
+                        serverManager.getActiveServer().getActiveChannel() != null &&
+                        inputField != null) {
+                    inputField.requestFocus();
                 }
             }
         };
@@ -113,6 +116,22 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
             public void onClick(View v) {
                 drawerLayout.closeDrawer(leftDrawer);
                 serverManager.getActiveServer().showServer();
+            }
+        });
+
+        findViewById(R.id.drawer_label_all_servers).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawer(leftDrawer);
+
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, new ServerListFragment());
+                fragmentTransaction.commit();
+
+                serverManager.clearActiveChannel();
+                connectionsList.setItemChecked(connectionsList.getCheckedItemPosition(), false);
+                connectionsList.setSelection(0);
             }
         });
     }
