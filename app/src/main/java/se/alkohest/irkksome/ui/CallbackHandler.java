@@ -15,12 +15,10 @@ import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.ui.fragment.NoConnectionsFragment;
 import se.alkohest.irkksome.ui.fragment.ServerInfoFragment;
 import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class CallbackHandler implements ServerCallback {
     private static CallbackHandler instance;
-    private final ConnectionListAdapter connectionListAdapter;
-    private final StickyListHeadersListView connectionListView;
+    private final ListView connectionListView;
     private UserAdapter userAdapter;
     private final Activity context;
     private final FragmentManager fragmentManager;
@@ -39,27 +37,26 @@ public class CallbackHandler implements ServerCallback {
     private CallbackHandler(Activity context) {
         this.context = context;
         fragmentManager = context.getFragmentManager();
-        connectionListAdapter = ConnectionListAdapter.getInstance();
-        connectionListView = (StickyListHeadersListView) context.findViewById(R.id.left_drawer_list);
+        connectionListView = (ListView) context.findViewById(R.id.left_drawer_list);
 
     }
 
     @Override
     public void showServerInfo(final IrcServer server, final String motd) {
         userAdapter = new UserSetAdapter(server.getKnownUsers());
+        ConnectionListAdapter.setInstance(context, server);
+
         context.runOnUiThread(new Runnable() {
             final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
             @Override
             public void run() {
+                connectionListView.setAdapter(ConnectionListAdapter.getInstance());
                 ServerInfoFragment serverInfoFragment = ServerInfoFragment.getInstance(server, motd);
                 fragmentManager.popBackStack();
                 fragmentTransaction.replace(R.id.fragment_container, serverInfoFragment);
                 fragmentTransaction.commit();
-
-                connectionListAdapter.notifyDataSetChanged(); // We don't need to reload the dataset unless it's a NEW connection, fix this!
-                connectionListView.setItemChecked(0, true);
-                connectionListView.setItemChecked(0, false);
+                connectionListView.setItemChecked(0, true); // TODO: ska bort (-1?)
                 connectionListView.setSelection(0);
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
             }
@@ -77,7 +74,7 @@ public class CallbackHandler implements ServerCallback {
             public void run() {
                 fragmentTransaction.replace(R.id.fragment_container, new NoConnectionsFragment());
                 fragmentTransaction.commit();
-                connectionListAdapter.notifyDataSetChanged();
+                ConnectionListAdapter.getInstance().notifyDataSetChanged();
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(null);
             }
         });
@@ -122,10 +119,10 @@ public class CallbackHandler implements ServerCallback {
 
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
 
-                connectionListAdapter.notifyDataSetChanged(); // We don't need to reload the dataset unless it's a NEW channel, fix this!
-
-//                connectionListView.setItemChecked(position, true);
-//                connectionListView.setSelection(position);
+                ConnectionListAdapter.getInstance().notifyDataSetChanged(); // We don't need to reload the dataset unless it's a NEW channel, fix this!
+                int position = ConnectionListAdapter.getInstance().getPosition(channel);
+                connectionListView.setItemChecked(position, true);
+                connectionListView.setSelection(position);
             }
         });
     }

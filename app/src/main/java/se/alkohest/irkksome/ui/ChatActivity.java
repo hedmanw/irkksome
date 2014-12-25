@@ -14,23 +14,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.irc.Log;
 import se.alkohest.irkksome.model.api.ServerManager;
-import se.alkohest.irkksome.model.api.UnreadEntity;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.ui.fragment.NoConnectionsFragment;
 import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
-import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class ChatActivity extends Activity implements ChannelFragment.OnMessageSendListener {
     private static final Log LOG = Log.getInstance(ChatActivity.class);
     private static ServerManager serverManager = ServerManager.INSTANCE;
-    private StickyListHeadersListView connectionsList;
+    private ListView connectionsList;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
 
@@ -38,10 +35,10 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_drawers);
-        ConnectionListAdapter.setInstance(this, serverManager.getServers());
+        ConnectionListAdapter.setInstance(this, null);
         CallbackHandler.setInstance(this);
         HilightManager.setInstance(this, serverManager.getUnreadStack());
-        connectionsList = (StickyListHeadersListView) findViewById(R.id.left_drawer_list);
+        connectionsList = (ListView) findViewById(R.id.left_drawer_list);
 
         if (savedInstanceState == null) {
 //            serverManager.loadPersisted(); Either load from DB, or make connections static. Can we ensure all connections are kept alive?
@@ -90,31 +87,15 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
         final View leftDrawer = findViewById(R.id.left_drawer);
 
         connectionsList.setEmptyView(findViewById(android.R.id.empty));
-        final ConnectionListAdapter listAdapter = ConnectionListAdapter.getInstance();
-        connectionsList.setAdapter(listAdapter);
+        connectionsList.setAdapter(ConnectionListAdapter.getInstance());
 
         connectionsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 drawerLayout.closeDrawer(leftDrawer);
-//                final Server selectedServer = listAdapter.getHeader(position);
-//                if (selectedServer != serverManager.getActiveServer()) {
-//                    serverManager.setActiveServer(selectedServer);
-//                }
-                IrcChannel channel = listAdapter.getItem(position);
+                IrcChannel channel = ConnectionListAdapter.getInstance().getItem(position);
                 serverManager.getUnreadStack().remove(channel, serverManager.getActiveServer().getBackingBean());
                 serverManager.getActiveServer().setActiveChannel(channel);
-            }
-        });
-        connectionsList.setOnHeaderClickListener(new StickyListHeadersListView.OnHeaderClickListener() {
-            @Override
-            public void onHeaderClick(StickyListHeadersListView stickyListHeadersListView, View view, int position, long id, boolean currentlySticky) {
-                drawerLayout.closeDrawer(leftDrawer);
-//                final Server selectedServer = listAdapter.getGroup(groupPos);
-//                if (selectedServer != serverManager.getActiveServer()) {
-//                    serverManager.setActiveServer(selectedServer);
-//                }
-                serverManager.getActiveServer().showServer();
             }
         });
 
