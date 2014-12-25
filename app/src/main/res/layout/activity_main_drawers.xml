@@ -18,6 +18,16 @@
             android:orientation="vertical"
             android:id="@+id/left_drawer"
             android:background="#EEE">
+        <Button
+            style="@style/list_item_button"
+            android:text="New connection (TODO)"/>
+        <Button
+            style="@style/list_item_button"
+            android:id="@+id/drawer_label_server"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grayish"/>
         <ListView
                 android:id="@+id/left_drawer_list"
                 android:layout_width="280dp"

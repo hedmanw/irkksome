@@ -107,6 +107,14 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
                 startQuery(nick);
             }
         });
+
+        findViewById(R.id.drawer_label_server).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawer(leftDrawer);
+                serverManager.getActiveServer().showServer();
+            }
+        });
     }
 
     @Override

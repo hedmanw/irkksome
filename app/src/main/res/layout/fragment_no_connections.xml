@@ -14,5 +14,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:id="@+id/button_new_connections"
-        android:text="make new connection"/>
+        android:text="make a new connection"/>
 </LinearLayout>

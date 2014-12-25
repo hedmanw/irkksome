@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import se.alkohest.irkksome.R;
@@ -51,12 +53,15 @@ public class CallbackHandler implements ServerCallback {
 
             @Override
             public void run() {
+                context.findViewById(R.id.drawer_label_server).setVisibility(View.VISIBLE);
                 connectionListView.setAdapter(ConnectionListAdapter.getInstance());
                 ServerInfoFragment serverInfoFragment = ServerInfoFragment.getInstance(server, motd);
                 fragmentManager.popBackStack();
                 fragmentTransaction.replace(R.id.fragment_container, serverInfoFragment);
                 fragmentTransaction.commit();
-                connectionListView.setItemChecked(0, true); // TODO: ska bort (-1?)
+                TextView serverName = (TextView) context.findViewById(R.id.drawer_label_server);
+                serverName.setText(server.getHost());
+                connectionListView.setItemChecked(connectionListView.getCheckedItemPosition(), false);
                 connectionListView.setSelection(0);
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
             }
@@ -65,17 +70,22 @@ public class CallbackHandler implements ServerCallback {
 
     @Override
     public void serverDisconnected() {
-        // TODO - should go to another connected server if present
-        // TODO - should not create a new serverConnectFragment
         context.runOnUiThread(new Runnable() {
             final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
             @Override
             public void run() {
-                fragmentTransaction.replace(R.id.fragment_container, new NoConnectionsFragment());
-                fragmentTransaction.commit();
-                ConnectionListAdapter.getInstance().notifyDataSetChanged();
-                ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(null);
+                // TODO - should go to another connected server if present
+                if (false) {
+                    // Show some other stuff
+                } else {
+                    context.findViewById(R.id.drawer_label_server).setVisibility(View.GONE);
+                    fragmentTransaction.replace(R.id.fragment_container, new NoConnectionsFragment());
+                    fragmentTransaction.commit();
+                    ConnectionListAdapter.getInstance().notifyDataSetChanged();
+                    ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(null);
+                    ((ListView) context.findViewById(R.id.left_drawer_list)).setAdapter(null);
+                }
             }
         });
 
