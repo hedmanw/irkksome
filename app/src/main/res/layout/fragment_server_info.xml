@@ -48,12 +48,10 @@
             android:layout_height="1dp"
             android:background="@color/grayish"/>
     </LinearLayout>
-    <ImageButton
+    <Button
         style="@style/hilight_button"
-        android:id="@+id/hilight_button"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:visibility="gone"/>
+        android:id="@+id/hilight_button"/>
     <!--<ListView-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->

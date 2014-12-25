@@ -2,7 +2,7 @@ package se.alkohest.irkksome.ui;
 
 import android.app.Activity;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.ServerManager;
@@ -44,14 +44,16 @@ public class HilightManager {
     }
 
     public void updateHilightButton() {
-        ImageButton number = (ImageButton) context.findViewById(R.id.hilight_button);
+        Button number = (Button) context.findViewById(R.id.hilight_button);
         if (number != null) {
             if (unreadStack.getHilightCount() > 0) {
                 number.setVisibility(View.VISIBLE);
+                number.setText(unreadStack.getHilightCount() + "");
                 number.setBackground(context.getDrawable(R.drawable.highlightbadge_background_highlight));
             }
             else if (unreadStack.getMessageCount() > 0) {
                 number.setVisibility(View.VISIBLE);
+                number.setText(unreadStack.getMessageCount() + "");
                 number.setBackground(context.getDrawable(R.drawable.highlightbadge_background));
             }
             else {

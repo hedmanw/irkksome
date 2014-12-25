@@ -52,15 +52,17 @@
     </style>
 
     <style name="hilight_button">
-        <item name="android:layout_width">56dp</item>
-        <item name="android:layout_height">56dp</item>
-        <item name="android:elevation">5dp</item>
+        <item name="android:layout_width">@dimen/hilight_button_size</item>
+        <item name="android:layout_height">@dimen/hilight_button_size</item>
+        <item name="android:layout_margin">@dimen/activity_vertical_margin</item>
+        <item name="android:gravity">center</item>
+        <item name="android:elevation">4dp</item>
         <item name="android:textColor">@color/text_color</item>
-        <item name="android:textSize">30sp</item>
-        <item name="android:gravity">end|bottom</item>
-        <item name="android:layout_marginBottom">16dp</item>
-        <item name="android:layout_marginEnd">16dp</item>
-        <item name="android:tint">@android:color/white</item>
+        <item name="android:textSize">40sp</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:background">@drawable/highlightbadge_background</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <!--<item name="android:tint">@android:color/white</item>-->
     </style>
 
     <style name="list_item_button">

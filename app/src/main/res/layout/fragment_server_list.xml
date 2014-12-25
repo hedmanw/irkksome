@@ -7,12 +7,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@android:id/list"/>
-    <ImageButton
+    <Button
         style="@style/hilight_button"
-        android:id="@+id/hilight_button"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:visibility="gone"/>
+        android:id="@+id/hilight_button"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
