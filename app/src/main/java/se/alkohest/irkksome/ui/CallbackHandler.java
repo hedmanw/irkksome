@@ -14,8 +14,8 @@ import se.alkohest.irkksome.model.api.ServerCallback;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
-import se.alkohest.irkksome.ui.fragment.ServerInfoFragment;
-import se.alkohest.irkksome.ui.fragment.ServerListFragment;
+import se.alkohest.irkksome.ui.fragment.server.ServerInfoFragment;
+import se.alkohest.irkksome.ui.fragment.server.ServerListFragment;
 import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
 
 public class CallbackHandler implements ServerCallback {

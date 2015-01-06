@@ -1,4 +1,4 @@
-package se.alkohest.irkksome.ui.fragment;
+package se.alkohest.irkksome.ui.fragment.server;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcServer;
+import se.alkohest.irkksome.ui.fragment.HilightContainedFragment;
 
 public class ServerInfoFragment extends HilightContainedFragment {
     private static IrcServer ircServer;

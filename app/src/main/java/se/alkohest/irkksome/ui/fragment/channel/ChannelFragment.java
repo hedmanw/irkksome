@@ -1,7 +1,6 @@
 package se.alkohest.irkksome.ui.fragment.channel;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -13,7 +12,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,8 +20,6 @@ import java.util.List;
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
-import se.alkohest.irkksome.ui.ChatActivity;
-import se.alkohest.irkksome.ui.HilightManager;
 import se.alkohest.irkksome.ui.fragment.HilightContainedFragment;
 import se.alkohest.irkksome.ui.view.ChatListView;
 

@@ -167,11 +167,11 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
 
     @Override
     public String toString() {
-        return "IrkksomeConnectionEB[ id = " + getId() + "\n" +
-                nickname + '@' + host + ':' + port +
-                ", username='" + username + '\'' + ", realname='" + realname + '\'' + ", useSSL=" + useSSL +
-                ", SSH: [ " + sshUser + '@' + sshHost + ':' + sshPort + ']' +
-                "\n]";
+        if (isIrssiProxyConnection()) {
+            return getSshUser() + "@" + getSshHost();
+        } else {
+            return getHost();
+        }
     }
 
     @Override

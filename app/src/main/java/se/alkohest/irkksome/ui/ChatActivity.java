@@ -21,7 +21,7 @@ import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.irc.Log;
 import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.entity.IrcChannel;
-import se.alkohest.irkksome.ui.fragment.ServerListFragment;
+import se.alkohest.irkksome.ui.fragment.server.ServerListFragment;
 import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
 
 public class ChatActivity extends Activity implements ChannelFragment.OnMessageSendListener {
