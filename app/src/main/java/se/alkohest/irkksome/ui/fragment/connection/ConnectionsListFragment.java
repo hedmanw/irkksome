@@ -3,12 +3,16 @@ package se.alkohest.irkksome.ui.fragment.connection;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+
+import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.SimpleSwipeUndoAdapter;
 
 import java.util.List;
 
@@ -17,11 +21,11 @@ import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
 import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
-public class ConnectionsListFragment extends Fragment implements ConnectionsRecyclerAdapter.LegacyConnectionListener {
+public class ConnectionsListFragment extends Fragment {
     public static final String TAG = "CONNECTION_LIST";
     private final IrkksomeConnectionDAOLocal connectionDAO = new IrkksomeConnectionDAO();
     private OnConnectionSelectedListener listener;
-    private ConnectionsRecyclerAdapter adapter;
+    private LegacyConnectionsAdapter adapter;
     private List<IrkksomeConnectionEB> connectionsForDisplay;
 
     public static ConnectionsListFragment newInstance() {
@@ -36,19 +40,33 @@ public class ConnectionsListFragment extends Fragment implements ConnectionsRecy
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         connectionsForDisplay = connectionDAO.getConnectionsForDisplay();
-        adapter = new ConnectionsRecyclerAdapter(this, connectionsForDisplay);
+        adapter = new LegacyConnectionsAdapter(getActivity(), connectionsForDisplay);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_new_connection_list, container, false);
-        RecyclerView recyclerView = (RecyclerView) inflatedView.findViewById(R.id.legacy_connection_listView);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(adapter);
+        DynamicListView dynamicListView = (DynamicListView) inflatedView.findViewById(R.id.legacy_connection_listView);
+        dynamicListView.setAdapter(adapter);
+        dynamicListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                legacyConnectionClicked(adapter.getItem(position));
+            }
+        });
+
+        SimpleSwipeUndoAdapter simpleSwipeUndoAdapter = new SimpleSwipeUndoAdapter(adapter, getActivity(), new OnDismissCallback() {
+            @Override
+            public void onDismiss(@NonNull final ViewGroup viewGroup, @NonNull final int[] reverseSortedPositions) {
+                for (int position : reverseSortedPositions) {
+                    legacyConnectionRemoved(adapter.getItem(position));
+                }
+            }
+        });
+        simpleSwipeUndoAdapter.setAbsListView(dynamicListView);
+        dynamicListView.setAdapter(simpleSwipeUndoAdapter);
+        dynamicListView.enableSimpleSwipeUndo();
 
         View regularConnectionButton = inflatedView.findViewById(R.id.new_connection_regular);
         regularConnectionButton.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +107,6 @@ public class ConnectionsListFragment extends Fragment implements ConnectionsRecy
         listener = null;
     }
 
-    @Override
     public void legacyConnectionClicked(IrkksomeConnectionEB connectionItem) {
         if (connectionItem.isIrssiProxyConnection()) {
             sendCallback(IrssiProxyConnectionFragment.newInstance(connectionItem));
@@ -99,7 +116,6 @@ public class ConnectionsListFragment extends Fragment implements ConnectionsRecy
         }
     }
 
-    @Override
     public void legacyConnectionRemoved(IrkksomeConnectionEB connectionItem) {
         connectionDAO.delete(connectionItem);
         connectionsForDisplay.remove(connectionItem);

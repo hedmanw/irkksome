@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#757575"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    tools:ignore="overdraw">
+    <TextView
+        android:id="@+id/undo_row_texttv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="10dp"
+        android:text="Deleted"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+    <Button
+        android:id="@+id/undo_row_undobutton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@null"
+        android:padding="10dp"
+        android:text="Undo"
+        android:textColor="#feb500"
+        android:textSize="16sp"
+        android:gravity="center_vertical|end" />
+</LinearLayout>

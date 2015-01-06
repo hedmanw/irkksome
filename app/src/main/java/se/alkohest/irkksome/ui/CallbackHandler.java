@@ -46,7 +46,7 @@ public class CallbackHandler implements ServerCallback {
     @Override
     public void showServerInfo(final IrcServer server, final String motd) {
         userAdapter = new UserSetAdapter(server.getKnownUsers());
-        ConnectionListAdapter.setInstance(context, server);
+        ChannelsAdapter.setInstance(context, server);
 
         context.runOnUiThread(new Runnable() {
             final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -54,7 +54,7 @@ public class CallbackHandler implements ServerCallback {
             @Override
             public void run() {
                 context.findViewById(R.id.drawer_label_server).setVisibility(View.VISIBLE);
-                connectionListView.setAdapter(ConnectionListAdapter.getInstance());
+                connectionListView.setAdapter(ChannelsAdapter.getInstance());
                 ServerInfoFragment serverInfoFragment = ServerInfoFragment.getInstance(server, motd);
                 fragmentManager.popBackStack();
                 fragmentTransaction.replace(R.id.fragment_container, serverInfoFragment);
@@ -82,7 +82,7 @@ public class CallbackHandler implements ServerCallback {
                     context.findViewById(R.id.drawer_label_server).setVisibility(View.GONE);
                     fragmentTransaction.replace(R.id.fragment_container, new ServerListFragment());
                     fragmentTransaction.commit();
-                    ConnectionListAdapter.getInstance().notifyDataSetChanged();
+                    ChannelsAdapter.getInstance().notifyDataSetChanged();
                     ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(null);
                     ((ListView) context.findViewById(R.id.left_drawer_list)).setAdapter(null);
                 }
@@ -129,8 +129,8 @@ public class CallbackHandler implements ServerCallback {
 
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
 
-                ConnectionListAdapter.getInstance().notifyDataSetChanged(); // We don't need to reload the dataset unless it's a NEW channel, fix this!
-                int position = ConnectionListAdapter.getInstance().getPosition(channel);
+                ChannelsAdapter.getInstance().notifyDataSetChanged(); // We don't need to reload the dataset unless it's a NEW channel, fix this!
+                int position = ChannelsAdapter.getInstance().getPosition(channel);
                 connectionListView.setItemChecked(position, true);
                 connectionListView.setSelection(position);
             }

@@ -3,10 +3,10 @@ package se.alkohest.irkksome.model.api.dao;
 import java.util.List;
 
 import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
+import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 import se.alkohest.irkksome.orm.GenericDAO;
 import se.emilsjolander.sprinkles.CursorList;
-import se.emilsjolander.sprinkles.ManyQuery;
 import se.emilsjolander.sprinkles.Query;
 
 /**

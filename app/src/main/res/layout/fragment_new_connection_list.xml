@@ -29,7 +29,7 @@
             android:id="@+id/new_connection_irssi" />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
         android:id="@+id/legacy_connection_listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

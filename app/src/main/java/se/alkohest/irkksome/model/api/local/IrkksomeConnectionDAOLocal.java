@@ -2,6 +2,7 @@ package se.alkohest.irkksome.model.api.local;
 
 import java.util.List;
 
+import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 import se.emilsjolander.sprinkles.ManyQuery;
 

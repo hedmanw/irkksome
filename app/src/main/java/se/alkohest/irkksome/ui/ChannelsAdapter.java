@@ -11,20 +11,20 @@ import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 
-public class ConnectionListAdapter extends BaseAdapter {
-    private static ConnectionListAdapter INSTANCE;
+public class ChannelsAdapter extends BaseAdapter {
+    private static ChannelsAdapter INSTANCE;
     private LayoutInflater inflater;
     private IrcServer server;
 
-    public static ConnectionListAdapter getInstance() {
+    public static ChannelsAdapter getInstance() {
         return INSTANCE;
     }
 
     public static void setInstance(Context context, IrcServer server) {
-        INSTANCE = new ConnectionListAdapter(context, server);
+        INSTANCE = new ChannelsAdapter(context, server);
     }
 
-    private ConnectionListAdapter(Context context, IrcServer server) {
+    private ChannelsAdapter(Context context, IrcServer server) {
         this.inflater = LayoutInflater.from(context);
         this.server = server;
         notifyDataSetChanged();
