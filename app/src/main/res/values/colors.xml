@@ -3,6 +3,7 @@
     <color name="grayish">#FF58585B</color>
     <color name="black">#FF000000</color>
     <color name="tip_font_color">#FF7d7d7d</color>
+    <color name="light_grey">#e6e6e6</color>
 
     <color name="primary">#ff34a5dd</color>
     <color name="primary_dark">#ff0678be</color>

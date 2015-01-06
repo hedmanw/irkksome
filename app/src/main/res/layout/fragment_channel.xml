@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/light_grey"
     tools:context=".ui.ChannelFragment">
 
     <se.alkohest.irkksome.ui.view.ChatListView
@@ -9,43 +10,31 @@
         android:layout_height="wrap_content"
         android:id="@+id/listView"
         android:layout_alignParentTop="true"
-        android:layout_above="@android:id/custom"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#FFC0C0C0"
-        android:id="@android:id/custom"
         android:layout_above="@android:id/inputArea"/>
     <Button
         style="@style/hilight_button"
-        android:layout_above="@android:id/custom"
+        android:layout_above="@android:id/inputArea"
         android:id="@+id/hilight_button"/>
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@android:id/inputArea"
+        android:layout_marginBottom="@dimen/small_horizontal_margin"
+        android:layout_marginLeft="@dimen/small_horizontal_margin"
+        android:layout_marginRight="@dimen/small_horizontal_margin"
         android:layout_alignParentBottom="true">
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/send_button"
-            android:padding="4dp"
-            android:src="@drawable/ic_menu_send"
-            android:layout_alignParentRight="true"
-            android:onClick="sendMessage" />
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColorHint="#FFC0C0C0"
             android:inputType="textCapSentences"
             android:textSize="18sp"
-            android:background="@drawable/transparent"
+            android:background="@drawable/chat_text_view"
             android:padding="8dp"
             android:singleLine="true"
             android:imeOptions="actionSend"
             android:id="@+id/input_field"
-            android:layout_toLeftOf="@id/send_button"
             android:clickable="false" />
     </RelativeLayout>
 </RelativeLayout>
