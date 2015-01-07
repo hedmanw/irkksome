@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import se.alkohest.irkksome.R;
+import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.api.ServerCallback;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
@@ -44,9 +45,10 @@ public class CallbackHandler implements ServerCallback {
     }
 
     @Override
-    public void showServerInfo(final IrcServer server, final String motd) {
-        userAdapter = new UserSetAdapter(server.getKnownUsers());
-        ChannelsAdapter.setInstance(context, server);
+    public void showServerInfo(final Server server) {
+        final IrcServer ircServer = server.getBackingBean();
+        userAdapter = new UserSetAdapter(ircServer.getKnownUsers());
+        ChannelsAdapter.setInstance(context, ircServer);
 
         context.runOnUiThread(new Runnable() {
             final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -55,12 +57,12 @@ public class CallbackHandler implements ServerCallback {
             public void run() {
                 context.findViewById(R.id.drawer_label_server).setVisibility(View.VISIBLE);
                 connectionListView.setAdapter(ChannelsAdapter.getInstance());
-                ServerInfoFragment serverInfoFragment = ServerInfoFragment.getInstance(server, motd);
+                ServerInfoFragment serverInfoFragment = ServerInfoFragment.getInstance(server);
                 fragmentManager.popBackStack();
                 fragmentTransaction.replace(R.id.fragment_container, serverInfoFragment);
                 fragmentTransaction.commit();
                 TextView serverName = (TextView) context.findViewById(R.id.drawer_label_server);
-                serverName.setText(server.getHost());
+                serverName.setText(ircServer.getHost());
                 connectionListView.setItemChecked(connectionListView.getCheckedItemPosition(), false);
                 connectionListView.setSelection(0);
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);

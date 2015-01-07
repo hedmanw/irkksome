@@ -112,7 +112,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
             listener.setActiveChannel(activeChannel);
         } else {
             activeChannel = null;
-            listener.showServerInfo(ircServer, motd);
+            listener.showServerInfo(this);
         }
     }
 
@@ -156,7 +156,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void showServer() {
-        listener.showServerInfo(ircServer, motd);
+        listener.showServerInfo(this);
         activeChannel = null;
     }
 

@@ -9,17 +9,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
-import se.alkohest.irkksome.model.entity.IrcServer;
+import se.alkohest.irkksome.irc.ConnectionData;
+import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.ui.fragment.HilightContainedFragment;
 
 public class ServerInfoFragment extends HilightContainedFragment {
-    private static IrcServer ircServer;
+    private static Server server;
     private static String motd;
 
-    public static ServerInfoFragment getInstance(IrcServer ircServer, String motd) {
+    public static ServerInfoFragment getInstance(Server server) {
         final ServerInfoFragment serverInfoFragment = new ServerInfoFragment();
-        ServerInfoFragment.ircServer = ircServer;
-        ServerInfoFragment.motd = motd.trim();
+        ServerInfoFragment.server = server;
+        ServerInfoFragment.motd = server.getMotd().trim();
         return serverInfoFragment;
     }
 
@@ -31,7 +32,8 @@ public class ServerInfoFragment extends HilightContainedFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        getActivity().setTitle(ircServer.getHost());
+        ConnectionData connectionData = server.getConnectionData();
+        getActivity().setTitle(connectionData.toString());
     }
 
     @Override
@@ -44,12 +46,12 @@ public class ServerInfoFragment extends HilightContainedFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_server_info, container, false);
-        if (ircServer != null) {
+        if (server != null) {
             TextView hostname = (TextView) inflatedView.findViewById(R.id.server_info_hostname);
             TextView nickname = (TextView) inflatedView.findViewById(R.id.server_info_nickname);
             TextView motdView = (TextView) inflatedView.findViewById(R.id.server_motd);
-            hostname.setText(ircServer.getHost());
-            nickname.setText(ircServer.getSelf().getName());
+            hostname.setText(server.getBackingBean().getHost());
+            nickname.setText(server.getBackingBean().getSelf().getName());
             if (motd.length() > 20) {
                 motdView.setText(motd.substring(0, 20) + "[...]");
             }

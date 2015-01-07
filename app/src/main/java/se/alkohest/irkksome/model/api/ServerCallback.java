@@ -9,7 +9,7 @@ import se.alkohest.irkksome.model.entity.IrcServer;
  */
 public interface ServerCallback {
 
-    public void showServerInfo(IrcServer server, String motd);
+    public void showServerInfo(Server server);
 
     public void serverDisconnected();
 
