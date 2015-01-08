@@ -115,8 +115,8 @@ sub signals_add {
     #Irssi::signal_add_last('message part', 'part');
     #Irssi::signal_add_last('message quit', 'quit');
     #Irssi::signal_add_last('message kick', 'kick');
-    Irssi::signal_add_last('message nick', 'nick');
-    Irssi::signal_add_last('message own_nick', 'nick');
+    #Irssi::signal_add_last('message nick', 'nick');
+    #Irssi::signal_add_last('message own_nick', 'nick');
     #Irssi::signal_add_last('message invite', 'invite');
     #Irssi::signal_add_last('message topic', 'topic');
 }
@@ -131,8 +131,8 @@ sub signals_remove {
     #Irssi::signal_remove('message part', 'part');
     #Irssi::signal_remove('message quit', 'quit');
     #Irssi::signal_remove('message kick', 'kick');
-    Irssi::signal_remove('message nick', 'nick');
-    Irssi::signal_remove('message own_nick', 'nick');
+    #Irssi::signal_remove('message nick', 'nick');
+    #Irssi::signal_remove('message own_nick', 'nick');
     #Irssi::signal_remove('message invite', 'invite');
     #Irssi::signal_remove('message topic', 'topic');
 }
