@@ -1,8 +1,13 @@
 package se.alkohest.irkksome.irc;
 
+import java.security.KeyPair;
 import java.util.Date;
 
 public interface ConnectionData {
+    public KeyPair getKeyPair();
+
+    public void setKeyPair(KeyPair kp);
+
     public String getPassword();
 
     public void setPassword(String password);

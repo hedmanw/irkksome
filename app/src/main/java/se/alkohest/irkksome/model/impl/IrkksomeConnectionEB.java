@@ -1,5 +1,6 @@
 package se.alkohest.irkksome.model.impl;
 
+import java.security.KeyPair;
 import java.util.Date;
 
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
@@ -48,6 +49,16 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
     private boolean SSHKeySaved;
     @Column("lastUsed")
     private Date lastUsed;
+
+    private KeyPair keyPair;
+
+    public KeyPair getKeyPair() {
+        return keyPair;
+    }
+
+    public void setKeyPair(KeyPair kp) {
+        keyPair = kp;
+    }
 
     public String getPassword() {
         return password;
