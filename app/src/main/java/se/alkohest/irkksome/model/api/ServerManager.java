@@ -42,7 +42,7 @@ public class ServerManager implements ServerConnectionListener, HilightListener 
     }
 
     public Server establishConnection(IrkksomeConnection irkksomeConnection) {
-        final IrcServer ircServer = serverDAO.create(irkksomeConnection.getHost());
+        final IrcServer ircServer = serverDAO.create();
         Server server = new ServerImpl(ircServer, irkksomeConnection);
         server.addServerConnectionListener(this);
         server.setHilightListener(this);

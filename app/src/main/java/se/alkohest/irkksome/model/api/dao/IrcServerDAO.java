@@ -18,11 +18,10 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB> implements IrcServerDA
     private IrcUserDAO userDAO = new IrcUserDAO();
 
     @Override
-    public IrcServer create(String host) {
+    public IrcServer create() {
         IrcServer ircServer = new IrcServerEB();
         ircServer.setConnectedChannels(new ArrayList<IrcChannel>());
         ircServer.setKnownUsers(new HashSet<IrcUser>());
-        ircServer.setHost(host);
         ircServer.setLastMessageTime(new Date(0));
         return ircServer;
     }
