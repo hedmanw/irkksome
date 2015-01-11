@@ -15,6 +15,6 @@ public class IrcProtocolFactory {
     }
 
     private static Connection getSSHConnection(ConnectionData data) {
-        return new SSHConnection(data, NormalConnection.class);
+        return new SSHConnection(data);
     }
 }

@@ -39,24 +39,15 @@ public class SSHConnection implements Connection, HostKeyVerifier {
     private SSHClient ssh;
     private ServerSocket serverSocket;
 
-    private final Log LOG = Log.getInstance(this.getClass());
-
-    public SSHConnection(ConnectionData data,
-                         Class<? extends Connection> socketConnection) {
+    public SSHConnection(ConnectionData data) {
         this.sshAddress = data.getSshHost();
         this.sshUser = data.getSshUser();
         this.sshPass = data.getSshPass();
         this.ircHost = data.getHost();
         this.ircPort = data.getPort();
-        this.sshKeyCreated = data.isSSHKeySaved();
+        this.sshKeyCreated = false; //data.isSSHKeySaved();
         this.keyPair = data.getKeyPair();
-        try {
-            this.socketConnection = socketConnection.getConstructor(String.class, int.class)
-                    .newInstance(LOCALHOST, localPort);
-        } catch (InstantiationException | IllegalAccessException |
-                    NoSuchMethodException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        this.socketConnection = new NormalConnection(LOCALHOST, localPort);
     }
 
     @Override
@@ -97,13 +88,12 @@ public class SSHConnection implements Connection, HostKeyVerifier {
 
         if (!sshKeyCreated) {
             ssh.authPassword(sshUser, sshPass);
-            uploadPubKey(ssh);
+//            uploadPubKey(ssh);
         } else {
             // auth key
         }
 
-        final LocalPortForwarder.Parameters params
-                = new LocalPortForwarder.Parameters(LOCALHOST, localPort, ircHost, ircPort);
+        final LocalPortForwarder.Parameters params = new LocalPortForwarder.Parameters(LOCALHOST, localPort, ircHost, ircPort);
 
         serverSocket = new ServerSocket();
         serverSocket.setReuseAddress(true);
