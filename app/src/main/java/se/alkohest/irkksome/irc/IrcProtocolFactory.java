@@ -14,7 +14,7 @@ public class IrcProtocolFactory {
         return new IrcProtocolAdapter(new NormalConnection(data.getHost(), data.getPort()), bh);
     }
 
-    private static Connection getSSHConnection(ConnectionData data) {
+    private static ServerConnection getSSHConnection(ConnectionData data) {
         return new SSHConnection(data);
     }
 }

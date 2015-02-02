@@ -2,8 +2,8 @@ package se.alkohest.irkksome;
 
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
-import se.alkohest.irkksome.irc.Log;
 import se.emilsjolander.sprinkles.Migration;
 import se.emilsjolander.sprinkles.Sprinkles;
 
@@ -11,7 +11,6 @@ import se.emilsjolander.sprinkles.Sprinkles;
  * Created by wilhelm 2014-10-28.
  */
 public class IrkksomeApplication extends Application {
-    private static final Log log = Log.getInstance(IrkksomeApplication.class);
 
     @Override
     public void onCreate() {
@@ -34,13 +33,13 @@ public class IrkksomeApplication extends Application {
 
     private static void performMigration(SQLiteDatabase sqLiteDatabase, String command) {
         long time = System.currentTimeMillis();
-        log.e("STARTED MIGRATION...");
+        Log.d("irkksome", "STARTED MIGRATION...");
         execute(sqLiteDatabase, command);
-        log.e("FINISHED MIGRATION. Took " + (System.currentTimeMillis() - time) + " ms.");
+        Log.d("irkksome", "FINISHED MIGRATION. Took " + (System.currentTimeMillis() - time) + " ms.");
     }
 
     private static void execute(SQLiteDatabase sqLiteDatabase, String command) {
-        log.i("Executing: " + command);
+        Log.d("irkksome", "Executing: " + command);
         sqLiteDatabase.execSQL(command);
     }
 }

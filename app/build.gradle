@@ -25,8 +25,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'org.slf4j:slf4j-android:1.7.7'
-    compile 'net.schmizz:sshj:0.10.0'
+    compile 'com.trilead:trilead-ssh2:1.0.0-build217'
     compile 'com.android.support:appcompat-v7:21.0.2'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.nhaarman.listviewanimations:lib-core:3.1.0@aar'
