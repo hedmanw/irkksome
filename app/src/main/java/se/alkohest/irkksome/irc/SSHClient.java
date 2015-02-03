@@ -13,6 +13,7 @@ import com.trilead.ssh2.log.Logger;
 import java.io.IOException;
 import java.util.Random;
 
+// TODO: Close everything on failures?
 public abstract class SSHClient implements ConnectionMonitor {
     public static final String AUTH_PUBLIC_KEY = "publickey";
     public static final String AUTH_PASSWORD = "password";
@@ -21,7 +22,7 @@ public abstract class SSHClient implements ConnectionMonitor {
     private static final boolean DEBUG_SSH = true;
     private static final int MIN_PORT = 49152;
     private static final int MAX_PORT = 65535;
-    private static final int AUTH_ATTEMPTS = 10;
+    private static final int AUTH_ATTEMPTS = 4;
 
     protected final int localPort = getRandomLocalPort();
     protected ConnectionData connectionData;
@@ -63,50 +64,54 @@ public abstract class SSHClient implements ConnectionMonitor {
         }
 
         if (shouldAuth) {
-            int tries = 0;
-            boolean shouldRetryAuth = true;
-            while (connected && shouldRetryAuth) {
-                authenticate();
-                tries++;
-
-                shouldRetryAuth = tries < AUTH_ATTEMPTS && !connection.isAuthenticationComplete() ;
-                if (shouldRetryAuth) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        Log.e(TAG, "Could not authenticate: (auth tries = " + tries + ")...", e);
-                    }
-                }
+            if (authLoop()) {
+                postAuthAction();
             }
-
-
+//            else {
+//                Throw auth error?
+//            }
         }
+        // Throw connection error?
     }
 
-    private void authenticate() {
-        try {
-            if (connection.authenticateWithNone(connectionData.getSshUser())) {
-                postAuthAction();
-                return;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            /*if (connection.isAuthMethodAvailable(connectionData.getSshUser(), AUTH_PUBLIC_KEY)) {
-                if (connection.authenticateWithPublicKey(connectionData.getSshUser(), connectionData.getKeyPair().getPrivate(), null)) {
-                    postAuthAction();
+    private boolean authLoop() {
+        int tries = 0;
+        boolean shouldRetryAuth = true;
+        while (connected && shouldRetryAuth) {
+            authenticate();
+            tries++;
+            shouldRetryAuth = tries < AUTH_ATTEMPTS && !connection.isAuthenticationComplete() ;
+            if (shouldRetryAuth) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    // just die
                 }
             }
-            else*/
+        }
+        return connection.isAuthenticationComplete();
+    }
+
+    private boolean authenticate() {
+        try {
+            if (connection.authenticateWithNone(connectionData.getSshUser())) {
+                return true;
+            }
+            if (connection.isAuthMethodAvailable(connectionData.getSshUser(), AUTH_PUBLIC_KEY)) {
+                if (connectionData.getKeyPair() != null &&
+                        connection.authenticateWithPublicKey(connectionData.getSshUser(), connectionData.getKeyPair().getPrivate().toString().toCharArray(), null)) {
+                    return true;
+                }
+            }
             if (connection.isAuthMethodAvailable(connectionData.getSshUser(), AUTH_PASSWORD)) {
                 if (connectionData.getSshPass() != null && connection.authenticateWithPassword(connectionData.getSshUser(), connectionData.getSshPass())) {
-                    postAuthAction();
+                    return true;
                 }
             }
         } catch (IOException e) {
             Log.e(TAG, "AUTH exception", e);
         }
+        return false;
     }
 
     protected abstract void postAuthAction();

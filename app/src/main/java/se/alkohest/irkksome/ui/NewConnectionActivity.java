@@ -53,11 +53,11 @@ public class NewConnectionActivity extends Activity implements ConnectionsListFr
         ServerManager serverManager = ServerManager.INSTANCE;
         if (irkksomeConnection.isIrssiProxyConnection()) {
             KeyPairHelper kph = new KeyPairHelper(this);
-            try {
-                irkksomeConnection.setKeyPair(kph.getKeyPair());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                irkksomeConnection.setKeyPair(kph.getKeyPair());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
         final Server pendingServer = serverManager.establishConnection(irkksomeConnection);
         pendingServer.addServerConnectionListener(this);
