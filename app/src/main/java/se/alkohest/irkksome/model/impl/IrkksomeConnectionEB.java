@@ -45,8 +45,8 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
     private String sshPass = "";
     @Column("sshPort")
     private int sshPort = 22;
-    @Column("sshKeySaved")
-    private boolean SSHKeySaved;
+    @Column("useKeyPair")
+    private boolean useKeyPair;
     @Column("lastUsed")
     private Date lastUsed;
 
@@ -77,13 +77,13 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
     }
 
     @Override
-    public boolean isSSHKeySaved() {
-        return SSHKeySaved;
+    public boolean isUseKeyPair() {
+        return useKeyPair;
     }
 
     @Override
-    public void setSSHKeySaved(boolean saved) {
-        SSHKeySaved = saved;
+    public void setUseKeyPair(boolean saved) {
+        useKeyPair = saved;
     }
 
     public int getSshPort() {
@@ -196,12 +196,14 @@ public class IrkksomeConnectionEB extends AbstractBean implements IrkksomeConnec
         if (sshPort != that.sshPort) return false;
         if (useSSH != that.useSSH) return false;
         if (useSSL != that.useSSL) return false;
+        if (useKeyPair != that.useKeyPair) return false;
         if (host != null ? !host.equals(that.host) : that.host != null) return false;
         if (nickname != null ? !nickname.equals(that.nickname) : that.nickname != null)
             return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
         if (!realname.equals(that.realname)) return false;
         if (sshHost != null ? !sshHost.equals(that.sshHost) : that.sshHost != null) return false;
+//        Never uncomment this! It is meant to serve as a reminder that ssh password is not taken into account!
 //        if (sshPass != null ? !sshPass.equals(that.sshPass) : that.sshPass != null) return false;
         if (sshUser != null ? !sshUser.equals(that.sshUser) : that.sshUser != null) return false;
         if (!username.equals(that.username)) return false;

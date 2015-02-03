@@ -15,18 +15,12 @@ public class IrkksomeApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        final String createStatement = "CREATE TABLE Connection(id INTEGER PRIMARY KEY AUTOINCREMENT, host TEXT NOT NULL, port INTEGER NOT NULL, nickname TEXT NOT NULL, username TEXT, realname TEXT, useSSL INTEGER NOT NULL, useSSH INTEGER NOT NULL, sshHost TEXT, sshUser TEXT, sshPort INTEGER NOT NULL, sshKeySaved INTEGER NOT NULL, lastUsed INTEGER NOT NULL)";
+        final String createStatement = "CREATE TABLE Connection(id INTEGER PRIMARY KEY AUTOINCREMENT, host TEXT NOT NULL, port INTEGER NOT NULL, nickname TEXT NOT NULL, username TEXT, realname TEXT, useSSL INTEGER NOT NULL, useSSH INTEGER NOT NULL, sshHost TEXT, sshUser TEXT, sshPort INTEGER NOT NULL, lastUsed INTEGER NOT NULL, irssiPassword TEXT, useKeyPair INTEGER NOT NULL);";
         Sprinkles sprinkles = Sprinkles.init(getApplicationContext());
         sprinkles.addMigration(new Migration() {
             @Override
             protected void doMigration(SQLiteDatabase sqLiteDatabase) {
                 performMigration(sqLiteDatabase, createStatement);
-            }
-        });
-        sprinkles.addMigration(new Migration() {
-            @Override
-            protected void doMigration(SQLiteDatabase sqLiteDatabase) {
-                performMigration(sqLiteDatabase, "ALTER TABLE Connection ADD COLUMN irssiPassword TEXT;");
             }
         });
     }

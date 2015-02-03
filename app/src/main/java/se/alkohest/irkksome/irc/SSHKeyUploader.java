@@ -2,6 +2,7 @@ package se.alkohest.irkksome.irc;
 
 import com.trilead.ssh2.Session;
 
+import java.io.IOException;
 import java.security.spec.X509EncodedKeySpec;
 
 public class SSHKeyUploader extends SSHClient {
@@ -9,13 +10,20 @@ public class SSHKeyUploader extends SSHClient {
         super(data);
     }
 
-    private void uploadPubKey() {
-//        final Session session = ssh.startSession();
-//        X509EncodedKeySpec key = new X509EncodedKeySpec(keyPair.getPublic().getEncoded());
-//        final Session.Command cmd = session.exec("echo -e '\n' " + key.getEncoded() + " >> ~/.ssh/authorized_keys");
+    public void establishAndUpload() {
+        establishConnection();
+    }
 
-//        cmd.join(5, TimeUnit.SECONDS);
-//        session.close();
+    private void uploadPubKey() {
+        try {
+            final Session session = connection.openSession();
+//            X509EncodedKeySpec key = new X509EncodedKeySpec(connectionData.getKeyPair().getPublic().getEncoded());
+//            session.execCommand("echo -e '\n' " + key.getEncoded() + " >> ~/.ssh/authorized_keys");
+            session.execCommand("echo -e '\n' hej >> ~/irkksome-test.txt");
+            session.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -27,7 +35,7 @@ public class SSHKeyUploader extends SSHClient {
     @Override
     protected void closeAll() {
         if (connected) {
-            // close session
+            // close session?
         }
 
         super.closeAll();

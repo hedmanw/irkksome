@@ -16,9 +16,9 @@ public interface ConnectionData {
 
     public void setUseSSH(boolean useSSH);
 
-    public boolean isSSHKeySaved();
+    public boolean isUseKeyPair();
 
-    public void setSSHKeySaved(boolean saved);
+    public void setUseKeyPair(boolean saved);
 
     public int getSshPort();
 
