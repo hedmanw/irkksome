@@ -28,6 +28,7 @@ public class SSHConnection implements ServerConnection, ConnectionMonitor {
     private Connection connection;
     private ConnectionInfo connectionInfo;
     private boolean connected;
+    private LocalPortForwarder portForwarder;
 
     public SSHConnection(ConnectionData data) {
         this.connectionData = data;
@@ -36,14 +37,14 @@ public class SSHConnection implements ServerConnection, ConnectionMonitor {
     }
 
     @Override
-    public void connect() throws IOException{
+    public void connect() throws IOException {
         connected = true;
         connection = new Connection(connectionData.getSshHost(), connectionData.getSshPort());
         connection.addConnectionMonitor(this);
         DebugLogger logger = new DebugLogger() {
             @Override
             public void log(int level, String className, String message) {
-                Log.e(TAG, message);
+                Log.i(TAG, message);
             }
         };
         Logger.enabled = true;
@@ -114,8 +115,7 @@ public class SSHConnection implements ServerConnection, ConnectionMonitor {
 
     private void finishConnection() {
         try {
-            LocalPortForwarder lpf = connection.createLocalPortForwarder(new InetSocketAddress(InetAddress.getLocalHost(), localPort), connectionData.getHost(), connectionData.getPort());
-
+            portForwarder = connection.createLocalPortForwarder(new InetSocketAddress(InetAddress.getLocalHost(), localPort), connectionData.getHost(), connectionData.getPort());
         } catch (IOException e) {
             Log.e(TAG, "could not create portforward", e);
         }
@@ -129,10 +129,18 @@ public class SSHConnection implements ServerConnection, ConnectionMonitor {
 
     @Override
     public void close() {
-        connected = false;
-
-        if (connection != null) {
-            connection.close();
+        if (connected) {
+            connected = false;
+            if (portForwarder != null) {
+                try {
+                    portForwarder.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                connection.close();
+            }
         }
     }
 
@@ -153,7 +161,7 @@ public class SSHConnection implements ServerConnection, ConnectionMonitor {
     @Override
     public void connectionLost(Throwable reason) {
         close();
-        Log.e(TAG, "Connection lost: ", reason);
+        Log.i(TAG, "Connection lost: ", reason);
     }
 
     public class HostKeyVerifier implements ServerHostKeyVerifier {
