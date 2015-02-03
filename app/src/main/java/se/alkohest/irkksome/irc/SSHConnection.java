@@ -62,14 +62,18 @@ public class SSHConnection implements ServerConnection, ConnectionMonitor {
 
         if (shouldAuth) {
             int tries = 0;
-            while (connected && !connection.isAuthenticationComplete() && tries < AUTH_TRIES) {
+            boolean shouldRetryAuth = true;
+            while (connected && shouldRetryAuth) {
                 authenticate();
                 tries++;
 
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    Log.e(TAG, "Could not authenticate: (auth tries = " + tries + ")...", e);
+                shouldRetryAuth = tries < AUTH_TRIES && !connection.isAuthenticationComplete() ;
+                if (shouldRetryAuth) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Log.e(TAG, "Could not authenticate: (auth tries = " + tries + ")...", e);
+                    }
                 }
             }
 
