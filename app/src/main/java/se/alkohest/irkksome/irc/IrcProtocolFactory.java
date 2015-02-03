@@ -11,10 +11,14 @@ public class IrcProtocolFactory {
         if (data.isUseSSH()) {
             return new IrcProtocolAdapter(getSSHConnection(data), bh);
         }
-        return new IrcProtocolAdapter(new NormalConnection(data.getHost(), data.getPort()), bh);
+        return new IrcProtocolAdapter(getNormalConnection(data), bh);
     }
 
     private static ServerConnection getSSHConnection(ConnectionData data) {
         return new SSHConnection(data);
+    }
+
+    private static ServerConnection getNormalConnection(ConnectionData data) {
+        return new NormalConnection(data.getHost(), data.getPort());
     }
 }

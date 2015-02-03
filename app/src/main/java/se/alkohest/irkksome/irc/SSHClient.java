@@ -1,0 +1,146 @@
+package se.alkohest.irkksome.irc;
+
+import android.util.Log;
+
+import com.trilead.ssh2.Connection;
+import com.trilead.ssh2.ConnectionInfo;
+import com.trilead.ssh2.ConnectionMonitor;
+import com.trilead.ssh2.DebugLogger;
+import com.trilead.ssh2.LocalPortForwarder;
+import com.trilead.ssh2.ServerHostKeyVerifier;
+import com.trilead.ssh2.log.Logger;
+
+import java.io.IOException;
+import java.util.Random;
+
+public abstract class SSHClient implements ConnectionMonitor {
+    public static final String AUTH_PUBLIC_KEY = "publickey";
+    public static final String AUTH_PASSWORD = "password";
+    public static final String TAG = "irkksomeSSH";
+    private static final Random PORTFORWARD_RANDOM = new Random();
+    private static final boolean DEBUG_SSH = true;
+    private static final int MIN_PORT = 49152;
+    private static final int MAX_PORT = 65535;
+    private static final int AUTH_ATTEMPTS = 10;
+
+    protected final int localPort = getRandomLocalPort();
+    protected ConnectionData connectionData;
+    protected LocalPortForwarder portForwarder;
+    protected Connection connection;
+    protected boolean connected;
+    protected ConnectionInfo connectionInfo;
+
+    static {
+        if (DEBUG_SSH) {
+            DebugLogger logger = new DebugLogger() {
+                @Override
+                public void log(int level, String className, String message) {
+                    Log.i(TAG, message);
+                }
+            };
+            Logger.enabled = true;
+            Logger.logger = logger;
+        }
+    }
+
+    public SSHClient(ConnectionData data) {
+        this.connectionData = data;
+    }
+
+    protected void establishConnection() {
+        connected = true;
+        connection = new Connection(connectionData.getSshHost(), connectionData.getSshPort());
+        connection.addConnectionMonitor(this);
+
+        boolean shouldAuth = true;
+
+        try {
+            connectionInfo = connection.connect(new HostKeyVerifier());
+        } catch (IOException e) {
+            closeAll();
+            Log.e(TAG, e.getCause().getMessage());
+            shouldAuth = false;
+        }
+
+        if (shouldAuth) {
+            int tries = 0;
+            boolean shouldRetryAuth = true;
+            while (connected && shouldRetryAuth) {
+                authenticate();
+                tries++;
+
+                shouldRetryAuth = tries < AUTH_ATTEMPTS && !connection.isAuthenticationComplete() ;
+                if (shouldRetryAuth) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        Log.e(TAG, "Could not authenticate: (auth tries = " + tries + ")...", e);
+                    }
+                }
+            }
+
+
+        }
+    }
+
+    private void authenticate() {
+        try {
+            if (connection.authenticateWithNone(connectionData.getSshUser())) {
+                postAuthAction();
+                return;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            /*if (connection.isAuthMethodAvailable(connectionData.getSshUser(), AUTH_PUBLIC_KEY)) {
+                if (connection.authenticateWithPublicKey(connectionData.getSshUser(), connectionData.getKeyPair().getPrivate(), null)) {
+                    postAuthAction();
+                }
+            }
+            else*/
+            if (connection.isAuthMethodAvailable(connectionData.getSshUser(), AUTH_PASSWORD)) {
+                if (connectionData.getSshPass() != null && connection.authenticateWithPassword(connectionData.getSshUser(), connectionData.getSshPass())) {
+                    postAuthAction();
+                }
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "AUTH exception", e);
+        }
+    }
+
+    protected abstract void postAuthAction();
+
+    protected void closeAll() {
+        if (connected) {
+            connected = false;
+            if (portForwarder != null) {
+                try {
+                    portForwarder.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
+
+    @Override
+    public void connectionLost(Throwable reason) {
+        closeAll();
+        Log.i(TAG, "Connection lost: ", reason);
+    }
+
+    private static int getRandomLocalPort() {
+        return PORTFORWARD_RANDOM.nextInt(MAX_PORT - MIN_PORT) + MIN_PORT;
+    }
+
+    public class HostKeyVerifier implements ServerHostKeyVerifier {
+        @Override
+        public boolean verifyServerHostKey(String hostname, int port, String serverHostKeyAlgorithm, byte[] serverHostKey) throws IOException {
+            return true;
+        }
+    }
+}
