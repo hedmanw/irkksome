@@ -32,8 +32,7 @@ public class ServerInfoFragment extends HilightContainedFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        ConnectionData connectionData = server.getConnectionData();
-        getActivity().setTitle(connectionData.toString());
+        getActivity().setTitle(server.getBackingBean().getHost());
     }
 
     @Override

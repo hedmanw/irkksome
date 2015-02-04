@@ -8,7 +8,7 @@ import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.model.impl.IrcServerEB;
 
 public interface IrcServerDAOLocal {
-    public IrcServer create(String host);
+    public IrcServer create();
 
     public IrcChannel getChannel(IrcServer ircServer, String channelName);
 

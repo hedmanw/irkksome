@@ -175,6 +175,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public void serverRegistered(String server, String nick) {
         // TODO - this should maybe check if your nick has changed and change it instead of creating new
+        ircServer.setHost(server);
         ircServer.setSelf(serverDAO.getUser(ircServer, nick));
         showServer();
         for (IrcChannel channel : getBackingBean().getConnectedChannels()) {

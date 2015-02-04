@@ -53,7 +53,12 @@ public class ConnectedServersAdapter extends BaseAdapter {
         TextView serverName = (TextView) convertView.findViewById(android.R.id.text1);
         serverName.setText(connectionData.toString());
         TextView infoText = (TextView) convertView.findViewById(android.R.id.text2);
-        infoText.setText(getItem(position).getBackingBean().getConnectedChannels().size() + " connected channels.");
+        final int channels = getItem(position).getBackingBean().getConnectedChannels().size();
+        String channelLabel = " connected channels";
+        if (channels == 1) {
+            channelLabel = " connected channel";
+        }
+        infoText.setText(channels + channelLabel);
         return convertView;
     }
 }
