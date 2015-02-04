@@ -98,8 +98,10 @@ public abstract class SSHClient implements ConnectionMonitor {
                 return true;
             }
             if (connection.isAuthMethodAvailable(connectionData.getSshUser(), AUTH_PUBLIC_KEY)) {
-                if (connectionData.getKeyPair() != null &&
-                        connection.authenticateWithPublicKey(connectionData.getSshUser(), connectionData.getKeyPair().getPrivate().toString().toCharArray(), null)) {
+                // ladda in nyckeln på något vis
+                // autha med nyckel baserad på något sorts val
+//                final String pemKey = "-----BEGIN CERTIFICATE-----'\n'" + pubKey + "'\n'-----END CERTIFICATE-----";
+                if (connection.authenticateWithPublicKey(connectionData.getSshUser(), connectionData.getKeyPair().getPrivate().toString().toCharArray(), null)) {
                     return true;
                 }
             }
@@ -116,7 +118,7 @@ public abstract class SSHClient implements ConnectionMonitor {
 
     protected abstract void postAuthAction();
 
-    protected void closeAll() {
+    public void closeAll() {
         if (connected) {
             connected = false;
             if (portForwarder != null) {

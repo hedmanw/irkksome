@@ -1,9 +1,12 @@
 package se.alkohest.irkksome.irc;
 
+import android.util.Base64;
+
 import com.trilead.ssh2.Session;
 
 import java.io.IOException;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Arrays;
 
 public class SSHKeyUploader extends SSHClient {
     public SSHKeyUploader(ConnectionData data) {
@@ -15,29 +18,25 @@ public class SSHKeyUploader extends SSHClient {
     }
 
     private void uploadPubKey() {
+        final String pubKey = makePubKey(connectionData.getKeyPair().getPublic().getEncoded());
+
         try {
             final Session session = connection.openSession();
-//            X509EncodedKeySpec key = new X509EncodedKeySpec(connectionData.getKeyPair().getPublic().getEncoded());
 //            session.execCommand("echo -e '\n' " + key.getEncoded() + " >> ~/.ssh/authorized_keys");
-            session.execCommand("echo -e '\n' hej >> ~/irkksome-test.txt");
+
+            session.execCommand("echo -e " + pubKey + " >> ~/.ssh/authorized_keys");
             session.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    private String makePubKey(byte[] encoded) {
+        return "ssh-dsa " + Base64.encodeToString(encoded, Base64.NO_WRAP) + " irkksome";
+    }
 
     @Override
     protected void postAuthAction() {
         uploadPubKey();
-    }
-
-    @Override
-    protected void closeAll() {
-        if (connected) {
-            // close session?
-        }
-
-        super.closeAll();
     }
 }

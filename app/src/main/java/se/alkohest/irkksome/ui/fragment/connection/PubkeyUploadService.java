@@ -3,7 +3,10 @@ package se.alkohest.irkksome.ui.fragment.connection;
 import android.app.IntentService;
 import android.content.Intent;
 
+import java.io.IOException;
+
 import se.alkohest.irkksome.irc.SSHKeyUploader;
+import se.alkohest.irkksome.model.api.KeyPairHelper;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
 import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
@@ -25,7 +28,15 @@ public class PubkeyUploadService extends IntentService {
         IrkksomeConnection connection = irkksomeConnectionDAO.findById(pk);
         connection.setSshPass(sshPassword);
 
+        KeyPairHelper kph = new KeyPairHelper(this);
+        try {
+            connection.setKeyPair(kph.getKeyPair());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         SSHKeyUploader sshKeyUploader = new SSHKeyUploader(connection);
         sshKeyUploader.establishAndUpload();
+        sshKeyUploader.closeAll();
     }
 }
