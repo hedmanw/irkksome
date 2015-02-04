@@ -32,7 +32,7 @@ public class SSHKeyUploader extends SSHClient {
     }
 
     private String makePubKey(byte[] encoded) {
-        return "ssh-dsa " + Base64.encodeToString(encoded, Base64.NO_WRAP) + " irkksome";
+        return "ssh-dss " + Base64.encodeToString(encoded, Base64.NO_WRAP) + " irkksome";
     }
 
     @Override
