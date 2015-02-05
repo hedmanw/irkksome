@@ -1,6 +1,5 @@
 package se.alkohest.irkksome.irc;
 
-import android.util.Base64;
 import android.util.Log;
 
 import com.trilead.ssh2.Connection;
@@ -18,6 +17,8 @@ import se.alkohest.irkksome.model.entity.SSHConnection;
 import se.alkohest.irkksome.util.Base64Encoder;
 
 // TODO: Close everything on failures?
+// test keys can be generated with
+// $ ssh-keygen -t rsa -b 1024 -f dummy-ssh-keygen.pem -N '' -C "keyname"
 public abstract class SSHClient implements ConnectionMonitor {
     public static final String AUTH_PUBLIC_KEY = "publickey";
     public static final String AUTH_PASSWORD = "password";
@@ -53,7 +54,10 @@ public abstract class SSHClient implements ConnectionMonitor {
     public SSHClient(SSHConnection data) {
         this.sshConnectionData = data;
         if (sshConnectionData.isUseKeyPair() && sshConnectionData.getKeyPair() != null) {
-            final String pemKey = Base64Encoder.createPrivkey(sshConnectionData.getKeyPair().getPrivate().getEncoded());
+            final String pemKey = "-----BEGIN RSA PRIVATE KEY-----\n" +
+                    "PRIVKEY GOES HERE" +
+                    "-----END RSA PRIVATE KEY-----";
+//            Base64Encoder.createPrivkey(sshConnectionData.getKeyPair().getPrivate().getEncoded());
             decodedPemKey = pemKey.toCharArray();
         }
     }
@@ -112,7 +116,7 @@ public abstract class SSHClient implements ConnectionMonitor {
             }
             if (sshConnectionData.isUseKeyPair() && decodedPemKey != null) {
                 if (connection.isAuthMethodAvailable(sshConnectionData.getSshUser(), AUTH_PUBLIC_KEY)) {
-                    if (connection.authenticateWithPublicKey(sshConnectionData.getSshUser(), decodedPemKey, null)) {
+                    if (connection.authenticateWithPublicKey(sshConnectionData.getSshUser(), decodedPemKey, "asdf")) {
                         return true;
                     }
                 }
