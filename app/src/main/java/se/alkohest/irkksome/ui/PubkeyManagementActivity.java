@@ -92,6 +92,7 @@ public class PubkeyManagementActivity extends Activity implements PubkeyDisabled
         @Override
         protected Boolean doInBackground(SSHConnection... hosts) {
             SSHConnection host = hosts[0];
+            host.setUseKeyPair(false);
             KeyPairManager kph = new KeyPairManager(PubkeyManagementActivity.this);
             try {
                 host.setKeyPair(kph.getKeyPair());

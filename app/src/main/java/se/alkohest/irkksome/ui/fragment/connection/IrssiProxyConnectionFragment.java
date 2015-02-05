@@ -6,7 +6,10 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
+import java.io.IOException;
+
 import se.alkohest.irkksome.R;
+import se.alkohest.irkksome.model.api.KeyPairManager;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.entity.SSHConnection;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
@@ -106,6 +109,14 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
         sshConnection.setSshUser(getFieldValue(R.id.server_connect_sshUser));
         sshConnection.setSshPassword(getFieldValue(R.id.server_connect_sshPass));
         sshConnection.setUseKeyPair(((CheckBox) getActivity().findViewById(R.id.server_connect_use_pubkey)).isChecked());
+        if (sshConnection.isUseKeyPair()) {
+            try {
+                sshConnection.setKeyPair(new KeyPairManager(getActivity()).getKeyPair());
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Alert user
+            }
+        }
         return sshConnection;
     }
 }

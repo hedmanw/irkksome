@@ -89,6 +89,7 @@ public class SSHConnectionEB extends AbstractBean implements SSHConnection {
 
         SSHConnectionEB that = (SSHConnectionEB) o;
 
+        if (useKeyPair != that.useKeyPair) return false;
         if (sshPort != that.sshPort) return false;
         if (!sshHost.equals(that.sshHost)) return false;
         if (!sshUser.equals(that.sshUser)) return false;

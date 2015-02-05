@@ -1,5 +1,6 @@
 package se.alkohest.irkksome.irc;
 
+import android.util.Base64;
 import android.util.Log;
 
 import com.trilead.ssh2.Connection;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import se.alkohest.irkksome.model.entity.SSHConnection;
+import se.alkohest.irkksome.util.Base64Encoder;
 
 // TODO: Close everything on failures?
 public abstract class SSHClient implements ConnectionMonitor {
@@ -32,6 +34,7 @@ public abstract class SSHClient implements ConnectionMonitor {
     protected Connection connection;
     protected boolean connected;
     protected ConnectionInfo connectionInfo;
+    private char[] decodedPemKey;
 
     static {
         if (DEBUG_SSH) {
@@ -46,8 +49,13 @@ public abstract class SSHClient implements ConnectionMonitor {
         }
     }
 
+
     public SSHClient(SSHConnection data) {
         this.sshConnectionData = data;
+        if (sshConnectionData.isUseKeyPair() && sshConnectionData.getKeyPair() != null) {
+            final String pemKey = Base64Encoder.createPrivkey(sshConnectionData.getKeyPair().getPrivate().getEncoded());
+            decodedPemKey = pemKey.toCharArray();
+        }
     }
 
     protected void establishConnection() {
@@ -68,6 +76,9 @@ public abstract class SSHClient implements ConnectionMonitor {
         if (shouldAuth) {
             if (authLoop()) {
                 postAuthAction();
+            }
+            else {
+                closeAll();
             }
 //            else {
 //                Throw auth error?
@@ -99,14 +110,13 @@ public abstract class SSHClient implements ConnectionMonitor {
             if (connection.authenticateWithNone(sshConnectionData.getSshUser())) {
                 return true;
             }
-//            if (connection.isAuthMethodAvailable(sshConnectionData.getSshUser(), AUTH_PUBLIC_KEY)) {
-                // ladda in nyckeln på något vis
-                // autha med nyckel baserad på något sorts val
-//                final String pemKey = "-----BEGIN CERTIFICATE-----'\n'" + pubKey + "'\n'-----END CERTIFICATE-----";
-//                if (connection.authenticateWithPublicKey(sshConnectionData.getSshUser(), sshConnectionData.getKeyPair().getPrivate().toString().toCharArray(), null)) {
-//                    return true;
-//                }
-//            }
+            if (sshConnectionData.isUseKeyPair() && decodedPemKey != null) {
+                if (connection.isAuthMethodAvailable(sshConnectionData.getSshUser(), AUTH_PUBLIC_KEY)) {
+                    if (connection.authenticateWithPublicKey(sshConnectionData.getSshUser(), decodedPemKey, null)) {
+                        return true;
+                    }
+                }
+            }
             if (connection.isAuthMethodAvailable(sshConnectionData.getSshUser(), AUTH_PASSWORD)) {
                 if (sshConnectionData.getSshPassword() != null && connection.authenticateWithPassword(sshConnectionData.getSshUser(), sshConnectionData.getSshPassword())) {
                     return true;

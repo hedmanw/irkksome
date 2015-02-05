@@ -1,12 +1,11 @@
 package se.alkohest.irkksome.irc;
 
-import android.util.Base64;
-
 import com.trilead.ssh2.Session;
 
 import java.io.IOException;
 
 import se.alkohest.irkksome.model.entity.SSHConnection;
+import se.alkohest.irkksome.util.Base64Encoder;
 
 public class SSHKeyUploader extends SSHClient {
     public static final String ECHO_LITERAL = "echo -e ";
@@ -23,7 +22,7 @@ public class SSHKeyUploader extends SSHClient {
     }
 
     private void uploadPubKey() {
-        final String pubKey = makePubKey(sshConnectionData.getKeyPair().getPublic().getEncoded());
+        final String pubKey = Base64Encoder.createPubkey(sshConnectionData.getKeyPair().getPublic().getEncoded());
 
         try {
             final Session session = connection.openSession();
@@ -32,10 +31,6 @@ public class SSHKeyUploader extends SSHClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private String makePubKey(byte[] encoded) {
-        return "ssh-dss " + Base64.encodeToString(encoded, Base64.NO_WRAP) + " irkksome";
     }
 
     @Override

@@ -17,13 +17,13 @@ import java.security.spec.X509EncodedKeySpec;
 
 public class KeyPairManager {
 
-    public static final String GEN_ALGORITHM = "DSA";
+    public static final String GEN_ALGORITHM = "RSA";
     public static final String RANDOM_ALGORITHM = "SHA1PRNG";
     private static final int KEY_SIZE = 1024;
     // TODO - select these more carefully
 
-    private static final String PUBLIC_KEY_FILE = "public.key";
-    private static final String PRIVATE_KEY_FILE = "private.key";
+    private static final String PUBLIC_KEY_FILE = "public_rsa.key";
+    private static final String PRIVATE_KEY_FILE = "private_rsa.key";
 
     private final Context context;
 
