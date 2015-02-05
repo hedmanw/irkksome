@@ -2,7 +2,6 @@ package se.alkohest.irkksome.orm.typeserializer;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.util.Log;
 
 import se.alkohest.irkksome.db.SprinklesAdapter;
 

@@ -17,23 +17,6 @@ public class IrkksomeConnectionDAO extends GenericDAO<IrkksomeConnectionEB> impl
         return new IrkksomeConnectionEB();
     }
 
-    public String getPresentation(IrkksomeConnectionEB connection) {
-        if (connection.isUseSSH()) {
-            if (connection.isIrssiProxyConnection()) {
-//                return connection.getSshUser() + "@" + connection.getSshHost() + (connection.getSshPort() != 22 ? ":" + connection.getSshPort() : "") +
-//                        " (" + connection.getUsername() + ":" + connection.getPort() + ")";
-                return "hej!";
-            } else {
-//                return connection.getSshUser() + "@" + connection.getSshHost() + (connection.getSshPort() != 22 ? ":" + connection.getSshPort() : "") +
-//                        " (" + connection.getNickname() + "[" + connection.getUsername() + "]@" + connection.getHost() + ":" + connection.getPort() + ")";
-                return "hej?";
-            }
-        }
-        else {
-            return connection.getNickname() + "@" + connection.getHost() + ":" + connection.getPort();
-        }
-    }
-
     @Override
     public IrkksomeConnectionEB findById(long id) {
         return getById(id);
