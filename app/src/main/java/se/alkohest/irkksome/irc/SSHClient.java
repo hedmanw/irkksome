@@ -99,14 +99,14 @@ public abstract class SSHClient implements ConnectionMonitor {
             if (connection.authenticateWithNone(sshConnectionData.getSshUser())) {
                 return true;
             }
-            if (connection.isAuthMethodAvailable(sshConnectionData.getSshUser(), AUTH_PUBLIC_KEY)) {
+//            if (connection.isAuthMethodAvailable(sshConnectionData.getSshUser(), AUTH_PUBLIC_KEY)) {
                 // ladda in nyckeln på något vis
                 // autha med nyckel baserad på något sorts val
 //                final String pemKey = "-----BEGIN CERTIFICATE-----'\n'" + pubKey + "'\n'-----END CERTIFICATE-----";
-                if (connection.authenticateWithPublicKey(sshConnectionData.getSshUser(), sshConnectionData.getKeyPair().getPrivate().toString().toCharArray(), null)) {
-                    return true;
-                }
-            }
+//                if (connection.authenticateWithPublicKey(sshConnectionData.getSshUser(), sshConnectionData.getKeyPair().getPrivate().toString().toCharArray(), null)) {
+//                    return true;
+//                }
+//            }
             if (connection.isAuthMethodAvailable(sshConnectionData.getSshUser(), AUTH_PASSWORD)) {
                 if (sshConnectionData.getSshPassword() != null && connection.authenticateWithPassword(sshConnectionData.getSshUser(), sshConnectionData.getSshPassword())) {
                     return true;

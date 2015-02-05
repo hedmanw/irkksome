@@ -2,6 +2,7 @@ package se.alkohest.irkksome.orm.typeserializer;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.util.Log;
 
 import se.alkohest.irkksome.db.SprinklesAdapter;
 
@@ -16,15 +17,21 @@ public class SSHConnectionTypeSerializer implements TypeSerializer<SSHConnection
         final int pkValue = cursor.getInt(cursor.getColumnIndexOrThrow(name));
         SSHConnectionEB connection =  null;
         if (pkValue != -1) {
-            connection = new SSHConnectionEB();
-            SprinklesAdapter.findById(SSHConnectionEB.class, pkValue);
+            connection = SprinklesAdapter.findById(SSHConnectionEB.class, pkValue);
         }
         return connection;
     }
 
     @Override
     public void pack(SSHConnection sshConnectionEB, ContentValues contentValues, String s) {
-        contentValues.put(s, sshConnectionEB == null ? -1 : sshConnectionEB.getId());
+        if (sshConnectionEB == null) {
+            contentValues.put(s, -1);
+
+        }
+        else {
+            sshConnectionEB.save();
+            contentValues.put(s, sshConnectionEB.getId());
+        }
     }
 
     @Override
