@@ -6,11 +6,15 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
-public class SSHConnection extends SSHClient implements ServerConnection {
-    private ServerConnection forwardingConnection;
+import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 
-    public SSHConnection(ConnectionData data) {
-        super(data);
+public class SSHIrkkForwarder extends SSHClient implements ServerConnection {
+    private ServerConnection forwardingConnection;
+    private IrkksomeConnection ircConnection;
+
+    public SSHIrkkForwarder(IrkksomeConnection data) {
+        super(data.getSSHConnection());
+        this.ircConnection = data;
         this.forwardingConnection = new NormalConnection(data.getHost(), localPort);
     }
 
@@ -38,7 +42,7 @@ public class SSHConnection extends SSHClient implements ServerConnection {
     @Override
     protected void postAuthAction() {
         try {
-            portForwarder = connection.createLocalPortForwarder(new InetSocketAddress(InetAddress.getLocalHost(), localPort), connectionData.getHost(), connectionData.getPort());
+            portForwarder = connection.createLocalPortForwarder(new InetSocketAddress(InetAddress.getLocalHost(), localPort), ircConnection.getHost(), ircConnection.getPort());
         } catch (IOException e) {
             Log.e(TAG, "could not create portforward", e);
         }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_pubkey_copy"
+        android:title="Copy pubkey"/>
+    <item android:id="@+id/action_upload_pubkey"
+        android:title="Upload to host"/>
+    <item android:id="@+id/action_delete_pubkey"
+        android:title="Delete pubkey"
+        android:visible="false"/>
+</menu>

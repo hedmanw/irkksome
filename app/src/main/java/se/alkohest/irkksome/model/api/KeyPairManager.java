@@ -15,10 +15,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
-/**
- * Created by oed on 2014-11-12.
- */
-public class KeyPairHelper {
+public class KeyPairManager {
 
     public static final String GEN_ALGORITHM = "DSA";
     public static final String RANDOM_ALGORITHM = "SHA1PRNG";
@@ -30,8 +27,23 @@ public class KeyPairHelper {
 
     private final Context context;
 
-    public KeyPairHelper(Context context) {
+    public KeyPairManager(Context context) {
         this.context = context;
+    }
+
+    public boolean hasKeyPair() {
+        boolean publicExists = false;
+        boolean privateExists = false;
+        final String[] fileNames = context.fileList();
+        for (String fileName : fileNames) {
+            if (fileName.equals(PRIVATE_KEY_FILE)) {
+                privateExists = true;
+            }
+            if (fileName.equals(PUBLIC_KEY_FILE)) {
+                publicExists = true;
+            }
+        }
+        return publicExists && privateExists;
     }
 
     public KeyPair getKeyPair() throws IOException {

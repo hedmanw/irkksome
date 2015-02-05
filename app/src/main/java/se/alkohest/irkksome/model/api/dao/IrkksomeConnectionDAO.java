@@ -3,7 +3,6 @@ package se.alkohest.irkksome.model.api.dao;
 import java.util.List;
 
 import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
-import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 import se.alkohest.irkksome.orm.GenericDAO;
 import se.emilsjolander.sprinkles.CursorList;
@@ -21,11 +20,13 @@ public class IrkksomeConnectionDAO extends GenericDAO<IrkksomeConnectionEB> impl
     public String getPresentation(IrkksomeConnectionEB connection) {
         if (connection.isUseSSH()) {
             if (connection.isIrssiProxyConnection()) {
-                return connection.getSshUser() + "@" + connection.getSshHost() + (connection.getSshPort() != 22 ? ":" + connection.getSshPort() : "") +
-                        " (" + connection.getUsername() + ":" + connection.getPort() + ")";
+//                return connection.getSshUser() + "@" + connection.getSshHost() + (connection.getSshPort() != 22 ? ":" + connection.getSshPort() : "") +
+//                        " (" + connection.getUsername() + ":" + connection.getPort() + ")";
+                return "hej!";
             } else {
-                return connection.getSshUser() + "@" + connection.getSshHost() + (connection.getSshPort() != 22 ? ":" + connection.getSshPort() : "") +
-                        " (" + connection.getNickname() + "[" + connection.getUsername() + "]@" + connection.getHost() + ":" + connection.getPort() + ")";
+//                return connection.getSshUser() + "@" + connection.getSshHost() + (connection.getSshPort() != 22 ? ":" + connection.getSshPort() : "") +
+//                        " (" + connection.getNickname() + "[" + connection.getUsername() + "]@" + connection.getHost() + ":" + connection.getPort() + ")";
+                return "hej?";
             }
         }
         else {

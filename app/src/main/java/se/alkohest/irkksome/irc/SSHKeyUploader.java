@@ -5,11 +5,11 @@ import android.util.Base64;
 import com.trilead.ssh2.Session;
 
 import java.io.IOException;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
+
+import se.alkohest.irkksome.model.entity.SSHConnection;
 
 public class SSHKeyUploader extends SSHClient {
-    public SSHKeyUploader(ConnectionData data) {
+    public SSHKeyUploader(SSHConnection data) {
         super(data);
     }
 
@@ -18,7 +18,7 @@ public class SSHKeyUploader extends SSHClient {
     }
 
     private void uploadPubKey() {
-        final String pubKey = makePubKey(connectionData.getKeyPair().getPublic().getEncoded());
+        final String pubKey = makePubKey(sshConnectionData.getKeyPair().getPublic().getEncoded());
 
         try {
             final Session session = connection.openSession();

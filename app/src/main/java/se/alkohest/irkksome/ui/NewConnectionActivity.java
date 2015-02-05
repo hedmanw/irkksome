@@ -7,10 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import java.io.IOException;
-
 import se.alkohest.irkksome.R;
-import se.alkohest.irkksome.model.api.KeyPairHelper;
 import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.api.ServerConnectionListener;
 import se.alkohest.irkksome.model.api.ServerManager;
@@ -29,7 +26,7 @@ public class NewConnectionActivity extends Activity implements ConnectionsListFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_connection);
+        setContentView(R.layout.activity_fragment_container);
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -51,14 +48,6 @@ public class NewConnectionActivity extends Activity implements ConnectionsListFr
     @Override
     public void onConnectPressed(IrkksomeConnection irkksomeConnection) {
         ServerManager serverManager = ServerManager.INSTANCE;
-        if (irkksomeConnection.isIrssiProxyConnection()) {
-            KeyPairHelper kph = new KeyPairHelper(this);
-//            try {
-//                irkksomeConnection.setKeyPair(kph.getKeyPair());
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-        }
         final Server pendingServer = serverManager.establishConnection(irkksomeConnection);
         pendingServer.addServerConnectionListener(this);
         pendingServer.setListener(CallbackHandler.getInstance());

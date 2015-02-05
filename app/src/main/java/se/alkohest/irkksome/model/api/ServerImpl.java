@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import se.alkohest.irkksome.irc.ConnectionData;
 import se.alkohest.irkksome.irc.IrcProtocol;
 import se.alkohest.irkksome.irc.IrcProtocolFactory;
 import se.alkohest.irkksome.irc.IrcProtocolListener;
@@ -21,11 +20,12 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
+import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 
 public class ServerImpl implements Server, IrcProtocolListener {
     private IrcProtocol ircProtocol;
     private IrcServer ircServer;
-    private ConnectionData connectionData;
+    private IrkksomeConnection connectionData;
     private HilightHelper hilightHelper;
     private IrcChannelDAOLocal channelDAO = new IrcChannelDAO();
     private IrcMessageDAOLocal messageDAO = new IrcMessageDAO();
@@ -38,7 +38,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     private List<ServerConnectionListener> connectionListeners = new ArrayList<>();
     private HilightListener hilightListener;
 
-    public ServerImpl(IrcServer ircServer, ConnectionData data) {
+    public ServerImpl(IrcServer ircServer, IrkksomeConnection data) {
         this.connectionData = data;
         this.ircServer = ircServer;
         ircProtocol = IrcProtocolFactory.getIrcProtocol(data);
@@ -55,7 +55,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
-    public ConnectionData getConnectionData() {
+    public IrkksomeConnection getConnectionData() {
         return connectionData;
     }
 

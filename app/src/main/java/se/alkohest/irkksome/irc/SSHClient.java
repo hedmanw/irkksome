@@ -13,6 +13,8 @@ import com.trilead.ssh2.log.Logger;
 import java.io.IOException;
 import java.util.Random;
 
+import se.alkohest.irkksome.model.entity.SSHConnection;
+
 // TODO: Close everything on failures?
 public abstract class SSHClient implements ConnectionMonitor {
     public static final String AUTH_PUBLIC_KEY = "publickey";
@@ -25,7 +27,7 @@ public abstract class SSHClient implements ConnectionMonitor {
     private static final int AUTH_ATTEMPTS = 4;
 
     protected final int localPort = getRandomLocalPort();
-    protected ConnectionData connectionData;
+    protected SSHConnection sshConnectionData;
     protected LocalPortForwarder portForwarder;
     protected Connection connection;
     protected boolean connected;
@@ -44,13 +46,13 @@ public abstract class SSHClient implements ConnectionMonitor {
         }
     }
 
-    public SSHClient(ConnectionData data) {
-        this.connectionData = data;
+    public SSHClient(SSHConnection data) {
+        this.sshConnectionData = data;
     }
 
     protected void establishConnection() {
         connected = true;
-        connection = new Connection(connectionData.getSshHost(), connectionData.getSshPort());
+        connection = new Connection(sshConnectionData.getSshHost(), sshConnectionData.getSshPort());
         connection.addConnectionMonitor(this);
 
         boolean shouldAuth = true;
@@ -94,19 +96,19 @@ public abstract class SSHClient implements ConnectionMonitor {
 
     private boolean authenticate() {
         try {
-            if (connection.authenticateWithNone(connectionData.getSshUser())) {
+            if (connection.authenticateWithNone(sshConnectionData.getSshUser())) {
                 return true;
             }
-            if (connection.isAuthMethodAvailable(connectionData.getSshUser(), AUTH_PUBLIC_KEY)) {
+            if (connection.isAuthMethodAvailable(sshConnectionData.getSshUser(), AUTH_PUBLIC_KEY)) {
                 // ladda in nyckeln på något vis
                 // autha med nyckel baserad på något sorts val
 //                final String pemKey = "-----BEGIN CERTIFICATE-----'\n'" + pubKey + "'\n'-----END CERTIFICATE-----";
-                if (connection.authenticateWithPublicKey(connectionData.getSshUser(), connectionData.getKeyPair().getPrivate().toString().toCharArray(), null)) {
+                if (connection.authenticateWithPublicKey(sshConnectionData.getSshUser(), sshConnectionData.getKeyPair().getPrivate().toString().toCharArray(), null)) {
                     return true;
                 }
             }
-            if (connection.isAuthMethodAvailable(connectionData.getSshUser(), AUTH_PASSWORD)) {
-                if (connectionData.getSshPass() != null && connection.authenticateWithPassword(connectionData.getSshUser(), connectionData.getSshPass())) {
+            if (connection.isAuthMethodAvailable(sshConnectionData.getSshUser(), AUTH_PASSWORD)) {
+                if (sshConnectionData.getSshPassword() != null && connection.authenticateWithPassword(sshConnectionData.getSshUser(), sshConnectionData.getSshPassword())) {
                     return true;
                 }
             }

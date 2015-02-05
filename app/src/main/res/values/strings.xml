@@ -31,5 +31,6 @@
     <string name="connection_type_regular">Regular irkk</string>
     <string name="connection_type_irssi">Irssi proxy</string>
     <string name="use_pubkey_auth">Use pubkey authentication</string>
+    <string name="title_manage_pubkeys">Manage pubkeys</string>
 
 </resources>

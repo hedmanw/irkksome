@@ -6,11 +6,12 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
-import java.util.Date;
-
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
+import se.alkohest.irkksome.model.entity.SSHConnection;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
+import se.alkohest.irkksome.model.impl.SSHConnectionEB;
+import se.alkohest.irkksome.ui.PubkeyManagementActivity;
 
 public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
     public static AbstractConnectionFragment newInstance() {
@@ -50,25 +51,18 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
             setFieldValue(parent, R.id.server_connect_port, String.valueOf(templateConnection.getPort()));
             setFieldValue(parent, R.id.server_connect_username, templateConnection.getUsername());
             setFieldValue(parent, R.id.server_connect_password, templateConnection.getPassword());
-            setFieldValue(parent, R.id.server_connect_sshHost, templateConnection.getSshHost());
-            setFieldValue(parent, R.id.server_connect_sshUser, templateConnection.getSshUser());
+            setFieldValue(parent, R.id.server_connect_sshHost, templateConnection.getSSHConnection().getSshHost());
+            setFieldValue(parent, R.id.server_connect_sshUser, templateConnection.getSSHConnection().getSshUser());
             CheckBox usePubkey = (CheckBox) parent.findViewById(R.id.server_connect_use_pubkey);
-            usePubkey.setChecked(templateConnection.isUseKeyPair());
-            setEnabled(parent, R.id.server_connect_sshPass, !templateConnection.isUseKeyPair());
+            usePubkey.setChecked(templateConnection.getSSHConnection().isUseKeyPair());
+            setEnabled(parent, R.id.server_connect_sshPass, !templateConnection.getSSHConnection().isUseKeyPair());
             usePubkey.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean state) {
                     if (state) {
                         setEnabled(parent, R.id.server_connect_sshPass, false);
-                        // open dialog asking for ssh pw
-                        // open progress dialog
-                        Intent uploadIntent = new Intent(getActivity(), PubkeyUploadService.class);
-                        IrkksomeConnection connection = getConnection();
-                        connection.setLastUsed(new Date());
-                        connection.save();
-                        uploadIntent.putExtra(PubkeyUploadService.CONNECTION_DATA_PK, connection.getId());
-                        uploadIntent.putExtra(PubkeyUploadService.CONNECTION_DATA_SSH_PW, connection.getSshPass());
-                        getActivity().startService(uploadIntent);
+                        Intent intent = new Intent(getActivity(), PubkeyManagementActivity.class);
+                        startActivity(intent);
                     }
                     else {
                         setEnabled(parent, R.id.server_connect_sshPass, true);
@@ -91,13 +85,14 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
         connection.setUsername(userName);
         connection.setNickname(userName); // This field is not present in UI. The hack is to get hilights to recognize "your" name
         connection.setPassword(getFieldValue(R.id.server_connect_password));
-        connection.setSshHost(getFieldValue(R.id.server_connect_sshHost));
-        connection.setSshUser(getFieldValue(R.id.server_connect_sshUser));
-        connection.setSshPass(getFieldValue(R.id.server_connect_sshPass));
-        connection.setUseSSH(true);
-        connection.setUseKeyPair(((CheckBox) getActivity().findViewById(R.id.server_connect_use_pubkey)).isChecked());
+        SSHConnection sshConnection = new SSHConnectionEB();
+        sshConnection.setSshHost(getFieldValue(R.id.server_connect_sshHost));
+        sshConnection.setSshUser(getFieldValue(R.id.server_connect_sshUser));
+        sshConnection.setSshPassword(getFieldValue(R.id.server_connect_sshPass));
+        sshConnection.setUseKeyPair(((CheckBox) getActivity().findViewById(R.id.server_connect_use_pubkey)).isChecked());
+        connection.setSSHConnection(sshConnection);
         if (connection.equals(templateConnection)) {
-            templateConnection.setSshPass(connection.getSshPass());
+            templateConnection.getSSHConnection().setSshPassword(sshConnection.getSshPassword());
             return templateConnection;
         }
         else {
