@@ -10,6 +10,9 @@ import com.trilead.ssh2.LocalPortForwarder;
 import com.trilead.ssh2.ServerHostKeyVerifier;
 import com.trilead.ssh2.log.Logger;
 
+import org.bouncycastle.jcajce.provider.asymmetric.x509.PEMUtil;
+import org.bouncycastle.openssl.PEMParser;
+
 import java.io.IOException;
 import java.util.Random;
 
