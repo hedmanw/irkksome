@@ -9,6 +9,11 @@ import java.io.IOException;
 import se.alkohest.irkksome.model.entity.SSHConnection;
 
 public class SSHKeyUploader extends SSHClient {
+    public static final String ECHO_LITERAL = "echo -e ";
+    public static final String APPEND = " >> ";
+    public static final String AUTHORIZED_KEYS = "~/.ssh/authorized_keys";
+    public static final String TEST_FILE = "~/irkksome-text.txt";
+
     public SSHKeyUploader(SSHConnection data) {
         super(data);
     }
@@ -22,9 +27,7 @@ public class SSHKeyUploader extends SSHClient {
 
         try {
             final Session session = connection.openSession();
-//            session.execCommand("echo -e '\n' " + key.getEncoded() + " >> ~/.ssh/authorized_keys");
-
-            session.execCommand("echo -e " + pubKey + " >> ~/.ssh/authorized_keys");
+            session.execCommand(ECHO_LITERAL + pubKey + APPEND + TEST_FILE); // TODO: actual file
             session.close();
         } catch (IOException e) {
             e.printStackTrace();

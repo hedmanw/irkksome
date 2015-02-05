@@ -15,6 +15,8 @@ import java.io.IOException;
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.irc.SSHKeyUploader;
 import se.alkohest.irkksome.model.api.KeyPairManager;
+import se.alkohest.irkksome.model.api.dao.SSHConnectionDAO;
+import se.alkohest.irkksome.model.api.local.SSHConnectionDAOLocal;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.entity.SSHConnection;
 import se.alkohest.irkksome.ui.fragment.pubkey.PubkeyDisabledFragment;
@@ -22,7 +24,9 @@ import se.alkohest.irkksome.ui.fragment.pubkey.PubkeyEnabledFragment;
 
 
 public class PubkeyManagementActivity extends Activity implements PubkeyDisabledFragment.CreatePubkeyPressListener {
-
+    public static final String SSH_CONNECTION_PK = "sshConnectionPK";
+    public static final String SSH_CONNECTION_PASSWORD= "sshConnectionPassword";
+    private SSHConnectionDAOLocal sshConnectionDAO = new SSHConnectionDAO();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +50,13 @@ public class PubkeyManagementActivity extends Activity implements PubkeyDisabled
         // If we have some kind of token, use it for the connection
         // otherwise, select an existing connection to upload to and open dialog asking for ssh pw
         // open progress dialog
-
-        new PubkeyUploadTask().execute();
+        final long sshConnectionPK = getIntent().getLongExtra(SSH_CONNECTION_PK, -1);
+        final String sshConnectionPassword = getIntent().getStringExtra(SSH_CONNECTION_PASSWORD);
+        if (sshConnectionPK != -1) {
+            SSHConnection connection = sshConnectionDAO.findById(sshConnectionPK);
+            connection.setSshPassword(sshConnectionPassword);
+            new PubkeyUploadTask().execute(connection);
+        }
     }
 
     @Override

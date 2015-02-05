@@ -61,7 +61,11 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
                 public void onCheckedChanged(CompoundButton compoundButton, boolean state) {
                     if (state) {
                         setEnabled(parent, R.id.server_connect_sshPass, false);
+                        SSHConnection sshConnection = getSshConnection();
                         Intent intent = new Intent(getActivity(), PubkeyManagementActivity.class);
+                        sshConnection.save();
+                        intent.putExtra(PubkeyManagementActivity.SSH_CONNECTION_PK, sshConnection.getId());
+                        intent.putExtra(PubkeyManagementActivity.SSH_CONNECTION_PASSWORD, sshConnection.getSshPassword());
                         startActivity(intent);
                     }
                     else {
@@ -85,11 +89,7 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
         connection.setUsername(userName);
         connection.setNickname(userName); // This field is not present in UI. The hack is to get hilights to recognize "your" name
         connection.setPassword(getFieldValue(R.id.server_connect_password));
-        SSHConnection sshConnection = new SSHConnectionEB();
-        sshConnection.setSshHost(getFieldValue(R.id.server_connect_sshHost));
-        sshConnection.setSshUser(getFieldValue(R.id.server_connect_sshUser));
-        sshConnection.setSshPassword(getFieldValue(R.id.server_connect_sshPass));
-        sshConnection.setUseKeyPair(((CheckBox) getActivity().findViewById(R.id.server_connect_use_pubkey)).isChecked());
+        SSHConnection sshConnection = getSshConnection();
         connection.setSSHConnection(sshConnection);
         if (connection.equals(templateConnection)) {
             templateConnection.getSSHConnection().setSshPassword(sshConnection.getSshPassword());
@@ -98,5 +98,14 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
         else {
             return connection;
         }
+    }
+
+    private SSHConnection getSshConnection() {
+        SSHConnection sshConnection = new SSHConnectionEB();
+        sshConnection.setSshHost(getFieldValue(R.id.server_connect_sshHost));
+        sshConnection.setSshUser(getFieldValue(R.id.server_connect_sshUser));
+        sshConnection.setSshPassword(getFieldValue(R.id.server_connect_sshPass));
+        sshConnection.setUseKeyPair(((CheckBox) getActivity().findViewById(R.id.server_connect_use_pubkey)).isChecked());
+        return sshConnection;
     }
 }
