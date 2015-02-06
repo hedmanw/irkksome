@@ -1,13 +1,12 @@
 package se.alkohest.irkksome.util;
 
+import org.bouncycastle.openssl.PEMWriter;
 import org.bouncycastle.util.encoders.Base64;
-import org.bouncycastle.util.io.pem.PemObject;
-import org.bouncycastle.util.io.pem.PemWriter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.security.Key;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -16,8 +15,6 @@ import java.security.interfaces.RSAPublicKey;
  * Created by wilhelm 2015-02-06.
  */
 public class KeyEncodingUtil {
-
-    public static final String RSA_PRIVATE_KEY = "RSA PRIVATE KEY";
 
     public static String encodePublicKey(Key key) throws IOException {
         if (key instanceof RSAPublicKey) {
@@ -35,7 +32,7 @@ public class KeyEncodingUtil {
     public static byte[] encodePrivateKey(Key key) throws IOException {
         if (key instanceof RSAPrivateKey) {
             RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) key;
-            return pemEncodeKey(rsaPrivateKey, RSA_PRIVATE_KEY);
+            return pemEncodeKey(rsaPrivateKey);
         }
         throw new IOException("Key algorithm \"" + key.getAlgorithm() + "\" not recognized.");
     }
@@ -56,12 +53,11 @@ public class KeyEncodingUtil {
         outputStream.write(bytes);
     }
 
-    private static byte[] pemEncodeKey(Key key, String desc) throws IOException {
-        final PemObject pemObject = new PemObject(desc, key.getEncoded());
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        try (PemWriter pemWriter = new PemWriter(new OutputStreamWriter(baos))) {
-            pemWriter.writeObject(pemObject);
-        }
-        return baos.toByteArray();
+    private static byte[] pemEncodeKey(Key key) throws IOException {
+        StringWriter stringWriter = new StringWriter();
+        PEMWriter pemWriter = new PEMWriter(stringWriter);
+        pemWriter.writeObject(key);
+        pemWriter.close();
+        return stringWriter.toString().getBytes();
     }
 }

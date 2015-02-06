@@ -3,18 +3,10 @@ package se.alkohest.irkksome.model.api;
 import android.content.Context;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.util.encoders.Base64;
-import org.bouncycastle.util.io.pem.PemObject;
-import org.bouncycastle.util.io.pem.PemWriter;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -35,7 +27,7 @@ import se.alkohest.irkksome.util.KeyEncodingUtil;
  * $ ssh-keygen -t rsa -b 1024 -f dummy-ssh-keygen.pem -N '' -C "keyname"
  * For SSH pubkey auth:
  *  - the public key must be in SSH Public Key File Format (RFC 4716)
- *  - the private key must be in PEM RSA encoded (X.509)
+ *  - the private key must be PEM RSA encoded (X.509)
  */
 public class KeyPairManager {
 
@@ -69,27 +61,33 @@ public class KeyPairManager {
     }
 
     public KeyPair getKeyPair() throws IOException {
-        KeyPair keyPair;
-        try {
-            keyPair = loadKeyPair();
-        } catch (FileNotFoundException e) {
-            keyPair = generateKeyPair();
+        KeyPair kp = null;
+        if (hasKeyPair()) {
+            kp = loadKeyPair();
         }
-        return keyPair;
+        else {
+            try {
+                kp = generateKeyPair();
+            } catch (NoSuchProviderException e) {
+                e.printStackTrace();
+            }
+        }
+        return kp;
     }
 
-    private KeyPair generateKeyPair() throws IOException {
-        KeyPair kp = null;
+    private KeyPair generateKeyPair() throws IOException, NoSuchProviderException {
         try {
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(GEN_ALGORITHM);
+            Security.addProvider(new BouncyCastleProvider());
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(GEN_ALGORITHM, BouncyCastleProvider.PROVIDER_NAME);
             SecureRandom random = SecureRandom.getInstance(RANDOM_ALGORITHM);
-            keyGen.initialize(KEY_SIZE, random);
-            kp = keyGen.generateKeyPair();
+            keyPairGenerator.initialize(KEY_SIZE, random);
+            KeyPair kp = keyPairGenerator.generateKeyPair();
+            saveKeyPair(kp);
+            return kp;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        saveKeyPair(kp);
-        return kp;
+        return null;
     }
 
     private KeyPair loadKeyPair() throws IOException {
