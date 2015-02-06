@@ -56,7 +56,7 @@ public class KeyEncodingUtil {
         outputStream.write(bytes);
     }
 
-    public static byte[] pemEncodeKey(Key key, String desc) throws IOException {
+    private static byte[] pemEncodeKey(Key key, String desc) throws IOException {
         final PemObject pemObject = new PemObject(desc, key.getEncoded());
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try (PemWriter pemWriter = new PemWriter(new OutputStreamWriter(baos))) {

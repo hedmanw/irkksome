@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import se.alkohest.irkksome.model.entity.SSHConnection;
+import se.alkohest.irkksome.util.KeyEncodingUtil;
 
 // TODO: Close everything on failures?
 // test keys can be generated with
@@ -34,7 +35,7 @@ public abstract class SSHClient implements ConnectionMonitor {
     protected Connection connection;
     protected boolean connected;
     protected ConnectionInfo connectionInfo;
-    private char[] decodedPemKey;
+    private char[] pemEncodedKey;
 
     static {
         if (DEBUG_SSH) {
@@ -53,11 +54,11 @@ public abstract class SSHClient implements ConnectionMonitor {
     public SSHClient(SSHConnection data) {
         this.sshConnectionData = data;
         if (sshConnectionData.isUseKeyPair() && sshConnectionData.getKeyPair() != null) {
-            final String pemKey = "-----BEGIN RSA PRIVATE KEY-----\n" +
-                    "PRIVKEY GOES HERE" +
-                    "-----END RSA PRIVATE KEY-----";
-//            Base64Encoder.createPrivkey(sshConnectionData.getKeyPair().getPrivate().getEncoded());
-            decodedPemKey = pemKey.toCharArray();
+            try {
+                pemEncodedKey = KeyEncodingUtil.encodePrivateKeyToString(sshConnectionData.getKeyPair().getPrivate()).toCharArray();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -113,9 +114,9 @@ public abstract class SSHClient implements ConnectionMonitor {
             if (connection.authenticateWithNone(sshConnectionData.getSshUser())) {
                 return true;
             }
-            if (sshConnectionData.isUseKeyPair() && decodedPemKey != null) {
+            if (sshConnectionData.isUseKeyPair() && pemEncodedKey != null) {
                 if (connection.isAuthMethodAvailable(sshConnectionData.getSshUser(), AUTH_PUBLIC_KEY)) {
-                    if (connection.authenticateWithPublicKey(sshConnectionData.getSshUser(), decodedPemKey, "asdf")) {
+                    if (connection.authenticateWithPublicKey(sshConnectionData.getSshUser(), pemEncodedKey, null)) {
                         return true;
                     }
                 }

@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import se.alkohest.irkksome.R;
+import se.alkohest.irkksome.model.api.KeyPairManager;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
 import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
@@ -41,6 +42,7 @@ public abstract class AbstractConnectionFragment extends Fragment {
         if (listener != null) {
             IrkksomeConnection connection = getConnection();
             try {
+                connection.getSSHConnection().setKeyPair(new KeyPairManager(getActivity()).getKeyPair()); // TODO: this is really silly, do NOT commit this!
                 Log.e("irkksomeKEY", KeyEncodingUtil.encodePublicKey(connection.getSSHConnection().getKeyPair().getPublic()));
                 Log.e("irkksomeKEY", KeyEncodingUtil.encodePrivateKeyToString(connection.getSSHConnection().getKeyPair().getPrivate()));
             } catch (IOException e) {
