@@ -10,14 +10,10 @@ import com.trilead.ssh2.LocalPortForwarder;
 import com.trilead.ssh2.ServerHostKeyVerifier;
 import com.trilead.ssh2.log.Logger;
 
-import org.bouncycastle.jcajce.provider.asymmetric.x509.PEMUtil;
-import org.bouncycastle.openssl.PEMParser;
-
 import java.io.IOException;
 import java.util.Random;
 
 import se.alkohest.irkksome.model.entity.SSHConnection;
-import se.alkohest.irkksome.util.Base64Encoder;
 
 // TODO: Close everything on failures?
 // test keys can be generated with

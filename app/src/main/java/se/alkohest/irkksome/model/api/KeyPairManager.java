@@ -28,6 +28,8 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
+import se.alkohest.irkksome.util.KeyEncodingUtil;
+
 /**
  * Test keys can be generated with
  * $ ssh-keygen -t rsa -b 1024 -f dummy-ssh-keygen.pem -N '' -C "keyname"
@@ -132,68 +134,17 @@ public class KeyPairManager {
         return bytes;
     }
 
-    public static void main(String[] args) throws NoSuchProviderException, NoSuchAlgorithmException {
+    public static void main(String[] args) throws NoSuchProviderException, NoSuchAlgorithmException, IOException {
         Security.addProvider(new BouncyCastleProvider());
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA", "BC");
-        keyPairGenerator.initialize(2048, new SecureRandom());
+        SecureRandom random = SecureRandom.getInstance(RANDOM_ALGORITHM);
+        keyPairGenerator.initialize(1024, random);
         KeyPair kp = keyPairGenerator.generateKeyPair();
 
         RSAPrivateKey privateKey = (RSAPrivateKey) kp.getPrivate();
         RSAPublicKey publicKey = (RSAPublicKey) kp.getPublic();
 
-        try {
-            System.out.println(new String(sshEncode(publicKey)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        writePemKey(privateKey, "RSA PRIVATE KEY");
-
-
-//        System.out.println("privkey: \n" + new String(Base64.encode(privateKey.getEncoded())));
-//        System.out.println("pubkey: \n" + new String(Base64.encode(publicKey.getEncoded())));
-
-    }
-
-    public static void writePemKey(Key key, String desc) {
-        PemContainer privateContainer = new PemContainer(key, desc);
-        try {
-            privateContainer.write();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static byte[] sshEncode(RSAPublicKey key) throws IOException {
-        ByteArrayOutputStream buf = new ByteArrayOutputStream();
-        byte[] name = "ssh-rsa".getBytes();
-        write(name, buf);
-        write(key.getPublicExponent().toByteArray(), buf);
-        write(key.getModulus().toByteArray(), buf);
-        return Base64.encode(buf.toByteArray());
-    }
-
-    private static void write(byte[] str, OutputStream os) throws IOException {
-        for (int shift = 24; shift >= 0; shift -= 8) {
-            os.write((str.length >>> shift) & 0xFF);
-        }
-        os.write(str);
-    }
-
-    private static class PemContainer {
-        private PemObject pemObject;
-
-        public PemContainer(Key key, String desc) {
-            this.pemObject = new PemObject(desc, key.getEncoded());
-        }
-
-        public void write() throws IOException {
-            PemWriter pemWriter = new PemWriter(new OutputStreamWriter(System.out));
-            try {
-                pemWriter.writeObject(pemObject);
-            }
-            finally {
-                pemWriter.close();
-            }
-        }
+        System.out.println(KeyEncodingUtil.encodePrivateKeyToString(privateKey));
+        System.out.println(KeyEncodingUtil.encodePublicKey(publicKey));
     }
 }

@@ -13,13 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.Date;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
 import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
-import se.alkohest.irkksome.util.Base64Encoder;
+import se.alkohest.irkksome.util.KeyEncodingUtil;
 
 public abstract class AbstractConnectionFragment extends Fragment {
     public static final String CONNECTION_ARGUMENT = "CONNECTION";
@@ -39,8 +40,12 @@ public abstract class AbstractConnectionFragment extends Fragment {
     public void connectPressed() {
         if (listener != null) {
             IrkksomeConnection connection = getConnection();
-//            Log.e("irkksomeKEY", Base64Encoder.createPubkey(connection.getSSHConnection().getKeyPair().getPublic().getEncoded()));
-//            Log.e("irkksomeKEY", Base64Encoder.createPrivkey(connection.getSSHConnection().getKeyPair().getPrivate().getEncoded()));
+            try {
+                Log.e("irkksomeKEY", KeyEncodingUtil.encodePublicKey(connection.getSSHConnection().getKeyPair().getPublic()));
+                Log.e("irkksomeKEY", KeyEncodingUtil.encodePrivateKeyToString(connection.getSSHConnection().getKeyPair().getPrivate()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             connection.setLastUsed(new Date());
             listener.onConnectPressed(connection);
         }
