@@ -50,8 +50,7 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
 
     @Override
     public void inflateConnectionView(final ViewGroup parent) {
-        // If we're starting an entirely new irssi proxy session, the listener will never be attached.
-        // TODO: fix above
+        CheckBox usePubkey = (CheckBox) parent.findViewById(R.id.server_connect_use_pubkey);
         if (templateConnection != null) {
             setFieldValue(parent, R.id.server_connect_host, templateConnection.getHost());
             setFieldValue(parent, R.id.server_connect_port, String.valueOf(templateConnection.getPort()));
@@ -59,27 +58,26 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
             setFieldValue(parent, R.id.server_connect_password, templateConnection.getPassword());
             setFieldValue(parent, R.id.server_connect_sshHost, templateConnection.getSSHConnection().getSshHost());
             setFieldValue(parent, R.id.server_connect_sshUser, templateConnection.getSSHConnection().getSshUser());
-            CheckBox usePubkey = (CheckBox) parent.findViewById(R.id.server_connect_use_pubkey);
             usePubkey.setChecked(templateConnection.getSSHConnection().isUseKeyPair());
             setEnabled(parent, R.id.server_connect_sshPass, !templateConnection.getSSHConnection().isUseKeyPair());
-            usePubkey.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean state) {
-                    if (state) {
-                        setEnabled(parent, R.id.server_connect_sshPass, false);
-                        SSHConnection sshConnection = getSshConnection();
-                        Intent intent = new Intent(getActivity(), PubkeyManagementActivity.class);
-                        sshConnection.save();
-                        intent.putExtra(PubkeyManagementActivity.SSH_CONNECTION_PK, sshConnection.getId());
-                        intent.putExtra(PubkeyManagementActivity.SSH_CONNECTION_PASSWORD, sshConnection.getSshPassword());
-                        startActivity(intent);
-                    }
-                    else {
-                        setEnabled(parent, R.id.server_connect_sshPass, true);
-                    }
-                }
-            });
         }
+        usePubkey.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean state) {
+                if (state) {
+                    setEnabled(parent, R.id.server_connect_sshPass, false);
+                    SSHConnection sshConnection = getSshConnection();
+                    Intent intent = new Intent(getActivity(), PubkeyManagementActivity.class);
+                    sshConnection.save();
+                    intent.putExtra(PubkeyManagementActivity.SSH_CONNECTION_PK, sshConnection.getId());
+                    intent.putExtra(PubkeyManagementActivity.SSH_CONNECTION_PASSWORD, sshConnection.getSshPassword());
+                    startActivity(intent);
+                }
+                else {
+                    setEnabled(parent, R.id.server_connect_sshPass, true);
+                }
+            }
+        });
     }
 
     private void setEnabled(ViewGroup group, int id, boolean enabled) {
