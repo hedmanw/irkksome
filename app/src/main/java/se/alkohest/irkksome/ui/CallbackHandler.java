@@ -58,7 +58,7 @@ public class CallbackHandler implements ServerCallback {
                 context.findViewById(R.id.drawer_label_server).setVisibility(View.VISIBLE);
                 connectionListView.setAdapter(ChannelsAdapter.getInstance());
                 ServerInfoFragment serverInfoFragment = ServerInfoFragment.getInstance(server);
-                fragmentManager.popBackStack();
+                fragmentManager.popBackStack(); // TODO: why do we do this? this causes unexplainable crashes impossible to recreate
                 fragmentTransaction.replace(R.id.fragment_container, serverInfoFragment);
                 fragmentTransaction.commit();
                 TextView serverName = (TextView) context.findViewById(R.id.drawer_label_server);

@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -37,6 +38,8 @@ public class PubkeyManagementActivity extends Activity implements PubkeyDisabled
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_container);
+        getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -116,6 +119,14 @@ public class PubkeyManagementActivity extends Activity implements PubkeyDisabled
         fragmentTransaction.commit();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return true;
+    }
+
     private class PubkeyUploadTask extends AsyncTask<SSHConnection, Void, UploadTaskFinishStatus> {
         @Override
         protected UploadTaskFinishStatus doInBackground(SSHConnection... hosts) {
@@ -142,8 +153,8 @@ public class PubkeyManagementActivity extends Activity implements PubkeyDisabled
                 // finish activity?
             }
             else {
-                findViewById(android.R.id.button1).setEnabled(false);
-                Toast.makeText(PubkeyManagementActivity.this, "Bad news! " + result.message, Toast.LENGTH_SHORT).show();
+                findViewById(android.R.id.button1).setEnabled(true);
+                Toast.makeText(PubkeyManagementActivity.this, "Bad news! " + result.message, Toast.LENGTH_LONG).show();
             }
         }
     }
