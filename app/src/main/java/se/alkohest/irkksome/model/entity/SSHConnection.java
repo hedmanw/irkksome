@@ -1,7 +1,5 @@
 package se.alkohest.irkksome.model.entity;
 
-import java.security.KeyPair;
-
 import se.alkohest.irkksome.orm.BeanEntity;
 
 public interface SSHConnection extends BeanEntity {
@@ -24,8 +22,4 @@ public interface SSHConnection extends BeanEntity {
     public String getSshHost();
 
     public void setSshHost(String sshHost);
-
-    public KeyPair getKeyPair();
-
-    public void setKeyPair(KeyPair kp);
 }

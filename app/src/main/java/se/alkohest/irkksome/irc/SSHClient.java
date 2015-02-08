@@ -15,6 +15,7 @@ import java.util.Random;
 
 import se.alkohest.irkksome.model.entity.SSHConnection;
 import se.alkohest.irkksome.util.KeyEncodingUtil;
+import se.alkohest.irkksome.util.KeyProvider;
 
 // TODO: Close everything on failures?
 // test keys can be generated with
@@ -35,7 +36,6 @@ public abstract class SSHClient implements ConnectionMonitor {
     protected Connection connection;
     protected boolean connected;
     protected ConnectionInfo connectionInfo;
-    private char[] pemEncodedKey;
 
     static {
         if (DEBUG_SSH) {
@@ -53,13 +53,6 @@ public abstract class SSHClient implements ConnectionMonitor {
 
     public SSHClient(SSHConnection data) {
         this.sshConnectionData = data;
-        if (sshConnectionData.isUseKeyPair() && sshConnectionData.getKeyPair() != null) {
-            try {
-                pemEncodedKey = KeyEncodingUtil.encodePrivateKeyToString(sshConnectionData.getKeyPair().getPrivate()).toCharArray();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     protected void establishConnection() {
@@ -114,9 +107,10 @@ public abstract class SSHClient implements ConnectionMonitor {
             if (connection.authenticateWithNone(sshConnectionData.getSshUser())) {
                 return true;
             }
-            if (sshConnectionData.isUseKeyPair() && pemEncodedKey != null) {
+
+            if (sshConnectionData.isUseKeyPair() && KeyProvider.hasKeys()) {
                 if (connection.isAuthMethodAvailable(sshConnectionData.getSshUser(), AUTH_PUBLIC_KEY)) {
-                    if (connection.authenticateWithPublicKey(sshConnectionData.getSshUser(), pemEncodedKey, null)) {
+                    if (connection.authenticateWithPublicKey(sshConnectionData.getSshUser(), KeyProvider.getPrivkey(), null)) {
                         return true;
                     }
                 }

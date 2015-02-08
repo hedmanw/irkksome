@@ -29,7 +29,7 @@ public class KeyEncodingUtil {
         return new String(encodePrivateKey(key));
     }
 
-    public static byte[] encodePrivateKey(Key key) throws IOException {
+    public static char[] encodePrivateKey(Key key) throws IOException {
         if (key instanceof RSAPrivateKey) {
             RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) key;
             return pemEncodeKey(rsaPrivateKey);
@@ -53,11 +53,11 @@ public class KeyEncodingUtil {
         outputStream.write(bytes);
     }
 
-    private static byte[] pemEncodeKey(Key key) throws IOException {
+    private static char[] pemEncodeKey(Key key) throws IOException {
         StringWriter stringWriter = new StringWriter();
         PEMWriter pemWriter = new PEMWriter(stringWriter);
         pemWriter.writeObject(key);
         pemWriter.close();
-        return stringWriter.toString().getBytes();
+        return stringWriter.toString().toCharArray();
     }
 }

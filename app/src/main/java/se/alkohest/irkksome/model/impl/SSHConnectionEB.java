@@ -1,7 +1,5 @@
 package se.alkohest.irkksome.model.impl;
 
-import java.security.KeyPair;
-
 import se.alkohest.irkksome.model.entity.SSHConnection;
 import se.alkohest.irkksome.orm.AbstractBean;
 import se.alkohest.irkksome.orm.Nullable;
@@ -26,8 +24,6 @@ public class SSHConnectionEB extends AbstractBean implements SSHConnection {
 
     @Column("useKeyPair")
     private boolean useKeyPair;
-
-    private KeyPair keyPair;
 
     public boolean isUseKeyPair() {
         return useKeyPair;
@@ -67,14 +63,6 @@ public class SSHConnectionEB extends AbstractBean implements SSHConnection {
 
     public void setSshHost(String sshHost) {
         this.sshHost = sshHost;
-    }
-
-    public KeyPair getKeyPair() {
-        return keyPair;
-    }
-
-    public void setKeyPair(KeyPair kp) {
-        keyPair = kp;
     }
 
     @Override

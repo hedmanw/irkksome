@@ -4,9 +4,13 @@ import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.io.IOException;
+import java.security.KeyPair;
+
+import se.alkohest.irkksome.model.api.KeyPairManager;
 import se.alkohest.irkksome.model.entity.SSHConnection;
-import se.alkohest.irkksome.model.impl.SSHConnectionEB;
 import se.alkohest.irkksome.orm.typeserializer.SSHConnectionTypeSerializer;
+import se.alkohest.irkksome.util.KeyProvider;
 import se.emilsjolander.sprinkles.Migration;
 import se.emilsjolander.sprinkles.Sprinkles;
 
@@ -30,6 +34,17 @@ public class IrkksomeApplication extends Application {
                 performMigration(sqLiteDatabase, createSSHConnection);
             }
         });
+
+        KeyPairManager kpm = new KeyPairManager(this);
+        if (kpm.hasKeyPair()) {
+            try {
+                KeyPair keyPair = kpm.getKeyPair();
+                KeyProvider.initialize(keyPair.getPublic(), keyPair.getPrivate());
+                KeyProvider.printKeyPair();
+            } catch (IOException e) {
+                Log.e("irkksome", "Found keys on startup but could not load them.", e);
+            }
+        }
     }
 
     private static void performMigration(SQLiteDatabase sqLiteDatabase, String command) {

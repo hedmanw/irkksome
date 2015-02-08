@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.io.IOException;
+import java.security.KeyPair;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.irc.SSHKeyUploader;
@@ -21,6 +22,7 @@ import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.entity.SSHConnection;
 import se.alkohest.irkksome.ui.fragment.pubkey.PubkeyDisabledFragment;
 import se.alkohest.irkksome.ui.fragment.pubkey.PubkeyEnabledFragment;
+import se.alkohest.irkksome.util.KeyProvider;
 
 
 public class PubkeyManagementActivity extends Activity implements PubkeyDisabledFragment.CreatePubkeyPressListener {
@@ -33,11 +35,10 @@ public class PubkeyManagementActivity extends Activity implements PubkeyDisabled
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_container);
 
-        KeyPairManager kpm = new KeyPairManager(this);
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment fragment;
-        if (kpm.hasKeyPair()) {
+        if (KeyProvider.hasKeys()) {
             fragment = new PubkeyEnabledFragment();
         } else {
             fragment = PubkeyDisabledFragment.newInstance(this);
@@ -61,6 +62,15 @@ public class PubkeyManagementActivity extends Activity implements PubkeyDisabled
 
     @Override
     public void createPubkey() {
+        KeyPairManager keyPairManager = new KeyPairManager(this);
+        try {
+            KeyPair keyPair = keyPairManager.getKeyPair();
+            KeyProvider.initialize(keyPair.getPublic(), keyPair.getPrivate());
+            KeyProvider.printKeyPair();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // TODO: Notify user!
+        }
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, new PubkeyEnabledFragment());
@@ -93,12 +103,6 @@ public class PubkeyManagementActivity extends Activity implements PubkeyDisabled
         protected Boolean doInBackground(SSHConnection... hosts) {
             SSHConnection host = hosts[0];
             host.setUseKeyPair(false);
-            KeyPairManager kph = new KeyPairManager(PubkeyManagementActivity.this);
-            try {
-                host.setKeyPair(kph.getKeyPair());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
             SSHKeyUploader sshKeyUploader = new SSHKeyUploader(host);
             sshKeyUploader.establishAndUpload();

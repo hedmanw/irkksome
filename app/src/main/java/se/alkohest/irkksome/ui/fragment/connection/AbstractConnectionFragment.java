@@ -41,13 +41,6 @@ public abstract class AbstractConnectionFragment extends Fragment {
     public void connectPressed() {
         if (listener != null) {
             IrkksomeConnection connection = getConnection();
-            try {
-                connection.getSSHConnection().setKeyPair(new KeyPairManager(getActivity()).getKeyPair()); // TODO: this is really silly, do NOT commit this!
-                Log.e("irkksomeKEY", KeyEncodingUtil.encodePublicKey(connection.getSSHConnection().getKeyPair().getPublic()));
-                Log.e("irkksomeKEY", KeyEncodingUtil.encodePrivateKeyToString(connection.getSSHConnection().getKeyPair().getPrivate()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             connection.setLastUsed(new Date());
             listener.onConnectPressed(connection);
         }

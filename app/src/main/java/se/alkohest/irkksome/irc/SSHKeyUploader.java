@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import se.alkohest.irkksome.model.entity.SSHConnection;
 import se.alkohest.irkksome.util.KeyEncodingUtil;
+import se.alkohest.irkksome.util.KeyProvider;
 
 public class SSHKeyUploader extends SSHClient {
     public static final String ECHO_LITERAL = "echo -e ";
@@ -23,9 +24,9 @@ public class SSHKeyUploader extends SSHClient {
 
     private void uploadPubKey() {
         try {
-            final String pubKey = KeyEncodingUtil.encodePublicKey(sshConnectionData.getKeyPair().getPublic());
+            final String pubKey = KeyProvider.getPubkey();
             final Session session = connection.openSession();
-            session.execCommand(ECHO_LITERAL + pubKey + APPEND + AUTHORIZED_KEYS); // TODO: actual file
+            session.execCommand(ECHO_LITERAL + pubKey + APPEND + AUTHORIZED_KEYS);
             session.close();
         } catch (IOException e) {
             e.printStackTrace();

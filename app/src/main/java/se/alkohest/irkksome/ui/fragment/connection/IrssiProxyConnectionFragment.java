@@ -15,6 +15,7 @@ import se.alkohest.irkksome.model.entity.SSHConnection;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 import se.alkohest.irkksome.model.impl.SSHConnectionEB;
 import se.alkohest.irkksome.ui.PubkeyManagementActivity;
+import se.alkohest.irkksome.util.KeyProvider;
 
 public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
     public static AbstractConnectionFragment newInstance() {
@@ -49,6 +50,8 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
 
     @Override
     public void inflateConnectionView(final ViewGroup parent) {
+        // If we're starting an entirely new irssi proxy session, the listener will never be attached.
+        // TODO: fix above
         if (templateConnection != null) {
             setFieldValue(parent, R.id.server_connect_host, templateConnection.getHost());
             setFieldValue(parent, R.id.server_connect_port, String.valueOf(templateConnection.getPort()));
@@ -109,14 +112,13 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
         sshConnection.setSshUser(getFieldValue(R.id.server_connect_sshUser));
         sshConnection.setSshPassword(getFieldValue(R.id.server_connect_sshPass));
         sshConnection.setUseKeyPair(((CheckBox) getActivity().findViewById(R.id.server_connect_use_pubkey)).isChecked());
-        if (sshConnection.isUseKeyPair()) {
-            try {
-                sshConnection.setKeyPair(new KeyPairManager(getActivity()).getKeyPair());
-            } catch (IOException e) {
-                e.printStackTrace();
-                // Alert user
-            }
-        }
+//        if (sshConnection.isUseKeyPair()) {
+//            if (KeyProvider.hasKeys()) {
+//                // create a key and do lots of funny things
+//            }
+//            else {
+//            }
+//        }
         return sshConnection;
     }
 }
