@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.security.KeyPair;
 
 import se.alkohest.irkksome.R;
+import se.alkohest.irkksome.irc.ConnectionIOException;
 import se.alkohest.irkksome.irc.SSHKeyUploader;
 import se.alkohest.irkksome.model.api.KeyPairManager;
 import se.alkohest.irkksome.model.api.dao.SSHConnectionDAO;
@@ -115,30 +116,49 @@ public class PubkeyManagementActivity extends Activity implements PubkeyDisabled
         fragmentTransaction.commit();
     }
 
-    private class PubkeyUploadTask extends AsyncTask<SSHConnection, Void, Boolean> {
+    private class PubkeyUploadTask extends AsyncTask<SSHConnection, Void, UploadTaskFinishStatus> {
         @Override
-        protected Boolean doInBackground(SSHConnection... hosts) {
+        protected UploadTaskFinishStatus doInBackground(SSHConnection... hosts) {
             SSHConnection host = hosts[0];
             host.setUseKeyPair(false);
 
             SSHKeyUploader sshKeyUploader = new SSHKeyUploader(host);
-            sshKeyUploader.establishAndUpload();
+            try {
+                sshKeyUploader.establishAndUpload();
+            } catch (ConnectionIOException e) {
+                return new UploadTaskFinishStatus(e.getPhase(), e.getMessage());
+            }
             sshKeyUploader.closeAll();
-            return true;
+            return new UploadTaskFinishStatus(null, null);
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
+        protected void onPostExecute(UploadTaskFinishStatus result) {
             findViewById(R.id.upload_progress).setVisibility(View.GONE);
             // report things based on result?
-            if (result) {
-                Toast.makeText(PubkeyManagementActivity.this, "SSH connection finished.", Toast.LENGTH_SHORT).show();
+            if (result.taskWasFinished()) {
+                Toast.makeText(PubkeyManagementActivity.this, "Key uploaded!", Toast.LENGTH_SHORT).show();
                 // set some variable in the connection?
                 // finish activity?
             }
             else {
                 findViewById(android.R.id.button1).setEnabled(false);
+                Toast.makeText(PubkeyManagementActivity.this, "Bad news! " + result.message, Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    private static class UploadTaskFinishStatus {
+        private ConnectionIOException.ErrorPhase errorPhase;
+        private String message;
+
+        UploadTaskFinishStatus(ConnectionIOException.ErrorPhase errorPhase, String message) {
+            this.errorPhase = errorPhase;
+            this.message = message;
+        }
+
+        boolean taskWasFinished() {
+            return errorPhase == null && message == null;
         }
     }
 }

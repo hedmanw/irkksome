@@ -40,11 +40,11 @@ public class SSHIrkkForwarder extends SSHClient implements ServerConnection {
     }
 
     @Override
-    protected void postAuthAction() {
+    protected void postAuthAction() throws ConnectionIOException {
         try {
             portForwarder = connection.createLocalPortForwarder(new InetSocketAddress(InetAddress.getLocalHost(), localPort), ircConnection.getHost(), ircConnection.getPort());
         } catch (IOException e) {
-            Log.e(TAG, "could not create portforward", e);
+            throw new ConnectionIOException(ConnectionIOException.ErrorPhase.POST, "Portforward could not be created.");
         }
     }
 

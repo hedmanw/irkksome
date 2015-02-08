@@ -17,8 +17,6 @@ import se.alkohest.irkksome.model.entity.SSHConnection;
 import se.alkohest.irkksome.util.KeyEncodingUtil;
 import se.alkohest.irkksome.util.KeyProvider;
 
-// TODO: Close everything on failures?
-// ^ nej för fan, kasta hela jävla världen. vad är det för geni som döljer lågnivåfel?!
 // test keys can be generated with
 // $ ssh-keygen -t rsa -b 1024 -f dummy-ssh-keygen.pem -N '' -C "keyname"
 public abstract class SSHClient implements ConnectionMonitor {
@@ -56,40 +54,41 @@ public abstract class SSHClient implements ConnectionMonitor {
         this.sshConnectionData = data;
     }
 
-    protected void establishConnection() {
+    protected void establishConnection() throws ConnectionIOException {
         connected = true;
         connection = new Connection(sshConnectionData.getSshHost(), sshConnectionData.getSshPort());
         connection.addConnectionMonitor(this);
-
-        boolean shouldAuth = true;
 
         try {
             connectionInfo = connection.connect(new HostKeyVerifier());
         } catch (IOException e) {
             closeAll();
-            Log.e(TAG, e.getCause().getMessage());
-            shouldAuth = false;
+            throw new ConnectionIOException(ConnectionIOException.ErrorPhase.PRE, "Error while connecting. Correct host?");
         }
 
-        if (shouldAuth) {
-            if (authLoop()) {
-                postAuthAction();
-            }
-            else {
-                closeAll();
-            }
-//            else {
-//                Throw auth error?
-//            }
+
+        if (authLoop()) {
+            postAuthAction();
         }
-        // Throw connection error?
+        else {
+            closeAll();
+            // Auth loop never managed to auth, incorrect details
+            throw new ConnectionIOException(ConnectionIOException.ErrorPhase.AUTH, "Authentication failed. Incorrect details?");
+        }
+
+
     }
 
-    private boolean authLoop() {
+    private boolean authLoop() throws ConnectionIOException {
         int tries = 0;
         boolean shouldRetryAuth = true;
         while (connected && shouldRetryAuth) {
-            authenticate();
+            try {
+                authenticate();
+            } catch (IOException e) {
+                // Got IO during auth, network error
+                throw new ConnectionIOException(ConnectionIOException.ErrorPhase.AUTH, "Connection failed.");
+            }
             tries++;
             shouldRetryAuth = tries < AUTH_ATTEMPTS && !connection.isAuthenticationComplete() ;
             if (shouldRetryAuth) {
@@ -103,31 +102,27 @@ public abstract class SSHClient implements ConnectionMonitor {
         return connection.isAuthenticationComplete();
     }
 
-    private boolean authenticate() {
-        try {
-            if (connection.authenticateWithNone(sshConnectionData.getSshUser())) {
-                return true;
-            }
+    private boolean authenticate() throws IOException {
+        if (connection.authenticateWithNone(sshConnectionData.getSshUser())) {
+            return true;
+        }
 
-            if (sshConnectionData.isUseKeyPair() && KeyProvider.hasKeys()) {
-                if (connection.isAuthMethodAvailable(sshConnectionData.getSshUser(), AUTH_PUBLIC_KEY)) {
-                    if (connection.authenticateWithPublicKey(sshConnectionData.getSshUser(), KeyProvider.getPrivkey(), null)) {
-                        return true;
-                    }
-                }
-            }
-            if (connection.isAuthMethodAvailable(sshConnectionData.getSshUser(), AUTH_PASSWORD)) {
-                if (sshConnectionData.getSshPassword() != null && connection.authenticateWithPassword(sshConnectionData.getSshUser(), sshConnectionData.getSshPassword())) {
+        if (sshConnectionData.isUseKeyPair() && KeyProvider.hasKeys()) {
+            if (connection.isAuthMethodAvailable(sshConnectionData.getSshUser(), AUTH_PUBLIC_KEY)) {
+                if (connection.authenticateWithPublicKey(sshConnectionData.getSshUser(), KeyProvider.getPrivkey(), null)) {
                     return true;
                 }
             }
-        } catch (IOException e) {
-            Log.e(TAG, "AUTH exception", e);
+        }
+        if (connection.isAuthMethodAvailable(sshConnectionData.getSshUser(), AUTH_PASSWORD)) {
+            if (sshConnectionData.getSshPassword() != null && connection.authenticateWithPassword(sshConnectionData.getSshUser(), sshConnectionData.getSshPassword())) {
+                return true;
+            }
         }
         return false;
     }
 
-    protected abstract void postAuthAction();
+    protected abstract void postAuthAction() throws ConnectionIOException;
 
     public void closeAll() {
         if (connected) {
@@ -149,6 +144,7 @@ public abstract class SSHClient implements ConnectionMonitor {
     public void connectionLost(Throwable reason) {
         closeAll();
         Log.i(TAG, "Connection lost: ", reason);
+        // propagate up??
     }
 
     private static int getRandomLocalPort() {

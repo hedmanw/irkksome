@@ -18,23 +18,23 @@ public class SSHKeyUploader extends SSHClient {
         super(data);
     }
 
-    public void establishAndUpload() {
+    public void establishAndUpload() throws ConnectionIOException {
         establishConnection();
     }
 
-    private void uploadPubKey() {
+    private void uploadPubKey() throws ConnectionIOException {
         try {
             final String pubKey = KeyProvider.getPubkey();
             final Session session = connection.openSession();
             session.execCommand(ECHO_LITERAL + pubKey + APPEND + AUTHORIZED_KEYS);
             session.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ConnectionIOException(ConnectionIOException.ErrorPhase.POST, "Could not upload pubkey.");
         }
     }
 
     @Override
-    protected void postAuthAction() {
+    protected void postAuthAction() throws ConnectionIOException {
         uploadPubKey();
     }
 }
