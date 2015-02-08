@@ -40,7 +40,7 @@ public class IrkksomeApplication extends Application {
             try {
                 KeyPair keyPair = kpm.getKeyPair();
                 KeyProvider.initialize(keyPair.getPublic(), keyPair.getPrivate());
-                KeyProvider.printKeyPair();
+//                KeyProvider.printKeyPair();
             } catch (IOException e) {
                 Log.e("irkksome", "Found keys on startup but could not load them.", e);
             }

@@ -18,6 +18,7 @@ import se.alkohest.irkksome.util.KeyEncodingUtil;
 import se.alkohest.irkksome.util.KeyProvider;
 
 // TODO: Close everything on failures?
+// ^ nej för fan, kasta hela jävla världen. vad är det för geni som döljer lågnivåfel?!
 // test keys can be generated with
 // $ ssh-keygen -t rsa -b 1024 -f dummy-ssh-keygen.pem -N '' -C "keyname"
 public abstract class SSHClient implements ConnectionMonitor {

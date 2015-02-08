@@ -112,13 +112,6 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
         sshConnection.setSshUser(getFieldValue(R.id.server_connect_sshUser));
         sshConnection.setSshPassword(getFieldValue(R.id.server_connect_sshPass));
         sshConnection.setUseKeyPair(((CheckBox) getActivity().findViewById(R.id.server_connect_use_pubkey)).isChecked());
-//        if (sshConnection.isUseKeyPair()) {
-//            if (KeyProvider.hasKeys()) {
-//                // create a key and do lots of funny things
-//            }
-//            else {
-//            }
-//        }
         return sshConnection;
     }
 }

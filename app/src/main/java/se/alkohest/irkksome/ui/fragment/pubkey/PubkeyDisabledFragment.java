@@ -36,13 +36,6 @@ public class PubkeyDisabledFragment extends Fragment {
         return inflatedView;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.findItem(R.id.action_pubkey_copy).setVisible(false);
-        menu.findItem(R.id.action_upload_pubkey).setVisible(false);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
     public interface CreatePubkeyPressListener {
         public void createPubkey();
     }
