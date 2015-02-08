@@ -9,9 +9,9 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.security.KeyPair;
@@ -92,7 +92,8 @@ public class PubkeyManagementActivity extends Activity implements PubkeyDisabled
     }
 
     private void performUploadTask(SSHConnection connection) {
-        // Open progress dialog
+        findViewById(android.R.id.button1).setEnabled(false);
+        findViewById(R.id.upload_progress).setVisibility(View.VISIBLE);
         new PubkeyUploadTask().execute(connection);
     }
 
@@ -128,10 +129,16 @@ public class PubkeyManagementActivity extends Activity implements PubkeyDisabled
 
         @Override
         protected void onPostExecute(Boolean result) {
-            // close progress thing
-            // report things based on result
-            // set some variable in the connection?
-            // finish activity?
+            findViewById(R.id.upload_progress).setVisibility(View.GONE);
+            // report things based on result?
+            if (result) {
+                Toast.makeText(PubkeyManagementActivity.this, "SSH connection finished.", Toast.LENGTH_SHORT).show();
+                // set some variable in the connection?
+                // finish activity?
+            }
+            else {
+                findViewById(android.R.id.button1).setEnabled(false);
+            }
         }
     }
 }
