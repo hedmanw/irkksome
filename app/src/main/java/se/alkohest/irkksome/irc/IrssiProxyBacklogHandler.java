@@ -11,6 +11,7 @@ public class IrssiProxyBacklogHandler implements BacklogHandler {
     public static final String BACKLOG = "backlog";
     public static final String START = "start";
     public static final String STOP = "stop";
+    public static final String IRKKSOME = "irkksome";
 
     private boolean backlogReplaying;
 
@@ -29,11 +30,12 @@ public class IrssiProxyBacklogHandler implements BacklogHandler {
                     backlogReplaying = false;
                     break;
             }
-        } else if (backlogReplaying) {
+        } else if (backlogReplaying && parts[0].startsWith(IRKKSOME)) {
             try {
                 int index = parts[2].lastIndexOf(':');
                 long unixTime = Long.parseLong(parts[2].substring(index + 1));
                 parts[2] = parts[2].substring(0, index - 1);
+                parts[0] = parts[0].substring(IRKKSOME.length());
                 return new Date(unixTime*1000);
             } catch (NumberFormatException e) {}
         }
