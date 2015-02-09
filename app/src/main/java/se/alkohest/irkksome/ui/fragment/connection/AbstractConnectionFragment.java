@@ -7,17 +7,21 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.StringRes;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.Date;
 
 import se.alkohest.irkksome.R;
+import se.alkohest.irkksome.model.api.KeyPairManager;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
 import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
+import se.alkohest.irkksome.util.KeyEncodingUtil;
 
 public abstract class AbstractConnectionFragment extends Fragment {
     public static final String CONNECTION_ARGUMENT = "CONNECTION";

@@ -11,7 +11,6 @@ import se.emilsjolander.sprinkles.ManyQuery;
  */
 public interface IrkksomeConnectionDAOLocal {
     public IrkksomeConnectionEB create();
-    public String getPresentation(IrkksomeConnectionEB connection);
     public IrkksomeConnectionEB findById(long id);
     public void delete(IrkksomeConnectionEB connection);
     public List<IrkksomeConnectionEB> getAll();

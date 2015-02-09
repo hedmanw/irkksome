@@ -5,7 +5,7 @@ import java.io.IOException;
 /**
  * This interface handles a connection.
  */
-public interface Connection {
+public interface ServerConnection {
 
     public void connect() throws IOException;
 

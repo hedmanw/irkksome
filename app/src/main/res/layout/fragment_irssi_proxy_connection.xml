@@ -53,5 +53,11 @@
         android:id="@+id/server_connect_sshPass"
         android:hint="@string/hint_sshPass"
         android:inputType="textPassword" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/use_pubkey_auth"
+        android:id="@+id/server_connect_use_pubkey"/>
 </merge>
 

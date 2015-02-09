@@ -10,9 +10,9 @@ import android.widget.TextView;
 import java.util.List;
 
 import se.alkohest.irkksome.R;
-import se.alkohest.irkksome.irc.ConnectionData;
 import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.api.ServerManager;
+import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 
 /**
  * Created by wilhelm 2015-01-06.
@@ -47,7 +47,7 @@ public class ConnectedServersAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.server_connect_list_item, parent, false);
         }
 
-        ConnectionData connectionData = getItem(position).getConnectionData();
+        IrkksomeConnection connectionData = getItem(position).getConnectionData();
         TextView nickname = (TextView) convertView.findViewById(android.R.id.title);
         nickname.setText(connectionData.getNickname());
         TextView serverName = (TextView) convertView.findViewById(android.R.id.text1);

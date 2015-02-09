@@ -1,5 +1,5 @@
-apply plugin: 'robospock'
-
-robospock {
-    android = project( ':app' )
-}
+//apply plugin: 'robospock'
+//
+//robospock {
+//    android = project( ':app' )
+//}

@@ -22,6 +22,10 @@
         </activity>
         <activity android:name=".ui.NewConnectionActivity"
             android:label="@string/title_connect_to_server"/>
+        <activity android:name=".ui.PubkeyManagementActivity"
+            android:label="@string/title_manage_pubkeys"/>
+        <service android:name=".ui.fragment.pubkey.PubkeyUploadTask"
+            android:exported="false"/>
     </application>
 
 </manifest>

@@ -1,9 +1,9 @@
 package se.alkohest.irkksome.model.api;
 
-import se.alkohest.irkksome.irc.ConnectionData;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
+import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 
 public interface Server {
     public void joinChannel(String channelName);
@@ -36,7 +36,7 @@ public interface Server {
 
     public String getMotd();
 
-    public ConnectionData getConnectionData();
+    public IrkksomeConnection getConnectionData();
 
     public void removeServerConnectionListener();
 }

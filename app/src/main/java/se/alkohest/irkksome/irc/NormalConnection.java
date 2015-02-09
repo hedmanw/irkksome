@@ -10,7 +10,7 @@ import java.net.Socket;
 /**
  * This class represents a normal connection.
  */
-public class NormalConnection implements Connection {
+public class NormalConnection implements ServerConnection {
 
     private final String host;
     private final int port;
