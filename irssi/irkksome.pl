@@ -6,14 +6,12 @@ $VERSION = "0.6";
     description     => "Integrates irssi with the irkksome android app.",
     authors         => "oed",
     url             => "http://github.com/ircsex/irkksome",
-    license         => "Beerware",
+    license         => "MIT",
     changed         => "2014-07-29"
 );
-
 sub send_backlog {
     my ($server, $time) = @_;
     Irssi::print("Sending backlog..");
-    signals_remove();
     Irssi::signal_add_first('print text', 'stop_signal');
     Irssi::signal_emit('server incoming', $server, ":$time PROXY start");
     my $file = Irssi::settings_get_str('irkksome_log');
@@ -23,7 +21,7 @@ sub send_backlog {
         chomp $line;
         my $msg_time = substr $line, rindex($line, ":")+1;
         if ($msg_time >= $time) {
-            Irssi::signal_emit('server incoming', $server, $line);
+            Irssi::signal_emit('server incoming', $server, "irkksome$line");
         }
     }
     close(LOG);
@@ -35,7 +33,6 @@ sub send_backlog {
     }
     Irssi::signal_emit('server incoming', $server, ":$time PROXY stop");
     Irssi::signal_remove('print text', 'stop_signal');
-    signals_add();
 }
 
 sub clear_backlog {
@@ -111,30 +108,14 @@ sub signals_add {
     Irssi::signal_add_last('message private', 'private');
     Irssi::signal_add_last('message own_public', 'own_public');
     Irssi::signal_add_last('message own_private', 'own_private');
-    #Irssi::signal_add_last('message join', 'join');
-    #Irssi::signal_add_last('message part', 'part');
-    #Irssi::signal_add_last('message quit', 'quit');
-    #Irssi::signal_add_last('message kick', 'kick');
-    #Irssi::signal_add_last('message nick', 'nick');
-    #Irssi::signal_add_last('message own_nick', 'nick');
-    #Irssi::signal_add_last('message invite', 'invite');
-    #Irssi::signal_add_last('message topic', 'topic');
-}
-
-sub signals_remove {
-    Irssi::signal_remove('proxy client command', 'handle_command');
-    Irssi::signal_remove('message public', 'public');
-    Irssi::signal_remove('message private', 'private');
-    Irssi::signal_remove('message own_public', 'own_public');
-    Irssi::signal_remove('message own_private', 'own_private');
-    #Irssi::signal_remove('message join', 'join');
-    #Irssi::signal_remove('message part', 'part');
-    #Irssi::signal_remove('message quit', 'quit');
-    #Irssi::signal_remove('message kick', 'kick');
-    #Irssi::signal_remove('message nick', 'nick');
-    #Irssi::signal_remove('message own_nick', 'nick');
-    #Irssi::signal_remove('message invite', 'invite');
-    #Irssi::signal_remove('message topic', 'topic');
+    Irssi::signal_add_last('message join', 'join');
+    Irssi::signal_add_last('message part', 'part');
+    Irssi::signal_add_last('message quit', 'quit');
+    Irssi::signal_add_last('message kick', 'kick');
+    Irssi::signal_add_last('message nick', 'nick');
+    Irssi::signal_add_last('message own_nick', 'nick');
+    Irssi::signal_add_last('message invite', 'invite');
+    Irssi::signal_add_last('message topic', 'topic');
 }
 
 signals_add();
