@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/server_connect_legacy"
-    android:background="?android:attr/selectableItemBackground"
     android:padding="@dimen/small_horizontal_margin">
 
     <TextView

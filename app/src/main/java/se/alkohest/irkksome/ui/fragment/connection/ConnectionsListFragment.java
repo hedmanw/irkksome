@@ -3,30 +3,28 @@ package se.alkohest.irkksome.ui.fragment.connection;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
-
-import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
-import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
-import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.SimpleSwipeUndoAdapter;
-
-import java.util.List;
+import android.widget.ListView;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
-import se.alkohest.irkksome.model.api.local.IrkksomeConnectionDAOLocal;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
 public class ConnectionsListFragment extends Fragment {
     public static final String TAG = "CONNECTION_LIST";
-    private final IrkksomeConnectionDAOLocal connectionDAO = new IrkksomeConnectionDAO();
+    private final IrkksomeConnectionDAO connectionDAO = new IrkksomeConnectionDAO();
     private OnConnectionSelectedListener listener;
     private LegacyConnectionsAdapter adapter;
-    private List<IrkksomeConnectionEB> connectionsForDisplay;
+    private ListView listView;
 
     public static ConnectionsListFragment newInstance() {
         ConnectionsListFragment fragment = new ConnectionsListFragment();
@@ -39,34 +37,57 @@ public class ConnectionsListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        connectionsForDisplay = connectionDAO.getConnectionsForDisplay();
-        adapter = new LegacyConnectionsAdapter(getActivity(), connectionsForDisplay);
+        adapter = new LegacyConnectionsAdapter(getActivity(), connectionDAO.getConnectionsForDisplay());
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_new_connection_list, container, false);
-        DynamicListView dynamicListView = (DynamicListView) inflatedView.findViewById(R.id.legacy_connection_listView);
-        dynamicListView.setAdapter(adapter);
-        dynamicListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView = (ListView) inflatedView.findViewById(R.id.legacy_connection_listView);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 legacyConnectionClicked(adapter.getItem(position));
             }
         });
-
-        SimpleSwipeUndoAdapter simpleSwipeUndoAdapter = new SimpleSwipeUndoAdapter(adapter, getActivity(), new OnDismissCallback() {
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
             @Override
-            public void onDismiss(@NonNull final ViewGroup viewGroup, @NonNull final int[] reverseSortedPositions) {
-                for (int position : reverseSortedPositions) {
-                    legacyConnectionRemoved(adapter.getItem(position));
+            public void onItemCheckedStateChanged(ActionMode actionMode, int pos, long id, boolean checked) {
+
+            }
+
+            @Override
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                MenuInflater menuInflater = actionMode.getMenuInflater();
+                menuInflater.inflate(R.menu.context_connections, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.action_delete_connection:
+                        deleteSelectedItems();
+                        actionMode.finish();
+                        return true;
+                    default:
+                        return false;
                 }
             }
+
+            @Override
+            public void onDestroyActionMode(ActionMode actionMode) {
+
+            }
         });
-        simpleSwipeUndoAdapter.setAbsListView(dynamicListView);
-        dynamicListView.setAdapter(simpleSwipeUndoAdapter);
-        dynamicListView.enableSimpleSwipeUndo();
 
         View regularConnectionButton = inflatedView.findViewById(R.id.new_connection_regular);
         regularConnectionButton.setOnClickListener(new View.OnClickListener() {
@@ -116,10 +137,12 @@ public class ConnectionsListFragment extends Fragment {
         }
     }
 
-    public void legacyConnectionRemoved(IrkksomeConnectionEB connectionItem) {
-        connectionDAO.delete(connectionItem);
-        connectionsForDisplay.remove(connectionItem);
-        adapter.notifyDataSetChanged();
+    private void deleteSelectedItems() {
+        final long[] checkedItemIds = listView.getCheckedItemIds();
+        for (long id : checkedItemIds) {
+            connectionDAO.delete(id);
+        }
+        adapter.setNewData(connectionDAO.getConnectionsForDisplay());
     }
 
     public interface OnConnectionSelectedListener {
