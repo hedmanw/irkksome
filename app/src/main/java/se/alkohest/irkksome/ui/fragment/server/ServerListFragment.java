@@ -30,7 +30,9 @@ public class ServerListFragment extends HilightContainedFragment {
         newConnections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(getActivity(), NewConnectionActivity.class), NewConnectionActivity.MAKE_CONNECTION);
+                final Intent intent = new Intent(getActivity(), NewConnectionActivity.class);
+                intent.putExtra(NewConnectionActivity.REQUEST_CODE, NewConnectionActivity.MAKE_CONNECTION);
+                startActivityForResult(intent, NewConnectionActivity.MAKE_CONNECTION);
             }
         });
         return inflatedView;

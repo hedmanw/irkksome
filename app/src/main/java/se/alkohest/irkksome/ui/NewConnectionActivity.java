@@ -22,6 +22,7 @@ public class NewConnectionActivity extends Activity implements ConnectionsListFr
     public static final int MAKE_CONNECTION = 11;
     public static final int FRESH_STARTUP_CONNECTION = 1;
     public static final int CONNECTION_ESTABLISHED = 1337;
+    public static final String REQUEST_CODE = "requestCode";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,9 @@ public class NewConnectionActivity extends Activity implements ConnectionsListFr
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        ConnectionsListFragment connectFragment = ConnectionsListFragment.newInstance();
+
+        boolean canDelete = getIntent().getIntExtra(REQUEST_CODE, 0) == FRESH_STARTUP_CONNECTION;
+        ConnectionsListFragment connectFragment = ConnectionsListFragment.newInstance(canDelete);
         fragmentTransaction.add(R.id.fragment_container, connectFragment, ConnectionsListFragment.TAG);
         fragmentTransaction.commit();
     }

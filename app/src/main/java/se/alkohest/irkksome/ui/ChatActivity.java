@@ -48,7 +48,9 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
                 fragmentTransaction.add(R.id.fragment_container, emptynessFragment);
                 fragmentTransaction.commit();
 
-                startActivityForResult(new Intent(this, NewConnectionActivity.class), NewConnectionActivity.FRESH_STARTUP_CONNECTION);
+                final Intent intent = new Intent(this, NewConnectionActivity.class);
+                intent.putExtra(NewConnectionActivity.REQUEST_CODE, NewConnectionActivity.FRESH_STARTUP_CONNECTION);
+                startActivityForResult(intent, NewConnectionActivity.FRESH_STARTUP_CONNECTION);
             }
             else { // Back stack was emptied with sessions running, resume them (eller?)
                 serverManager.getActiveServer().setListener(CallbackHandler.getInstance());

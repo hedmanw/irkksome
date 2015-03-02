@@ -25,9 +25,11 @@ public class ConnectionsListFragment extends Fragment {
     private OnConnectionSelectedListener listener;
     private LegacyConnectionsAdapter adapter;
     private ListView listView;
+    private boolean canDeleteConnections; // should be static?
 
-    public static ConnectionsListFragment newInstance() {
+    public static ConnectionsListFragment newInstance(boolean canDeleteConnections) {
         ConnectionsListFragment fragment = new ConnectionsListFragment();
+        fragment.canDeleteConnections = canDeleteConnections;
         return fragment;
     }
 
@@ -52,42 +54,45 @@ public class ConnectionsListFragment extends Fragment {
                 legacyConnectionClicked(adapter.getItem(position));
             }
         });
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-            @Override
-            public void onItemCheckedStateChanged(ActionMode actionMode, int pos, long id, boolean checked) {
 
-            }
+        if (canDeleteConnections) {
+            listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+            listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                @Override
+                public void onItemCheckedStateChanged(ActionMode actionMode, int pos, long id, boolean checked) {
 
-            @Override
-            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-                MenuInflater menuInflater = actionMode.getMenuInflater();
-                menuInflater.inflate(R.menu.context_connections, menu);
-                return true;
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
-                return false;
-            }
-
-            @Override
-            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.action_delete_connection:
-                        deleteSelectedItems();
-                        actionMode.finish();
-                        return true;
-                    default:
-                        return false;
                 }
-            }
 
-            @Override
-            public void onDestroyActionMode(ActionMode actionMode) {
+                @Override
+                public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                    MenuInflater menuInflater = actionMode.getMenuInflater();
+                    menuInflater.inflate(R.menu.context_connections, menu);
+                    return true;
+                }
 
-            }
-        });
+                @Override
+                public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                    switch (menuItem.getItemId()) {
+                        case R.id.action_delete_connection:
+                            deleteSelectedItems();
+                            actionMode.finish();
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode actionMode) {
+
+                }
+            });
+        }
 
         View regularConnectionButton = inflatedView.findViewById(R.id.new_connection_regular);
         regularConnectionButton.setOnClickListener(new View.OnClickListener() {
