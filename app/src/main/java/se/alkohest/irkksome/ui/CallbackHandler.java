@@ -62,7 +62,7 @@ public class CallbackHandler implements ServerCallback {
                 fragmentTransaction.replace(R.id.fragment_container, serverInfoFragment);
                 fragmentTransaction.commit();
                 TextView serverName = (TextView) context.findViewById(R.id.drawer_label_server);
-                serverName.setText(ircServer.getHost());
+                serverName.setText(ircServer.getServerName());
                 connectionListView.setItemChecked(connectionListView.getCheckedItemPosition(), false);
                 connectionListView.setSelection(0);
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);

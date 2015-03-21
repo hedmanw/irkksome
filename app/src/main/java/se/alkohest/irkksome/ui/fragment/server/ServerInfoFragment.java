@@ -31,7 +31,7 @@ public class ServerInfoFragment extends HilightContainedFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        getActivity().setTitle(server.getBackingBean().getHost());
+        getActivity().setTitle(server.getBackingBean().getServerName());
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ServerInfoFragment extends HilightContainedFragment {
             TextView hostname = (TextView) inflatedView.findViewById(R.id.server_info_hostname);
             TextView nickname = (TextView) inflatedView.findViewById(R.id.server_info_nickname);
             TextView motdView = (TextView) inflatedView.findViewById(R.id.server_motd);
-            hostname.setText(server.getBackingBean().getHost());
+            hostname.setText(server.getBackingBean().getServerName());
             nickname.setText(server.getBackingBean().getSelf().getName());
             if (motd.length() > 20) {
                 motdView.setText(motd.substring(0, 20) + "[...]");

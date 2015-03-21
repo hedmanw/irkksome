@@ -1,7 +1,5 @@
 package se.alkohest.irkksome.model.impl;
 
-import android.content.ContentValues;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -17,28 +15,28 @@ import se.emilsjolander.sprinkles.annotations.Table;
 
 @Table("Server")
 public class IrcServerEB extends AbstractBean implements IrcServer {
-    @Column("host")
-    private String host;
-    @Column("server_id")
+    @Column("serverName")
+    private String serverName;
+
     @OneToMany(IrcChannelEB.class)
     private List<IrcChannel> connectedChannels;
-//    @Transient
+
     private Set<IrcUser> knownUsers;
 
     @Column("self")
     @OneToOne(IrcUserEB.class)
     private IrcUser self;
-//    @Transient
+
     private Date lastMessageTime;
 
     @Override
-    public String getHost() {
-        return host;
+    public String getServerName() {
+        return serverName;
     }
 
     @Override
-    public void setHost(String host) {
-        this.host = host;
+    public void setServerName(String host) {
+        this.serverName = host;
     }
 
     @Override
@@ -81,16 +79,8 @@ public class IrcServerEB extends AbstractBean implements IrcServer {
         this.connectedChannels = connectedChannels;
     }
 
-//    @Override
-    public ContentValues createRow(long dependentPK) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("host", host);
-        contentValues.put("self", self.getId());
-        return contentValues;
-    }
-
     @Override
     public String toString() {
-        return host + ":" + self.getName() + ":" + connectedChannels.get(0).getName();
+        return serverName + ":" + self.getName() + ":" + connectedChannels.get(0).getName();
     }
 }

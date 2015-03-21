@@ -51,7 +51,7 @@ public class ConnectedServersAdapter extends BaseAdapter {
         TextView nickname = (TextView) convertView.findViewById(android.R.id.title);
         nickname.setText(connectionData.getNickname());
         TextView serverName = (TextView) convertView.findViewById(android.R.id.text1);
-        serverName.setText(connectionData.toString());
+        serverName.setText(getItem(position).getBackingBean().getServerName() + " (" + connectionData.toString() + ")");
         TextView infoText = (TextView) convertView.findViewById(android.R.id.text2);
         final int channels = getItem(position).getBackingBean().getConnectedChannels().size();
         String channelLabel = " connected channels";
