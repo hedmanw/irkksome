@@ -6,6 +6,7 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@android:id/empty"
         android:id="@android:id/list"/>
     <Button
         style="@style/hilight_button"
@@ -14,14 +15,13 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_below="@android:id/list"
         android:id="@+id/button_new_connections"
-        android:text="make a new connection" />
+        android:text="Connect to a server" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:padding="@dimen/small_horizontal_margin"
         android:layout_alignParentTop="true"
         android:text="You have no connections"
         android:textSize="30sp"
