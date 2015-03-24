@@ -21,6 +21,7 @@ import se.alkohest.irkksome.ui.fragment.HilightContainedFragment;
 import se.alkohest.irkksome.util.DateFormatUtil;
 
 public class ChannelFragment extends HilightContainedFragment {
+    public static final String FRAGMENT_TAG = "channel";
     private static IrcChannel ircChannel;
     private RecyclerView messageRecyclerView;
     private static OnMessageSendListener activity;
@@ -75,6 +76,11 @@ public class ChannelFragment extends HilightContainedFragment {
         scrollToBottom();
 
         return inflatedView;
+    }
+
+    public void changeChannel(IrcChannel channel) {
+        ircChannel = channel;
+        messageRecyclerView.getAdapter().notifyDataSetChanged();
     }
 
     private boolean hasBacklog() {

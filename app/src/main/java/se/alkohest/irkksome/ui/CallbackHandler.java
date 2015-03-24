@@ -25,7 +25,6 @@ public class CallbackHandler implements ServerCallback {
     private UserAdapter userAdapter;
     private final Activity context;
     private final FragmentManager fragmentManager;
-    private ChannelFragment channelFragment; // TODO: When the phone is tilted, this reference becomes invalid
 
     public static CallbackHandler getInstance() {
         if (instance == null) {
@@ -119,16 +118,20 @@ public class CallbackHandler implements ServerCallback {
     @Override
     public void setActiveChannel(final IrcChannel channel) {
         userAdapter = new UserMapAdapter(channel.getUsers());
-        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 context.setTitle(channel.getName());
-
-                channelFragment = ChannelFragment.newInstance(channel);
-                fragmentTransaction.replace(R.id.fragment_container, channelFragment);
-                fragmentTransaction.commit();
+                ChannelFragment channelFragment = getChannelFragment();
+                if (channelFragment == null) {
+                    final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container, ChannelFragment.newInstance(channel), ChannelFragment.FRAGMENT_TAG);
+                    fragmentTransaction.commit();
+                }
+                else {
+                    channelFragment.changeChannel(channel);
+                }
 
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
 
@@ -145,7 +148,7 @@ public class CallbackHandler implements ServerCallback {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                channelFragment.receiveMessage();
+                getChannelFragment().receiveMessage();
             }
         });
     }
@@ -158,5 +161,9 @@ public class CallbackHandler implements ServerCallback {
                 userAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    private ChannelFragment getChannelFragment() {
+        return (ChannelFragment) fragmentManager.findFragmentByTag(ChannelFragment.FRAGMENT_TAG);
     }
 }
