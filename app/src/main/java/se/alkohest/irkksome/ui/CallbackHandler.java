@@ -25,6 +25,7 @@ public class CallbackHandler implements ServerCallback {
     private UserAdapter userAdapter;
     private final Activity context;
     private final FragmentManager fragmentManager;
+    private ChannelFragment channelFragment; // TODO: When the phone is tilted, this reference becomes invalid
 
     public static CallbackHandler getInstance() {
         if (instance == null) {
@@ -125,7 +126,7 @@ public class CallbackHandler implements ServerCallback {
             public void run() {
                 context.setTitle(channel.getName());
 
-                ChannelFragment channelFragment = ChannelFragment.newInstance(channel);
+                channelFragment = ChannelFragment.newInstance(channel);
                 fragmentTransaction.replace(R.id.fragment_container, channelFragment);
                 fragmentTransaction.commit();
 
@@ -140,11 +141,11 @@ public class CallbackHandler implements ServerCallback {
     }
 
     @Override
-    public void messageReceived(final IrcMessage message) {
+    public void messageReceived(final IrcMessage message) { // TODO: get rid of this parameter
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ChannelFragment.receiveMessage(message);
+                channelFragment.receiveMessage();
             }
         });
     }
