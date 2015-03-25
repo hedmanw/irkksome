@@ -22,7 +22,6 @@ import se.alkohest.irkksome.irc.ConnectionIOException;
 import se.alkohest.irkksome.irc.SSHKeyUploader;
 import se.alkohest.irkksome.model.api.KeyPairManager;
 import se.alkohest.irkksome.model.api.dao.SSHConnectionDAO;
-import se.alkohest.irkksome.model.api.local.SSHConnectionDAOLocal;
 import se.alkohest.irkksome.model.entity.SSHConnection;
 import se.alkohest.irkksome.ui.fragment.pubkey.PubkeyDisabledFragment;
 import se.alkohest.irkksome.ui.fragment.pubkey.PubkeyEnabledFragment;
@@ -32,7 +31,7 @@ import se.alkohest.irkksome.util.KeyProvider;
 public class PubkeyManagementActivity extends Activity implements PubkeyDisabledFragment.CreatePubkeyPressListener, PubkeyEnabledFragment.PubkeyManagementListener {
     public static final String SSH_CONNECTION_PK = "sshConnectionPK";
     public static final String SSH_CONNECTION_PASSWORD= "sshConnectionPassword";
-    private SSHConnectionDAOLocal sshConnectionDAO = new SSHConnectionDAO();
+    private SSHConnectionDAO sshConnectionDAO = new SSHConnectionDAO();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

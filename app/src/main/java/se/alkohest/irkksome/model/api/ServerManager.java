@@ -6,7 +6,6 @@ import java.util.List;
 
 import se.alkohest.irkksome.model.api.dao.IrcServerDAO;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
-import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.impl.IrcServerEB;
@@ -14,7 +13,7 @@ import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
 public class ServerManager implements ServerConnectionListener, HilightListener {
     public static final ServerManager INSTANCE = new ServerManager();
-    private IrcServerDAOLocal serverDAO;
+    private IrcServerDAO serverDAO;
     private IrkksomeConnectionDAO connectionDAO;
     private List<Server> servers;
     private Server activeServer;

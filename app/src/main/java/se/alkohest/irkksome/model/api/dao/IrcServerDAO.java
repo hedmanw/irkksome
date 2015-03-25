@@ -5,19 +5,16 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
-import se.alkohest.irkksome.model.api.local.IrcChannelDAOLocal;
-import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.model.impl.IrcServerEB;
 import se.alkohest.irkksome.orm.GenericDAO;
 
-public class IrcServerDAO extends GenericDAO<IrcServerEB> implements IrcServerDAOLocal {
-    private IrcChannelDAOLocal channelDAO = new IrcChannelDAO();
+public class IrcServerDAO extends GenericDAO<IrcServerEB> {
+    private IrcChannelDAO channelDAO = new IrcChannelDAO();
     private IrcUserDAO userDAO = new IrcUserDAO();
 
-    @Override
     public IrcServer create() {
         IrcServer ircServer = new IrcServerEB();
         ircServer.setConnectedChannels(new ArrayList<IrcChannel>());
@@ -26,12 +23,10 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB> implements IrcServerDA
         return ircServer;
     }
 
-    @Override
     public void addUser(IrcServer ircServer, IrcUser user) {
         ircServer.getKnownUsers().add(user);
     }
 
-    @Override
     public IrcChannel getChannel(IrcServer ircServer, String channelName) {
         for (IrcChannel c : ircServer.getConnectedChannels()) {
             if (channelDAO.compare(c, channelName)) {
@@ -43,7 +38,6 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB> implements IrcServerDA
         return channel;
     }
 
-    @Override
     public IrcUser getUser(IrcServer ircServer, String nick) {
         for (IrcUser u : ircServer.getKnownUsers()) {
             if (userDAO.compare(u, nick)) {
@@ -55,12 +49,10 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB> implements IrcServerDA
         return user;
     }
 
-    @Override
     public void removeChannel(IrcServer ircServer, IrcChannel channel) {
         ircServer.getConnectedChannels().remove(channel);
     }
 
-    @Override
     public void removeUser(IrcServer ircServer, IrcUser user) {
         ircServer.getKnownUsers().remove(user);
     }

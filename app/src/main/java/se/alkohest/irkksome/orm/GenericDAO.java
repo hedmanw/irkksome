@@ -15,13 +15,13 @@ public abstract class GenericDAO<E extends AbstractBean> {
     }
 
     public void delete(long id) {
-        E item = getById(id);
+        E item = findById(id);
         if (item != null) {
             item.delete();
         }
     }
 
-    public E getById(long id) {
+    public E findById(long id) {
         return SprinklesAdapter.findById(getEntityBean(), id);
     }
 

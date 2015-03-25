@@ -12,10 +12,6 @@ import se.alkohest.irkksome.model.api.dao.IrcChannelDAO;
 import se.alkohest.irkksome.model.api.dao.IrcMessageDAO;
 import se.alkohest.irkksome.model.api.dao.IrcServerDAO;
 import se.alkohest.irkksome.model.api.dao.IrcUserDAO;
-import se.alkohest.irkksome.model.api.local.IrcChannelDAOLocal;
-import se.alkohest.irkksome.model.api.local.IrcMessageDAOLocal;
-import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
-import se.alkohest.irkksome.model.api.local.IrcUserDAOLocal;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
@@ -27,10 +23,10 @@ public class ServerImpl implements Server, IrcProtocolListener {
     private IrcServer ircServer;
     private IrkksomeConnection connectionData;
     private HilightHelper hilightHelper;
-    private IrcChannelDAOLocal channelDAO = new IrcChannelDAO();
-    private IrcMessageDAOLocal messageDAO = new IrcMessageDAO();
-    private IrcServerDAOLocal serverDAO = new IrcServerDAO();
-    private IrcUserDAOLocal userDAO = new IrcUserDAO();
+    private IrcChannelDAO channelDAO = new IrcChannelDAO();
+    private IrcMessageDAO messageDAO = new IrcMessageDAO();
+    private IrcServerDAO serverDAO = new IrcServerDAO();
+    private IrcUserDAO userDAO = new IrcUserDAO();
     private ServerCallback listener;
     private String motd = "";
 
