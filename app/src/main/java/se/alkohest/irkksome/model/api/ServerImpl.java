@@ -132,7 +132,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
-    public void setActiveChannel(IrcChannel ircChannel) {
+    public void setActiveChannel(IrcChannel ircChannel) { // TODO: why are no internal methods using this?
         if (activeChannel != ircChannel) {
             if (ircChannel != null) {
                 listener.setActiveChannel(ircChannel);
@@ -322,8 +322,9 @@ public class ServerImpl implements Server, IrcProtocolListener {
         }
 
         if (!ircChannel.equals(activeChannel)) {
-            hilightListener.addUnread(ircServer, ircChannel, level);
-            listener.updateHilights();
+            if (hilightListener.addUnread(ircServer, ircChannel, level)) {
+                listener.updateHilights();
+            }
         }
 
         ircServer.setLastMessageTime(time);

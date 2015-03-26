@@ -131,6 +131,7 @@ public class CallbackHandler implements ServerCallback {
                 }
                 else {
                     channelFragment.changeChannel(channel);
+                    HilightHandler.getInstance().updateHilightButton();
                 }
 
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
