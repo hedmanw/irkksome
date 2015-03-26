@@ -110,7 +110,7 @@ public class CallbackHandler implements ServerCallback {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                HilightManager.getInstance().updateHilightButton();
+                HilightHandler.getInstance().updateHilightButton();
             }
         });
     }

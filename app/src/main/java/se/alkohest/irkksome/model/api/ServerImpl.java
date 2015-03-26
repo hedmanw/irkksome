@@ -17,12 +17,13 @@ import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
+import se.alkohest.irkksome.model.enumerations.HilightLevel;
 
 public class ServerImpl implements Server, IrcProtocolListener {
     private IrcProtocol ircProtocol;
     private IrcServer ircServer;
     private IrkksomeConnection connectionData;
-    private HilightHelper hilightHelper;
+    private HilightManager hilightManager;
     private IrcChannelDAO channelDAO = new IrcChannelDAO();
     private IrcMessageDAO messageDAO = new IrcMessageDAO();
     private IrcServerDAO serverDAO = new IrcServerDAO();
@@ -40,9 +41,8 @@ public class ServerImpl implements Server, IrcProtocolListener {
         ircProtocol = IrcProtocolFactory.getIrcProtocol(data);
         ircProtocol.setListener(this);
         ircProtocol.connect(data.getNickname(), data.getUsername(), data.getRealname(), data.getPassword());
-        hilightHelper = new HilightHelper();
-        // TODO - fix dynamic hilights
-        hilightHelper.addHilight(data.getNickname());
+        hilightManager = new HilightManager();
+        hilightManager.addHilight(data.getNickname(), HilightLevel.NICKNAME);
     }
 
     @Override
@@ -312,18 +312,17 @@ public class ServerImpl implements Server, IrcProtocolListener {
         IrcMessage ircMessage = messageDAO.create(IrcMessage.MessageTypeEnum.RECEIVED, ircUser, message, time);
         IrcChannel ircChannel;
 
-        // Hilightlogiken ska flyttas till hilights
+        HilightLevel level;
         if (ircServer.getSelf().getName().equals(channel)) {
             ircChannel = serverDAO.getChannel(ircServer, user);
-            ircMessage.setHilight(true);
+            level = HilightLevel.NICKNAME;
         } else {
             ircChannel = serverDAO.getChannel(ircServer, channel);
-            ircMessage.setHilight(hilightHelper.checkMessage(message));
+            level = hilightManager.getHilightLevel(message);
         }
 
         if (!ircChannel.equals(activeChannel)) {
-            UnreadEntity entity = new UnreadEntity(ircChannel, ircServer);
-            hilightListener.addUnread(entity, ircMessage.isHilight());
+            hilightListener.addUnread(ircServer, ircChannel, level);
             listener.updateHilights();
         }
 

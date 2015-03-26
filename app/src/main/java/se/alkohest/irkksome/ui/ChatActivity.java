@@ -35,7 +35,7 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
         setContentView(R.layout.activity_main_drawers);
         ChannelsAdapter.setInstance(this, null);
         CallbackHandler.setInstance(this);
-        HilightManager.setInstance(this, serverManager.getUnreadStack());
+        HilightHandler.setInstance(this, serverManager.getUnreadStack());
         connectionsList = (ListView) findViewById(R.id.left_drawer_list);
 
         if (savedInstanceState == null) {

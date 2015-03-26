@@ -8,7 +8,7 @@ import android.view.ViewOutlineProvider;
 import android.widget.Button;
 
 import se.alkohest.irkksome.R;
-import se.alkohest.irkksome.ui.HilightManager;
+import se.alkohest.irkksome.ui.HilightHandler;
 
 public class HilightContainedFragment extends Fragment {
     @Override
@@ -19,7 +19,7 @@ public class HilightContainedFragment extends Fragment {
         hilights.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HilightManager.getInstance().showHilight();
+                HilightHandler.getInstance().showHilight();
             }
         });
 
@@ -31,6 +31,6 @@ public class HilightContainedFragment extends Fragment {
             }
         };
         hilights.setOutlineProvider(viewOutlineProvider);
-        HilightManager.getInstance().updateHilightButton();
+        HilightHandler.getInstance().updateHilightButton();
     }
 }
