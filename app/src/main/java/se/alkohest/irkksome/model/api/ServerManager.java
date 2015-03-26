@@ -83,6 +83,7 @@ public class ServerManager implements ServerConnectionListener, HilightListener 
 
     @Override
     public void addUnread(IrcServer ircServer, IrcChannel ircChannel, HilightLevel hilightLevel) {
+        // TODO: use return value to optimize callbacks up to CallbackHandler (we don't need to update if false)
         unreadStack.pushOverwrite(ircServer, ircChannel, hilightLevel);
     }
 

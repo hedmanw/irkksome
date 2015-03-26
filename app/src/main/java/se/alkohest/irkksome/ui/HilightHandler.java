@@ -30,8 +30,6 @@ public class HilightHandler {
         this.unreadStack = unreadStack;
     }
 
-
-
     public void showHilight() {
         ServerManager serverManager = ServerManager.INSTANCE;
         if (serverManager.getUnreadStack().hasUnread()) {

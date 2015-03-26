@@ -27,6 +27,6 @@ public class HilightManager {
                 return hilightItem.getLevel();
             }
         }
-        return HilightLevel.NONE;
+        return HilightLevel.UNREAD;
     }
 }

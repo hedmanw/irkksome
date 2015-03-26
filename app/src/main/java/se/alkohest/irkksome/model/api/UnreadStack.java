@@ -17,9 +17,9 @@ public class UnreadStack {
     /**
      * Pushes a (server, channel) tuple to the stack, removing an existing such tuple of lower or same priority
      */
-    public void pushOverwrite(IrcServer ircServer, IrcChannel ircChannel, HilightLevel hilightLevel) {
+    public boolean pushOverwrite(IrcServer ircServer, IrcChannel ircChannel, HilightLevel hilightLevel) {
         UnreadEntity entity = new UnreadEntity(ircChannel, ircServer);
-        hilights.push(entity);
+        return hilights.pushWithPriority(entity, hilightLevel);
     }
 
     public HilightLevel peekPriority() {
@@ -86,21 +86,54 @@ public class UnreadStack {
             }
         }
 
+
+        /**
+         * Checks recursively for emptiness.
+         * Internally, just use isEmpty, since it's non-recursive. (Or, if in doubt, just use super.isEmpty()).
+         */
         @Override
-        public UnreadEntity pop() {
-            UnreadEntity head = super.pop();
-            if (head == null && child != null) {
-                return child.pop();
+        public boolean empty() {
+            if (super.empty()) {
+                if (child != null) {
+                    return child.empty();
+                }
+                else {
+                    return true;
+                }
             }
             else {
-                return head;
+                return false;
             }
         }
 
         @Override
-        public UnreadEntity push(UnreadEntity object) {
-            remove(object);
-            return super.push(object);
+        public UnreadEntity pop() {
+            if (isEmpty() && child != null) {
+                return child.pop();
+            }
+            else {
+                return super.pop();
+            }
+        }
+
+        public boolean pushWithPriority(UnreadEntity entity, HilightLevel level) {
+            if (level == this.level) {
+                remove(entity);
+                push(entity);
+                return true;
+            }
+            else {
+                // Don't add entity to a lower level if it exists on this level
+                if (contains(entity)) {
+                    return false;
+                }
+                if (child != null) {
+                    return child.pushWithPriority(entity, level);
+                }
+                else {
+                    throw new RuntimeException("Tried to push [" + entity.getServer().getServerName() + ", " + entity.getChannel().getName() + "] with HilightLevel " + level.name());
+                }
+            }
         }
 
         @Override
