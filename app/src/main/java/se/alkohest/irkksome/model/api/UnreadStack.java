@@ -1,5 +1,6 @@
 package se.alkohest.irkksome.model.api;
 
+import java.util.List;
 import java.util.Stack;
 
 import se.alkohest.irkksome.model.entity.IrcChannel;
@@ -38,9 +39,16 @@ public class UnreadStack {
         return !hilights.empty();
     }
 
-    public void remove(IrcChannel channel, IrcServer server) {
-        UnreadEntity entity = new UnreadEntity(channel, server);
+    public void remove(IrcServer ircServer, IrcChannel channel) {
+        UnreadEntity entity = new UnreadEntity(channel, ircServer);
         hilights.remove(entity);
+    }
+
+    public void remove(IrcServer ircServer) {
+        List<IrcChannel> channelList = ircServer.getConnectedChannels();
+        for (IrcChannel ircChannel : channelList) {
+            remove(ircServer, ircChannel);
+        }
     }
 
     private class HilightStack extends Stack<UnreadEntity> {

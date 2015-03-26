@@ -87,6 +87,11 @@ public class ServerManager implements ServerConnectionListener, HilightListener 
     }
 
     @Override
+    public void removeChannel(IrcServer ircServer, IrcChannel ircChannel) {
+        unreadStack.remove(ircServer, ircChannel);
+    }
+
+    @Override
     public void connectionEstablished(Server server) {
         servers.add(server);
         setActiveServer(server);
@@ -97,6 +102,7 @@ public class ServerManager implements ServerConnectionListener, HilightListener 
     @Override
     public void connectionDropped(Server server) {
         servers.remove(server);
+        unreadStack.remove(server.getBackingBean());
     }
 
     public void clearActiveChannel() {

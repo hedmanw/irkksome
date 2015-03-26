@@ -9,4 +9,5 @@ import se.alkohest.irkksome.model.enumerations.HilightLevel;
  */
 public interface HilightListener {
     public boolean addUnread(IrcServer ircServer, IrcChannel ircChannel, HilightLevel hilightLevel);
+    public void removeChannel(IrcServer ircServer, IrcChannel ircChannel);
 }
