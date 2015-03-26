@@ -5,7 +5,7 @@
     android:background="@color/light_grey"
     tools:context=".ui.ChannelFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <se.alkohest.irkksome.ui.view.ChatRecylerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/recycler_view"

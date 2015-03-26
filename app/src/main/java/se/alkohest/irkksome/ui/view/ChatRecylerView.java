@@ -1,24 +1,24 @@
 package se.alkohest.irkksome.ui.view;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.widget.ListView;
 
 /**
  * Created by wilhelm 2014-11-06.
  */
-public class ChatListView extends ListView {
+public class ChatRecylerView extends RecyclerView {
     private OnSizeChangedListener onSizeChangedListener;
 
-    public ChatListView(Context context) {
+    public ChatRecylerView(Context context) {
         super(context);
     }
 
-    public ChatListView(Context context, AttributeSet attrs) {
+    public ChatRecylerView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ChatListView(Context context, AttributeSet attrs, int defStyle) {
+    public ChatRecylerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 

@@ -18,12 +18,13 @@ import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.ui.fragment.HilightContainedFragment;
+import se.alkohest.irkksome.ui.view.ChatRecylerView;
 import se.alkohest.irkksome.util.DateFormatUtil;
 
 public class ChannelFragment extends HilightContainedFragment {
     public static final String FRAGMENT_TAG = "channel";
     private static IrcChannel ircChannel;
-    private RecyclerView messageRecyclerView;
+    private ChatRecylerView chatRecylerView;
     private static OnMessageSendListener activity;
     private EditText messageEditText;
 
@@ -66,36 +67,51 @@ public class ChannelFragment extends HilightContainedFragment {
             }
         });
 
-        messageRecyclerView = (RecyclerView) inflatedView.findViewById(R.id.recycler_view);
-        messageRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        messageRecyclerView.setAdapter(new ChatItemAdapter());
+        chatRecylerView = (ChatRecylerView) inflatedView.findViewById(R.id.recycler_view);
+        chatRecylerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        chatRecylerView.setAdapter(new ChatItemAdapter());
+
+        chatRecylerView.setOnSizeChangedListener(new ChatRecylerView.OnSizeChangedListener() {
+            @Override
+            public void onSizeChanged(int newWidth, int newHeight, int oldWidth, int oldHeight) {
+                if (oldHeight > newHeight) {
+                    instantScrollToBottom();
+                }
+            }
+        });
 
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(messageEditText, 0);
         messageEditText.requestFocus();
-        scrollToBottom();
+        smooothScrollToBottom();
 
         return inflatedView;
     }
 
     public void changeChannel(IrcChannel channel) {
         ircChannel = channel;
-        messageRecyclerView.getAdapter().notifyDataSetChanged();
+        chatRecylerView.getAdapter().notifyDataSetChanged();
     }
 
     private boolean hasBacklog() {
         return false;
     }
 
-    public void scrollToBottom() {
-        if (messageRecyclerView.getAdapter().getItemCount() > 0) {
-            messageRecyclerView.smoothScrollToPosition(messageRecyclerView.getAdapter().getItemCount()-1);
+    public void smooothScrollToBottom() {
+        if (chatRecylerView.getAdapter().getItemCount() > 0) {
+            chatRecylerView.smoothScrollToPosition(chatRecylerView.getAdapter().getItemCount()-1);
+        }
+    }
+
+    public void instantScrollToBottom() {
+        if (chatRecylerView.getAdapter().getItemCount() > 0) {
+            chatRecylerView.scrollToPosition(chatRecylerView.getAdapter().getItemCount()-1);
         }
     }
 
     public void receiveMessage() {
-        messageRecyclerView.getAdapter().notifyDataSetChanged();
-        scrollToBottom();
+        chatRecylerView.getAdapter().notifyDataSetChanged();
+        smooothScrollToBottom();
     }
 
     public interface OnMessageSendListener {
