@@ -6,8 +6,10 @@ import java.util.List;
 
 import se.alkohest.irkksome.model.api.dao.IrcServerDAO;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
+import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
+import se.alkohest.irkksome.model.enumerations.HilightLevel;
 import se.alkohest.irkksome.model.impl.IrcServerEB;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
@@ -80,8 +82,13 @@ public class ServerManager implements ServerConnectionListener, HilightListener 
     }
 
     @Override
-    public void addUnread(UnreadEntity entity, boolean isHilight) {
-        unreadStack.push(entity, isHilight);
+    public boolean addUnread(IrcServer ircServer, IrcChannel ircChannel, HilightLevel hilightLevel) {
+        return unreadStack.pushOverwrite(ircServer, ircChannel, hilightLevel);
+    }
+
+    @Override
+    public void removeChannel(IrcServer ircServer, IrcChannel ircChannel) {
+        unreadStack.remove(ircServer, ircChannel);
     }
 
     @Override
@@ -95,6 +102,7 @@ public class ServerManager implements ServerConnectionListener, HilightListener 
     @Override
     public void connectionDropped(Server server) {
         servers.remove(server);
+        unreadStack.remove(server.getBackingBean());
     }
 
     public void clearActiveChannel() {

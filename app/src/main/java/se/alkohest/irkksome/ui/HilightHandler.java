@@ -6,36 +6,34 @@ import android.widget.Button;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.ServerManager;
-import se.alkohest.irkksome.model.api.UnreadEntity;
 import se.alkohest.irkksome.model.api.UnreadStack;
+import se.alkohest.irkksome.model.enumerations.HilightLevel;
 
-public class HilightManager {
-    private static HilightManager instance;
+public class HilightHandler {
+    private static HilightHandler instance;
     private Activity context;
     private UnreadStack unreadStack;
 
     public static void setInstance(Activity context, UnreadStack unreadStack) {
-        instance = new HilightManager(context, unreadStack);
+        instance = new HilightHandler(context, unreadStack);
     }
 
-    public static HilightManager getInstance() {
+    public static HilightHandler getInstance() {
         if (instance == null) {
             throw new RuntimeException("HilightManager not initialized");
         }
         return instance;
     }
 
-    private HilightManager(Activity context, UnreadStack unreadStack) {
+    private HilightHandler(Activity context, UnreadStack unreadStack) {
         this.context = context;
         this.unreadStack = unreadStack;
     }
 
-
-
     public void showHilight() {
         ServerManager serverManager = ServerManager.INSTANCE;
         if (serverManager.getUnreadStack().hasUnread()) {
-            UnreadEntity entity = serverManager.getUnreadStack().pop();
+            UnreadStack.UnreadEntity entity = serverManager.getUnreadStack().pop();
             if (serverManager.getActiveServer() != entity.getServer()) {
                 serverManager.setActiveServer(entity.getServer());
             }
@@ -46,14 +44,16 @@ public class HilightManager {
     public void updateHilightButton() {
         Button number = (Button) context.findViewById(R.id.hilight_button);
         if (number != null) {
-            if (unreadStack.getHilightCount() > 0) {
+            // TODO: optimize
+            final HilightLevel level = unreadStack.peekPriority();
+            if (level == HilightLevel.NICKNAME) {
                 number.setVisibility(View.VISIBLE);
-                number.setText(unreadStack.getHilightCount() + "");
+                number.setText(unreadStack.stackSize() + "");
                 number.setBackground(context.getDrawable(R.drawable.highlightbadge_background_highlight));
             }
-            else if (unreadStack.getMessageCount() > 0) {
+            else if (level == HilightLevel.UNREAD) {
                 number.setVisibility(View.VISIBLE);
-                number.setText(unreadStack.getMessageCount() + "");
+                number.setText(unreadStack.stackSize() + "");
                 number.setBackground(context.getDrawable(R.drawable.highlightbadge_background));
             }
             else {

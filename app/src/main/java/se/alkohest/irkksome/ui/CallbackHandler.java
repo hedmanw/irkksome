@@ -110,7 +110,7 @@ public class CallbackHandler implements ServerCallback {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                HilightManager.getInstance().updateHilightButton();
+                HilightHandler.getInstance().updateHilightButton();
             }
         });
     }
@@ -131,6 +131,8 @@ public class CallbackHandler implements ServerCallback {
                 }
                 else {
                     channelFragment.changeChannel(channel);
+                    HilightHandler.getInstance().updateHilightButton();
+                    channelFragment.smooothScrollToBottom();
                 }
 
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);

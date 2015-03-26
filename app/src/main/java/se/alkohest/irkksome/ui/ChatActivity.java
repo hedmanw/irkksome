@@ -35,7 +35,7 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
         setContentView(R.layout.activity_main_drawers);
         ChannelsAdapter.setInstance(this, null);
         CallbackHandler.setInstance(this);
-        HilightManager.setInstance(this, serverManager.getUnreadStack());
+        HilightHandler.setInstance(this, serverManager.getUnreadStack());
         connectionsList = (ListView) findViewById(R.id.left_drawer_list);
 
         if (savedInstanceState == null) {
@@ -97,7 +97,7 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 drawerLayout.closeDrawer(leftDrawer);
                 IrcChannel channel = ChannelsAdapter.getInstance().getItem(position);
-                serverManager.getUnreadStack().remove(channel, serverManager.getActiveServer().getBackingBean());
+                serverManager.getUnreadStack().remove(serverManager.getActiveServer().getBackingBean(), channel);
                 serverManager.getActiveServer().setActiveChannel(channel);
             }
         });

@@ -21,10 +21,6 @@ public interface IrcMessage extends BeanEntity {
 
     public void setAuthor(IrcUser author);
 
-    public boolean isHilight();
-
-    public void setHilight(boolean hilight);
-
     public MessageTypeEnum getMessageType();
 
     public void setMessageType(MessageTypeEnum messageTypeEnum);
