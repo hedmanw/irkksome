@@ -63,7 +63,7 @@ public abstract class SSHClient implements ConnectionMonitor {
             connectionInfo = connection.connect(new HostKeyVerifier());
         } catch (IOException e) {
             closeAll();
-            throw new ConnectionIOException(ConnectionIOException.ErrorPhase.PRE, "Error while connecting. Correct host?");
+            throw new ConnectionIOException(ConnectionIOException.ErrorPhase.PRE, "Error while connecting. Host cannot be reached."); // This is thrown when there is no internet
         }
 
 

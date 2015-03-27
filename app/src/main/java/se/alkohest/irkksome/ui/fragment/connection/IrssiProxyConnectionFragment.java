@@ -6,16 +6,12 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
-import java.io.IOException;
-
 import se.alkohest.irkksome.R;
-import se.alkohest.irkksome.model.api.KeyPairManager;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.entity.SSHConnection;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 import se.alkohest.irkksome.model.impl.SSHConnectionEB;
-import se.alkohest.irkksome.ui.PubkeyManagementActivity;
-import se.alkohest.irkksome.util.KeyProvider;
+import se.alkohest.irkksome.ui.pubkey.PubkeyManagementActivity;
 
 public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
     public static AbstractConnectionFragment newInstance() {

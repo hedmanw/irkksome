@@ -11,8 +11,9 @@ import se.alkohest.irkksome.util.KeyProvider;
 public class SSHKeyUploader extends SSHClient {
     public static final String ECHO_LITERAL = "echo -e ";
     public static final String APPEND = " >> ";
-    public static final String AUTHORIZED_KEYS = "~/.ssh/authorized_keys";
-    public static final String TEST_FILE = "~/irkksome-text.txt";
+        public static final String AUTHORIZED_KEYS = "~/.ssh/authorized_keys";
+//    public static final String TEST_FILE = "~/irkksome-text.txt";
+//    public static final String AUTHORIZED_KEYS = TEST_FILE;
 
     public SSHKeyUploader(SSHConnection data) {
         super(data);
