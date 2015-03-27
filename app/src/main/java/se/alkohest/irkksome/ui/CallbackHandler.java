@@ -51,14 +51,13 @@ public class CallbackHandler implements ServerCallback {
         ChannelsAdapter.setInstance(context, ircServer);
 
         context.runOnUiThread(new Runnable() {
-            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
             @Override
             public void run() {
+                final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 context.findViewById(R.id.drawer_label_server).setVisibility(View.VISIBLE);
                 connectionListView.setAdapter(ChannelsAdapter.getInstance());
                 ServerInfoFragment serverInfoFragment = ServerInfoFragment.getInstance(server);
-                fragmentManager.popBackStack(); // TODO: why do we do this? this causes unexplainable crashes impossible to recreate
+//                fragmentManager.popBackStack(); // TODO: why do we do this? this causes unexplainable crashes impossible to recreate
                 fragmentTransaction.replace(R.id.fragment_container, serverInfoFragment);
                 fragmentTransaction.commit();
                 TextView serverName = (TextView) context.findViewById(R.id.drawer_label_server);
@@ -73,7 +72,6 @@ public class CallbackHandler implements ServerCallback {
     @Override
     public void serverDisconnected() {
         context.runOnUiThread(new Runnable() {
-            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
             @Override
             public void run() {
@@ -81,6 +79,7 @@ public class CallbackHandler implements ServerCallback {
                 if (false) {
                     // Show some other stuff
                 } else {
+                    final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     context.findViewById(R.id.drawer_label_server).setVisibility(View.GONE);
                     fragmentTransaction.replace(R.id.fragment_container, new ServerListFragment());
                     fragmentTransaction.commit();

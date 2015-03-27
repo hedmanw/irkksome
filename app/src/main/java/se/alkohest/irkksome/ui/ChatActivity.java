@@ -33,7 +33,6 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_drawers);
-        ChannelsAdapter.setInstance(this, null);
         CallbackHandler.setInstance(this);
         HilightHandler.setInstance(this, serverManager.getUnreadStack());
         connectionsList = (ListView) findViewById(R.id.left_drawer_list);
@@ -44,8 +43,8 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
 
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                ServerListFragment emptynessFragment = new ServerListFragment();
-                fragmentTransaction.add(R.id.fragment_container, emptynessFragment);
+                ServerListFragment emptinessFragment = new ServerListFragment();
+                fragmentTransaction.add(R.id.fragment_container, emptinessFragment);
                 fragmentTransaction.commit();
 
                 final Intent intent = new Intent(this, NewConnectionActivity.class);
@@ -68,6 +67,14 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
                     serverManager.getActiveServer().setActiveChannel(serverManager.getActiveServer().getActiveChannel());
                 }
             }
+        }
+        if (serverManager.getActiveServer() == null) {
+            ChannelsAdapter.setInstance(this, null);
+        }
+        else {
+            ChannelsAdapter.setInstance(this, serverManager.getActiveServer().getBackingBean());
+            TextView serverName = (TextView) findViewById(R.id.drawer_label_server);
+            serverName.setText(serverManager.getActiveServer().getBackingBean().getServerName());
         }
 
         ChatActivityStatic.onCreate(this);
