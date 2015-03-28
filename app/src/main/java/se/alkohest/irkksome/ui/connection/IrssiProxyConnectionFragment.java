@@ -1,4 +1,4 @@
-package se.alkohest.irkksome.ui.fragment.connection;
+package se.alkohest.irkksome.ui.connection;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,6 @@ import android.widget.CompoundButton;
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 import se.alkohest.irkksome.model.entity.SSHConnection;
-import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 import se.alkohest.irkksome.model.impl.SSHConnectionEB;
 import se.alkohest.irkksome.ui.pubkey.PubkeyManagementActivity;
 
@@ -27,6 +26,7 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
     }
 
     public IrssiProxyConnectionFragment() {
+        presenter = new IrssiProxyConnectionPresenterImpl(this);
     }
 
     @Override
@@ -47,6 +47,7 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
     @Override
     public void inflateConnectionView(final ViewGroup parent) {
         CheckBox usePubkey = (CheckBox) parent.findViewById(R.id.server_connect_use_pubkey);
+        IrkksomeConnection templateConnection = presenter.getTemplateConnection();
         if (templateConnection != null) {
             setFieldValue(parent, R.id.server_connect_host, templateConnection.getHost());
             setFieldValue(parent, R.id.server_connect_port, String.valueOf(templateConnection.getPort()));
@@ -82,7 +83,8 @@ public class IrssiProxyConnectionFragment extends AbstractConnectionFragment {
 
     @Override
     public IrkksomeConnection getConnection() {
-        IrkksomeConnectionEB connection = connectionDAO.create();
+        IrkksomeConnection connection = presenter.getNewConnection();
+        IrkksomeConnection templateConnection = presenter.getTemplateConnection();
         connection.setHost(getFieldValue(R.id.server_connect_host));
         connection.setPort(Integer.parseInt(getFieldValue(R.id.server_connect_port))); // When this is left empty, it crashes.
         final String userName = getFieldValue(R.id.server_connect_username);

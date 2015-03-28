@@ -20,6 +20,7 @@ import android.widget.TextView;
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.entity.IrcChannel;
+import se.alkohest.irkksome.ui.connection.NewConnectionActivity;
 import se.alkohest.irkksome.ui.fragment.server.ServerListFragment;
 import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
 

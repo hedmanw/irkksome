@@ -1,13 +1,10 @@
-package se.alkohest.irkksome.ui.fragment.connection;
+package se.alkohest.irkksome.ui.connection;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
-import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
 public class RegularConnectionFragment extends AbstractConnectionFragment {
 
@@ -43,6 +40,7 @@ public class RegularConnectionFragment extends AbstractConnectionFragment {
 
     @Override
     public void inflateConnectionView(ViewGroup parent) {
+        IrkksomeConnection templateConnection = presenter.getTemplateConnection();
         if (templateConnection != null) {
             setFieldValue(parent, R.id.server_connect_host, templateConnection.getHost());
             setFieldValue(parent, R.id.server_connect_port, String.valueOf(templateConnection.getPort()));
@@ -55,7 +53,8 @@ public class RegularConnectionFragment extends AbstractConnectionFragment {
 
     @Override
     public IrkksomeConnection getConnection() {
-        IrkksomeConnectionEB connection = connectionDAO.create();
+        IrkksomeConnection connection = presenter.getNewConnection();
+        IrkksomeConnection templateConnection = presenter.getTemplateConnection();
         connection.setHost(getFieldValue(R.id.server_connect_host));
         connection.setPort(Integer.parseInt(getFieldValue(R.id.server_connect_port)));
         connection.setNickname(getFieldValue(R.id.server_connect_nickname));

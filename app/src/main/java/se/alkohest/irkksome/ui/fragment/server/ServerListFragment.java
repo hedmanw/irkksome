@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import se.alkohest.irkksome.R;
-import se.alkohest.irkksome.ui.NewConnectionActivity;
+import se.alkohest.irkksome.ui.connection.NewConnectionActivity;
 import se.alkohest.irkksome.ui.fragment.HilightContainedFragment;
 
 /**

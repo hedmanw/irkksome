@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.NewConnectionActivity"
+        <activity android:name=".ui.connection.NewConnectionActivity"
             android:label="@string/title_connect_to_server"/>
         <activity android:name=".ui.pubkey.PubkeyManagementActivity"
             android:label="@string/title_manage_pubkeys"/>

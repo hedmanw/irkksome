@@ -1,6 +1,5 @@
-package se.alkohest.irkksome.ui.fragment.connection;
+package se.alkohest.irkksome.ui.connection;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
@@ -10,44 +9,24 @@ import android.support.annotation.StringRes;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Date;
-
 import se.alkohest.irkksome.R;
-import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 
-public abstract class AbstractConnectionFragment extends Fragment {
+public abstract class AbstractConnectionFragment extends Fragment implements AbstractConnectionView {
     public static final String CONNECTION_ARGUMENT = "CONNECTION";
+    public static final int CONNECTION_ESTABLISHED = 1337;
 
-    protected OnConnectPressedListener listener;
-    protected IrkksomeConnection templateConnection;
-    protected IrkksomeConnectionDAO connectionDAO = new IrkksomeConnectionDAO();
+    protected ConnectionPresenter presenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        presenter = new AbstractConnectionPresenter(this);
         if (getArguments() != null) {
-            templateConnection = connectionDAO.findById(getArguments().getLong(CONNECTION_ARGUMENT));
-        }
-    }
-
-    public void connectPressed() {
-        if (listener != null) {
-            IrkksomeConnection connection = getConnection();
-            connection.setLastUsed(new Date());
-            listener.onConnectPressed(connection);
-        }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            listener = (OnConnectPressedListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnConnectPressedListener");
+            presenter.setTemplateConnection(getArguments().getLong(CONNECTION_ARGUMENT));
         }
     }
 
@@ -62,7 +41,7 @@ public abstract class AbstractConnectionFragment extends Fragment {
         inflatedView.findViewById(R.id.server_connect_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                connectPressed();
+                presenter.connect(getConnection());
             }
         });
         final ViewGroup fieldContainer = (ViewGroup) inflatedView.findViewById(R.id.connection_fields_container);
@@ -72,9 +51,32 @@ public abstract class AbstractConnectionFragment extends Fragment {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        listener = null;
+    public void showProgress() {
+        final Button button = (Button) getActivity().findViewById(R.id.server_connect_button);
+        button.setText("Connecting...");
+        button.setEnabled(false);
+        getActivity().findViewById(R.id.server_connect_progress).setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void connectionSuccess() {
+        getActivity().setResult(CONNECTION_ESTABLISHED);
+        getActivity().finish();
+    }
+
+    @Override
+    public void connectionFailure() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final Button button = (Button) getActivity().findViewById(R.id.server_connect_button);
+                if (button != null) {
+                    button.setText("Connect");
+                    button.setEnabled(true);
+                    getActivity().findViewById(R.id.server_connect_progress).setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     protected String getFieldValue(@IdRes int resourceId) {
@@ -90,8 +92,4 @@ public abstract class AbstractConnectionFragment extends Fragment {
     protected abstract void inflateConnectionView(ViewGroup parent);
     protected abstract @DrawableRes int getIcon();
     protected abstract @StringRes int getHeadingStringId();
-
-    public interface OnConnectPressedListener {
-        public void onConnectPressed(IrkksomeConnection irkksomeConnection);
-    }
 }
