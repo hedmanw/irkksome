@@ -18,7 +18,7 @@ import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.ui.fragment.HilightContainedFragment;
-import se.alkohest.irkksome.ui.view.ChatRecylerView;
+import se.alkohest.irkksome.ui.widget.ChatRecylerView;
 import se.alkohest.irkksome.util.DateFormatUtil;
 
 public class ChannelFragment extends HilightContainedFragment {
