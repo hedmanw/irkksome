@@ -1,25 +1,29 @@
 package se.alkohest.irkksome.model.api;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import se.alkohest.irkksome.model.api.dao.IrcServerDAO;
 import se.alkohest.irkksome.model.api.dao.IrkksomeConnectionDAO;
-import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
+import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
+import se.alkohest.irkksome.model.enumerations.HilightLevel;
 import se.alkohest.irkksome.model.impl.IrcServerEB;
 import se.alkohest.irkksome.model.impl.IrkksomeConnectionEB;
 
-public class ServerManager implements ServerDropAcidListener {
+public class ServerManager implements ServerConnectionListener, HilightListener {
     public static final ServerManager INSTANCE = new ServerManager();
-    private IrcServerDAOLocal serverDAO;
+    private IrcServerDAO serverDAO;
+    private IrkksomeConnectionDAO connectionDAO;
     private List<Server> servers;
     private Server activeServer;
     private UnreadStack unreadStack;
 
     protected ServerManager() {
         serverDAO = new IrcServerDAO();
+        connectionDAO = new IrkksomeConnectionDAO();
         servers = new ArrayList<>();
         unreadStack = new UnreadStack();
     }
@@ -29,7 +33,7 @@ public class ServerManager implements ServerDropAcidListener {
         for (IrcServer ircServer : persisted) {
             /* maybe later...
             Server server = new ServerImpl(ircServer, ircServer.getSelf().getName());
-            server.setDropListener(this);
+            server.addServerConnectionListener(this);
             servers.add(server);
             */
         }
@@ -38,12 +42,12 @@ public class ServerManager implements ServerDropAcidListener {
         }
     }
 
-    public Server addServer(IrkksomeConnection irkksomeConnection) {
-        new IrkksomeConnectionDAO().persist((IrkksomeConnectionEB) irkksomeConnection);
-        final IrcServer ircServer = serverDAO.create(irkksomeConnection.getHost());
+    public Server establishConnection(IrkksomeConnection irkksomeConnection) {
+        final IrcServer ircServer = serverDAO.create();
         Server server = new ServerImpl(ircServer, irkksomeConnection);
-        server.setDropListener(this);
-        servers.add(server);
+        server.addServerConnectionListener(this);
+        server.setHilightListener(this);
+
         return server;
     }
 
@@ -70,6 +74,7 @@ public class ServerManager implements ServerDropAcidListener {
 
     public void shutDownServer(Server server) {
         server.disconnect();
+        this.activeServer = null; // TODO: Change this when we allow multiple conns
     }
 
     public UnreadStack getUnreadStack() {
@@ -77,12 +82,32 @@ public class ServerManager implements ServerDropAcidListener {
     }
 
     @Override
-    public void addUnread(UnreadEntity entity, boolean isHilight) {
-        unreadStack.push(entity, isHilight);
+    public boolean addUnread(IrcServer ircServer, IrcChannel ircChannel, HilightLevel hilightLevel) {
+        return unreadStack.pushOverwrite(ircServer, ircChannel, hilightLevel);
     }
 
     @Override
-    public void dropServer(Server server) {
+    public void removeChannel(IrcServer ircServer, IrcChannel ircChannel) {
+        unreadStack.remove(ircServer, ircChannel);
+    }
+
+    @Override
+    public void connectionEstablished(Server server) {
+        servers.add(server);
+        setActiveServer(server);
+        server.getConnectionData().setLastUsed(new Date());
+        connectionDAO.persist((IrkksomeConnectionEB) server.getConnectionData());
+    }
+
+    @Override
+    public void connectionDropped(Server server) {
         servers.remove(server);
+        unreadStack.remove(server.getBackingBean());
+    }
+
+    public void clearActiveChannel() {
+        if (activeServer != null) {
+            activeServer.setActiveChannel(null);
+        }
     }
 }

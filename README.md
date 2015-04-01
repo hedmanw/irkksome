@@ -1,39 +1,25 @@
 irkksome ![asdf](app/src/main/res/drawable-mdpi/ic_launcher.png)
 ========
 
-Android IRC client. New and improved!
-We aim to bring an actually usable client to the platform.
+Android Material Design IRC client with irssi proxy support.
 
 [![Stories in Ready](https://badge.waffle.io/ircsex/irkksome.svg?label=ready&title=Ready for impl)](http://waffle.io/ircsex/irkksome)
-##Introduction
-IRC or Internet Relay Chat is a messaging protocol for communication
-with groups or individuals over the internet. It was created in 1988
-and has been used ever since. Therefore there are a plethora of clients
-with 20th century thinking. The demand for a new, 21st century client,
-for 21st century devices is obvious.
- 
-##Product vision
-For IRC users who are using their Android phones to connect to IRC,
-irkksome is the client that will revolutionize the way we
-communicate on mobile devices. Drawing upon modern messaging platforms
-and idioms, with our product, we show that an IRC-client can be more than a 
-terminal or look like a hacker chat. The world of IRC clients for Android 
-are in need for change - and we’re determined to do that!
 
-##irssi-proxy support
+##What's this?
+Irkksome is made for irssi users who want to connect to their irssi session with a native Android client. No more terminal emulation on a small touch device!
 In irkksome, you can connect to an existing irssi session. There's no need to use Irssi ConnectBot anymore! Set up irssi proxy and hook up our magical irssi script, and you will have rich access to your irssi session from your phone or tablet.
+Check out the [wiki](https://github.com/ircSEX/irkksome/wiki/How-to-connect-to-irssi-proxy) for more info.
 
 ##Specifics
-- Android SDK - API 20
-- sshj 0.10.0
-- Groovy 1.8.6
-- Spock 0.6-groovy-1.8
+- Android SDK - API 21 - compile and min sdk.
+- Material design.
+- Connect to your existing (screen, tmux) irssi session while on your Android device.
 
 ##Contact
 Want to contribute or have questions? Meet us at [`#irkksome` on irc.chalmers.it](ircs://irc.chalmers.it:9999/irkksome) 
 
 ##Contributing
-Gaffel iväg!
+Fork away!
 
 ##License
 This software is licensed under the Beerware license.

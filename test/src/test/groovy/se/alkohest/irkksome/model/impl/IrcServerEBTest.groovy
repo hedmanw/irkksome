@@ -1,9 +1,9 @@
 package se.alkohest.irkksome.model.impl
 
+import se.alkohest.irkksome.ColorProviderMockSpecification
 import se.alkohest.irkksome.model.api.dao.IrcUserDAO
-import spock.lang.Specification
 
-public class IrcServerEBTest extends Specification {
+public class IrcServerEBTest extends ColorProviderMockSpecification {
     def userDAO = new IrcUserDAO()
 
     def "getSetUrl"() {

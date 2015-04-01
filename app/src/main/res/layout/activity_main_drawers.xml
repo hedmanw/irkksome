@@ -18,10 +18,20 @@
             android:orientation="vertical"
             android:id="@+id/left_drawer"
             android:background="#EEE">
-        <ExpandableListView
+        <Button
+            style="@style/list_item_button"
+            android:text="All servers"
+            android:id="@+id/drawer_label_all_servers"/>
+        <Button
+            style="@style/list_item_button"
+            android:id="@+id/drawer_label_server"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grayish"/>
+        <ListView
                 android:id="@+id/left_drawer_list"
                 android:layout_width="280dp"
-                android:groupIndicator="@null"
                 android:layout_height="match_parent"
                 android:choiceMode="singleChoice"
                 android:divider="#DCDCDC"

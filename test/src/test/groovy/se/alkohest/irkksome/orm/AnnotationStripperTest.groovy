@@ -22,7 +22,7 @@ public class AnnotationStripperTest extends Specification{
 
     def "Gets OTO class"() {
         when:
-        def oneToOne = AnnotationStripper.getOneToOne(new IrcChatMessageEB())
+        def oneToOne = AnnotationStripper.getOneToOne(new IrcMessageEB())
 
         then:
         oneToOne == IrcUserEB.class

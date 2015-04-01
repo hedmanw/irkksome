@@ -1,8 +1,9 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="android:Theme.Material.Light">
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorPrimaryDark">@color/primary_dark</item>
     </style>
 
     <style name="base_string">
@@ -41,5 +42,34 @@
         <item name="android:layout_margin">8dp</item>
         <item name="android:minHeight">10dp</item>
         <item name="android:minWidth">10dp</item>
+    </style>
+
+    <style name="connection_type_button">
+        <item name="android:elevation">2dp</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_margin">@dimen/small_horizontal_margin</item>
+        <item name="android:padding">@dimen/activity_horizontal_margin</item>
+    </style>
+
+    <style name="hilight_button">
+        <item name="android:layout_width">@dimen/hilight_button_size</item>
+        <item name="android:layout_height">@dimen/hilight_button_size</item>
+        <item name="android:layout_margin">@dimen/activity_vertical_margin</item>
+        <item name="android:gravity">center</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">40sp</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:background">@drawable/highlightbadge_background</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <!--<item name="android:tint">@android:color/white</item>-->
+    </style>
+
+    <style name="list_item_button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:padding">@dimen/activity_vertical_margin</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 </resources>

@@ -9,7 +9,6 @@ $VERSION = "0.6";
     license         => "MIT",
     changed         => "2014-07-29"
 );
-
 sub send_backlog {
     my ($server, $time) = @_;
     Irssi::print("Sending backlog..");
@@ -112,11 +111,12 @@ sub signals_add {
     Irssi::signal_add_last('message join', 'join');
     Irssi::signal_add_last('message part', 'part');
     Irssi::signal_add_last('message quit', 'quit');
-    Irssi::signal_add_last('message kick', 'kick');
     Irssi::signal_add_last('message nick', 'nick');
-    Irssi::signal_add_last('message own_nick', 'nick');
-    Irssi::signal_add_last('message invite', 'invite');
-    Irssi::signal_add_last('message topic', 'topic');
+    # TODO: implement these
+    #Irssi::signal_add_last('message kick', 'kick');
+    #Irssi::signal_add_last('message own_nick', 'nick');
+    #Irssi::signal_add_last('message invite', 'invite');
+    #Irssi::signal_add_last('message topic', 'topic');
 }
 
 signals_add();

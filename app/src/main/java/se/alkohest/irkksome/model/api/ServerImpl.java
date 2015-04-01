@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import se.alkohest.irkksome.irc.ConnectionData;
 import se.alkohest.irkksome.irc.IrcProtocol;
 import se.alkohest.irkksome.irc.IrcProtocolFactory;
 import se.alkohest.irkksome.irc.IrcProtocolListener;
@@ -13,43 +12,47 @@ import se.alkohest.irkksome.model.api.dao.IrcChannelDAO;
 import se.alkohest.irkksome.model.api.dao.IrcMessageDAO;
 import se.alkohest.irkksome.model.api.dao.IrcServerDAO;
 import se.alkohest.irkksome.model.api.dao.IrcUserDAO;
-import se.alkohest.irkksome.model.api.local.IrcChannelDAOLocal;
-import se.alkohest.irkksome.model.api.local.IrcMessageDAOLocal;
-import se.alkohest.irkksome.model.api.local.IrcServerDAOLocal;
-import se.alkohest.irkksome.model.api.local.IrcUserDAOLocal;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.entity.IrcUser;
-import se.alkohest.irkksome.model.impl.IrcChatMessageEB;
+import se.alkohest.irkksome.model.entity.IrkksomeConnection;
+import se.alkohest.irkksome.model.enumerations.HilightLevel;
 
 public class ServerImpl implements Server, IrcProtocolListener {
     private IrcProtocol ircProtocol;
     private IrcServer ircServer;
-    private HilightHelper hilightHelper;
-    private IrcChannelDAOLocal channelDAO = new IrcChannelDAO();
-    private IrcMessageDAOLocal messageDAO = new IrcMessageDAO();
-    private IrcServerDAOLocal serverDAO = new IrcServerDAO();
-    private IrcUserDAOLocal userDAO = new IrcUserDAO();
+    private IrkksomeConnection connectionData;
+    private HilightManager hilightManager;
+    private IrcChannelDAO channelDAO = new IrcChannelDAO();
+    private IrcMessageDAO messageDAO = new IrcMessageDAO();
+    private IrcServerDAO serverDAO = new IrcServerDAO();
+    private IrcUserDAO userDAO = new IrcUserDAO();
     private ServerCallback listener;
     private String motd = "";
 
     private IrcChannel activeChannel;
-    private ServerDropAcidListener dropListener;
+    private List<ServerConnectionListener> connectionListeners = new ArrayList<>();
+    private HilightListener hilightListener;
 
-    public ServerImpl(IrcServer ircServer, ConnectionData data) {
+    public ServerImpl(IrcServer ircServer, IrkksomeConnection data) {
+        this.connectionData = data;
         this.ircServer = ircServer;
         ircProtocol = IrcProtocolFactory.getIrcProtocol(data);
         ircProtocol.setListener(this);
         ircProtocol.connect(data.getNickname(), data.getUsername(), data.getRealname(), data.getPassword());
-        hilightHelper = new HilightHelper();
-        // TODO - fix dynamic hilights
-        hilightHelper.addHilight(data.getNickname());
+        hilightManager = new HilightManager();
+        hilightManager.addHilight(data.getNickname(), HilightLevel.NICKNAME);
     }
 
     @Override
     public IrcServer getBackingBean() {
         return ircServer;
+    }
+
+    @Override
+    public IrkksomeConnection getConnectionData() {
+        return connectionData;
     }
 
     @Override
@@ -79,8 +82,18 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
-    public void setDropListener(ServerDropAcidListener listener) {
-        dropListener = listener;
+    public void addServerConnectionListener(ServerConnectionListener listener) {
+        connectionListeners.add(listener);
+    }
+
+    @Override
+    public void removeServerConnectionListener() {
+        connectionListeners.remove(1);
+    }
+
+    @Override
+    public void setHilightListener(HilightListener listener) {
+        hilightListener = listener;
     }
 
     @Override
@@ -95,14 +108,14 @@ public class ServerImpl implements Server, IrcProtocolListener {
             listener.setActiveChannel(activeChannel);
         } else {
             activeChannel = null;
-            listener.showServerInfo(ircServer, motd);
+            listener.showServerInfo(this);
         }
     }
 
     @Override
     public void sendMessage(IrcChannel channel, String message) {
         ircProtocol.sendChannelMessage(channel.getName(), message);
-        IrcMessage ircMessage = messageDAO.create(ircServer.getSelf(), message, new Date());
+        IrcMessage ircMessage = messageDAO.create(IrcMessage.MessageTypeEnum.SENT, ircServer.getSelf(), message, new Date());
 
         channelDAO.addMessage(channel, ircMessage);
         listener.messageReceived(ircMessage);
@@ -119,10 +132,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
-    public void setActiveChannel(IrcChannel ircChannel) {
+    public void setActiveChannel(IrcChannel ircChannel) { // TODO: why are no internal methods using this?
         if (activeChannel != ircChannel) {
-            listener.setActiveChannel(ircChannel);
-            listener.updateHilights();
+            if (ircChannel != null) {
+                listener.setActiveChannel(ircChannel);
+            }
             activeChannel = ircChannel;
         }
     }
@@ -138,23 +152,28 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void showServer() {
-        listener.showServerInfo(ircServer, motd);
+        listener.showServerInfo(this);
         activeChannel = null;
     }
 
     //    ---------------------------------------------------------
 
     @Override
-    public void serverConnected() {
-        // TODO - this should only be done when we know we connect to irrsi?
-        ircProtocol.sendBacklogRequest(ircServer.getLastMessageTime().getTime()/1000);
+    public void serverConnectionEstablished() {
+        for (ServerConnectionListener serverConnectionListener : connectionListeners) {
+            serverConnectionListener.connectionEstablished(this);
+        }
+
+        // this should perhaps only be done when we know we connect to irrsi or another backlog provider
+        ircProtocol.sendBacklogRequest(ircServer.getLastMessageTime().getTime() / 1000);
     }
 
     @Override
     public void serverRegistered(String server, String nick) {
         // TODO - this should maybe check if your nick has changed and change it instead of creating new
+        ircServer.setServerName(server);
         ircServer.setSelf(serverDAO.getUser(ircServer, nick));
-        listener.showServerInfo(ircServer, motd);
+        showServer();
         for (IrcChannel channel : getBackingBean().getConnectedChannels()) {
             joinChannel(channel.getName());
         }
@@ -164,24 +183,51 @@ public class ServerImpl implements Server, IrcProtocolListener {
     public void nickChanged(String oldNick, String newNick, Date time) {
         if (userDAO.compare(ircServer.getSelf(), oldNick)) {
             ircServer.getSelf().setName(newNick);
+            final IrcMessage message = messageDAO.create(IrcMessage.MessageTypeEnum.NICKCHANGE, ircServer.getSelf(), "You are now known as " + newNick, time);
+            for (IrcChannel channel : ircServer.getConnectedChannels()) {
+                channelDAO.addMessage(channel, message);
+                if (channel == getActiveChannel()) {
+                    listener.messageReceived(message);
+                }
+            }
         } else {
             IrcUser user = serverDAO.getUser(ircServer, oldNick);
-            user.setName(newNick);
-            listener.postInfoMessage(messageDAO.create(oldNick + " is now known as " + newNick, time), user.getColor());
+            final IrcMessage message = messageDAO.create(IrcMessage.MessageTypeEnum.NICKCHANGE, user, oldNick + " is now known as " + newNick, time);
+            updateChannelsWithUser(user, message, newNick);
+            listener.updateUserList();
         }
         ircServer.setLastMessageTime(time);
+    }
+
+    private void updateChannelsWithUser(IrcUser user, IrcMessage message, String newNick) {
+        boolean refreshUI = false;
+        final List<IrcChannel> connectedChannels = ircServer.getConnectedChannels();
+        for (IrcChannel channel : connectedChannels) {
+            if (channelDAO.hasUser(channel, user)) {
+                channelDAO.removeUser(channel, user);
+                user.setName(newNick);
+                channelDAO.addUser(channel, user, "");
+                channelDAO.addMessage(channel, message);
+                if (getActiveChannel() == channel) {
+                    refreshUI = true;
+                }
+            }
+        }
+        if (refreshUI) {
+            listener.messageReceived(message);
+        }
     }
 
     @Override
     public void usersInChannel(String channelName, List<String> users) {
         IrcChannel channel = serverDAO.getChannel(ircServer, channelName);
-        for (String u : users) {
+        for (String userName : users) {
             String flag = "";
-            if (hasFlag(u)) {
-                flag = String.valueOf(u.charAt(0));
-                u = u.substring(1);
+            if (hasFlag(userName)) {
+                flag = String.valueOf(userName.charAt(0));
+                userName = userName.substring(1);
             }
-            IrcUser user = serverDAO.getUser(ircServer, u);
+            IrcUser user = serverDAO.getUser(ircServer, userName);
             channelDAO.addUser(channel, user, flag);
             serverDAO.addUser(ircServer, user);
         }
@@ -212,8 +258,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
         } else {
             IrcUser user = serverDAO.getUser(ircServer, nick);
             channelDAO.addUser(channel, user, "");
-            IrcMessage message = messageDAO.create(nick + " joined the channel.", time);
-            listener.postInfoMessage(message, user.getColor());
+            final IrcMessage message = messageDAO.create(IrcMessage.MessageTypeEnum.JOIN, user, nick + " joined the channel.", time);
+            channelDAO.addMessage(channel, message);
+            if (channel == activeChannel) {
+                listener.messageReceived(message);
+            }
         }
         checkUserUpdate(channel);
         ircServer.setLastMessageTime(time);
@@ -225,8 +274,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
         if (!userDAO.compare(ircServer.getSelf(), nick)) {
             IrcUser user = serverDAO.getUser(ircServer, nick);
             channelDAO.removeUser(channel, user);
-            IrcMessage message = messageDAO.create(nick + " left the channel.", time);
-            listener.postInfoMessage(message, user.getColor());
+            IrcMessage message = messageDAO.create(IrcMessage.MessageTypeEnum.PART, user, nick + " left the channel.", time);
+            channelDAO.addMessage(channel, message);
+            if (channel == getActiveChannel()) {
+                listener.messageReceived(message);
+            }
             checkUserUpdate(channel);
         } else {
             leaveChannel(channel);
@@ -238,36 +290,41 @@ public class ServerImpl implements Server, IrcProtocolListener {
     public void userQuit(String nick, String quitMessage, Date time) {
         IrcUser user = serverDAO.getUser(ircServer, nick);
         serverDAO.removeUser(ircServer, user);
-        List<IrcChannel> channels = new ArrayList<>();
-        for (IrcChannel c : ircServer.getConnectedChannels()) {
-            String flag = channelDAO.removeUser(c, user);
-            if (flag != null) {
-                channels.add(c);
+
+        final IrcMessage message = messageDAO.create(IrcMessage.MessageTypeEnum.QUIT, user, nick + " quit. (" + quitMessage + ")", time);
+        for (IrcChannel channel : ircServer.getConnectedChannels()) {
+            if (channelDAO.hasUser(channel, user)) {
+                channelDAO.removeUser(channel, user);
+                channelDAO.addMessage(channel, message);
+                if (channel == getActiveChannel()) {
+                    listener.messageReceived(message);
+                }
             }
         }
+
         ircServer.setLastMessageTime(time);
-        listener.postInfoMessage(messageDAO.create(nick + " quit. (" + quitMessage + ")", time), user.getColor());
+        listener.updateUserList();
     }
 
     @Override
     public void channelMessageReceived(String channel, String user, String message, Date time) {
         IrcUser ircUser = serverDAO.getUser(ircServer, user);
-        IrcChatMessageEB ircMessage = messageDAO.create(ircUser, message, time);
+        IrcMessage ircMessage = messageDAO.create(IrcMessage.MessageTypeEnum.RECEIVED, ircUser, message, time);
         IrcChannel ircChannel;
 
-        // Hilightlogiken ska flyttas till hilights
+        HilightLevel level;
         if (ircServer.getSelf().getName().equals(channel)) {
             ircChannel = serverDAO.getChannel(ircServer, user);
-            ircMessage.setHilight(true);
+            level = HilightLevel.NICKNAME;
         } else {
             ircChannel = serverDAO.getChannel(ircServer, channel);
-            ircMessage.setHilight(hilightHelper.checkMessage(message));
+            level = hilightManager.getHilightLevel(message);
         }
 
         if (!ircChannel.equals(activeChannel)) {
-            UnreadEntity entity = new UnreadEntity(ircChannel, ircServer);
-            dropListener.addUnread(entity, ircMessage.isHilight());
-            listener.updateHilights();
+            if (hilightListener.addUnread(ircServer, ircChannel, level)) {
+                listener.updateHilights();
+            }
         }
 
         ircServer.setLastMessageTime(time);
@@ -303,9 +360,18 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
+    public void couldNotEstablish(String techMessage) {
+        for (ServerConnectionListener connectionListener : connectionListeners) {
+            connectionListener.connectionDropped(this);
+        }
+    }
+
+    @Override
     public void serverDisconnected() {
         // TODO - this method should try to reconnect if its appropriate?
-        dropListener.dropServer(this);
+        for (ServerConnectionListener connectionListener : connectionListeners) {
+            connectionListener.connectionDropped(this);
+        }
         listener.serverDisconnected();
     }
 

@@ -4,55 +4,65 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.view.Gravity;
-import android.widget.LinearLayout;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
-
 import se.alkohest.irkksome.R;
+import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.api.ServerCallback;
-import se.alkohest.irkksome.model.api.UnreadStack;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
-import se.alkohest.irkksome.model.entity.IrcUser;
-import se.alkohest.irkksome.ui.fragment.ServerInfoFragment;
+import se.alkohest.irkksome.ui.fragment.server.ServerInfoFragment;
+import se.alkohest.irkksome.ui.fragment.server.ServerListFragment;
 import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
-import se.alkohest.irkksome.ui.fragment.connection.ConnectionsListFragment;
 
 public class CallbackHandler implements ServerCallback {
-    private final ConnectionListAdapter connectionListAdapter;
+    private static CallbackHandler instance;
     private final ListView connectionListView;
     private UserAdapter userAdapter;
     private final Activity context;
     private final FragmentManager fragmentManager;
-    private UnreadStack unreadStack;
 
-    public CallbackHandler(Activity context, UnreadStack unreadStack) {
+    public static CallbackHandler getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("No CallbackHandler has been initialized.");
+        }
+        return instance;
+    }
+
+    public static void setInstance(Activity context) {
+        instance = new CallbackHandler(context);
+    }
+
+    private CallbackHandler(Activity context) {
         this.context = context;
         fragmentManager = context.getFragmentManager();
-        connectionListAdapter = ConnectionListAdapter.getInstance();
         connectionListView = (ListView) context.findViewById(R.id.left_drawer_list);
-        this.unreadStack = unreadStack;
+
     }
 
     @Override
-    public void showServerInfo(final IrcServer server, final String motd) {
-        userAdapter = new UserSetAdapter(server.getKnownUsers());
-        context.runOnUiThread(new Runnable() {
-            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    public void showServerInfo(final Server server) {
+        final IrcServer ircServer = server.getBackingBean();
+        userAdapter = new UserSetAdapter(ircServer.getKnownUsers());
+        ChannelsAdapter.setInstance(context, ircServer);
 
+        context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ServerInfoFragment serverInfoFragment = ServerInfoFragment.getInstance(server, motd);
-                fragmentManager.popBackStack();
+                final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                context.findViewById(R.id.drawer_label_server).setVisibility(View.VISIBLE);
+                connectionListView.setAdapter(ChannelsAdapter.getInstance());
+                ServerInfoFragment serverInfoFragment = ServerInfoFragment.getInstance(server);
+//                fragmentManager.popBackStack(); // TODO: why do we do this? this causes unexplainable crashes impossible to recreate
                 fragmentTransaction.replace(R.id.fragment_container, serverInfoFragment);
                 fragmentTransaction.commit();
-
-                connectionListAdapter.notifyDataSetChanged(); // We don't need to reload the dataset unless it's a NEW connection, fix this!
-                connectionListView.setItemChecked(0, true);
+                TextView serverName = (TextView) context.findViewById(R.id.drawer_label_server);
+                serverName.setText(ircServer.getServerName());
+                connectionListView.setItemChecked(connectionListView.getCheckedItemPosition(), false);
                 connectionListView.setSelection(0);
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
             }
@@ -61,18 +71,22 @@ public class CallbackHandler implements ServerCallback {
 
     @Override
     public void serverDisconnected() {
-        // TODO - should go to another connected server if present
-        // TODO - should not create a new serverConnectFragment
         context.runOnUiThread(new Runnable() {
-            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
             @Override
             public void run() {
-                ConnectionsListFragment connectionsListFragment = ConnectionsListFragment.newInstance();
-                fragmentTransaction.replace(R.id.fragment_container, connectionsListFragment);
-                fragmentTransaction.commit();
-                connectionListAdapter.notifyDataSetChanged();
-                ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(null);
+                // TODO - should go to another connected server if present
+                if (false) {
+                    // Show some other stuff
+                } else {
+                    final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    context.findViewById(R.id.drawer_label_server).setVisibility(View.GONE);
+                    fragmentTransaction.replace(R.id.fragment_container, new ServerListFragment());
+                    fragmentTransaction.commit();
+                    ChannelsAdapter.getInstance().notifyDataSetChanged();
+                    ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(null);
+                    ((ListView) context.findViewById(R.id.left_drawer_list)).setAdapter(null);
+                }
             }
         });
 
@@ -95,18 +109,7 @@ public class CallbackHandler implements ServerCallback {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // Controller?
-                TextView number = (TextView) context.findViewById(R.id.actionbar_notifcation_textview);
-                if (unreadStack.getHilightCount() > 0) {
-                    number.setText(unreadStack.getHilightCount() + "");
-                    ((LinearLayout) number.getParent()).setBackground(context.getResources().getDrawable(R.drawable.highlightbadge_background_highlight));
-                } else if (unreadStack.getMessageCount() > 0) {
-                    number.setText(unreadStack.getMessageCount() + "");
-                    ((LinearLayout) number.getParent()).setBackground(context.getResources().getDrawable(R.drawable.highlightbadge_background));
-                } else {
-                    number.setText("0");
-                    ((LinearLayout) number.getParent()).setBackground(context.getResources().getDrawable(R.drawable.highlightbadge_background_disabled));
-                }
+                HilightHandler.getInstance().updateHilightButton();
             }
         });
     }
@@ -114,21 +117,27 @@ public class CallbackHandler implements ServerCallback {
     @Override
     public void setActiveChannel(final IrcChannel channel) {
         userAdapter = new UserMapAdapter(channel.getUsers());
-        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 context.setTitle(channel.getName());
-
-                ChannelFragment channelFragment = ChannelFragment.newInstance(channel);
-                fragmentTransaction.replace(R.id.fragment_container, channelFragment);
-                fragmentTransaction.commit();
+                ChannelFragment channelFragment = getChannelFragment();
+                if (channelFragment == null) {
+                    final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_container, ChannelFragment.newInstance(channel), ChannelFragment.FRAGMENT_TAG);
+                    fragmentTransaction.commit();
+                }
+                else {
+                    channelFragment.changeChannel(channel);
+                    HilightHandler.getInstance().updateHilightButton();
+                    channelFragment.smooothScrollToBottom();
+                }
 
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
 
-                connectionListAdapter.notifyDataSetChanged(); // We don't need to reload the dataset unless it's a NEW channel, fix this!
-                final int position = connectionListAdapter.getPosition(channel);
+                ChannelsAdapter.getInstance().notifyDataSetChanged(); // We don't need to reload the dataset unless it's a NEW channel, fix this!
+                int position = ChannelsAdapter.getInstance().getPosition(channel);
                 connectionListView.setItemChecked(position, true);
                 connectionListView.setSelection(position);
             }
@@ -136,11 +145,11 @@ public class CallbackHandler implements ServerCallback {
     }
 
     @Override
-    public void messageReceived(final IrcMessage message) {
+    public void messageReceived(final IrcMessage message) { // TODO: get rid of this parameter
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ChannelFragment.receiveMessage(message);
+                getChannelFragment().receiveMessage();
             }
         });
     }
@@ -155,13 +164,7 @@ public class CallbackHandler implements ServerCallback {
         });
     }
 
-    public void postInfoMessage(final IrcMessage message, final int color) {
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ChannelFragment.putInfoMessage(message, color);
-            }
-        });
-        updateUserList();
+    private ChannelFragment getChannelFragment() {
+        return (ChannelFragment) fragmentManager.findFragmentByTag(ChannelFragment.FRAGMENT_TAG);
     }
 }

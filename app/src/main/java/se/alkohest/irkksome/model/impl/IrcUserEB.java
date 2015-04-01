@@ -1,9 +1,8 @@
 package se.alkohest.irkksome.model.impl;
 
-import android.graphics.Color;
-
 import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
+import se.alkohest.irkksome.util.ColorProvider;
 import se.emilsjolander.sprinkles.annotations.Column;
 import se.emilsjolander.sprinkles.annotations.Table;
 
@@ -31,9 +30,7 @@ public class IrcUserEB extends AbstractBean implements IrcUser {
     }
 
     private void generateColor() {
-        float hue = name.hashCode()%360;
-        float[] hsv = {hue, 0.05f, 0.99f};
-        color = Color.HSVToColor(hsv);
+        color = ColorProvider.getInstance().getColor(name.hashCode());
     }
 
     @Override

@@ -1,11 +1,12 @@
 package se.alkohest.irkksome.model.impl
 
-import spock.lang.Specification
+import se.alkohest.irkksome.ColorProviderMockSpecification
+import se.alkohest.irkksome.model.entity.IrcMessage
 
-public class IrcMessageEBTest extends Specification {
+public class IrcMessageEBTest extends ColorProviderMockSpecification {
     def "getSetMessage"() {
         when:
-        def message = new IrcChatMessageEB()
+        def message = new IrcMessageEB()
         message.setMessage("This is a message")
 
         then:
@@ -14,7 +15,7 @@ public class IrcMessageEBTest extends Specification {
 
     def "getSetTimestamp"() {
         when:
-        def message = new IrcChatMessageEB()
+        def message = new IrcMessageEB()
         def date = new Date()
         message.setTimestamp(date)
 
@@ -24,12 +25,31 @@ public class IrcMessageEBTest extends Specification {
 
     def "getSetAuthor"() {
         when:
-        def message = new IrcChatMessageEB()
+        def message = new IrcMessageEB()
         def author = new IrcUserEB()
         author.setName("Korvryttarn")
         message.setAuthor(author)
 
         then:
         message.getAuthor() == author
+    }
+
+    def "getSetMessageType"() {
+        when:
+        def message = new IrcMessageEB();
+        message.setMessageType(messageType)
+
+        then:
+        message.getMessageType() == messageType
+
+        where:
+        messageType << [
+                IrcMessage.MessageTypeEnum.RECEIVED,
+                IrcMessage.MessageTypeEnum.SENT,
+                IrcMessage.MessageTypeEnum.JOIN,
+                IrcMessage.MessageTypeEnum.PART,
+                IrcMessage.MessageTypeEnum.QUIT,
+                IrcMessage.MessageTypeEnum.NICKCHANGE
+        ]
     }
 }

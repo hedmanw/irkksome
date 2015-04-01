@@ -7,12 +7,11 @@
     <TextView
         android:id="@+id/drawer_label_channel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:textColor="@drawable/drawer_textcolor"
         android:background="?android:attr/activatedBackgroundIndicator"
         android:gravity="center_vertical"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:minHeight="?android:attr/listPreferredItemHeightSmall" />
+        android:paddingLeft="@dimen/activity_horizontal_margin" />
 
 </LinearLayout>

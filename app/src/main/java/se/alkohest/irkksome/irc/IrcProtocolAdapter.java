@@ -1,5 +1,7 @@
 package se.alkohest.irkksome.irc;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +20,6 @@ public class IrcProtocolAdapter implements IrcProtocol {
     private static final String HASHTAG = "#";
     private static final String BANG = "!";
     private static final String LINE_BREAK = "\r\n";
-    private final Log LOG = Log.getInstance(this.getClass());
 
     private static Set<String> errorType1 = new HashSet<String>() {{
         add(IrcProtocolStrings.ERR_NOSUCHNICK);
@@ -40,14 +41,13 @@ public class IrcProtocolAdapter implements IrcProtocol {
     }};
 
     private IrcProtocolListener listener;
-    private Connection connection;
+    private ServerConnection connection;
     private BacklogHandler backlogHandler;
     private boolean running;
     private List<String> writeWaitList;
     private StringBuilder motdBuilder;
-    private Log log = Log.getInstance(getClass());
 
-    public IrcProtocolAdapter(Connection connection, BacklogHandler backlogHandler) {
+    public IrcProtocolAdapter(ServerConnection connection, BacklogHandler backlogHandler) {
         this.connection = connection;
         this.backlogHandler = backlogHandler;
         writeWaitList = new ArrayList<>();
@@ -59,7 +59,7 @@ public class IrcProtocolAdapter implements IrcProtocol {
      */
     private void handleReply(String reply) {
         String[] parts = reply.split(BLANK, 3);
-        log.i(reply);
+        Log.i("irkksome", reply);
         // Too few parts means that reply is not a valid IRC string.
         if (parts.length < 2) return;
         handlePing(parts);
@@ -165,7 +165,7 @@ public class IrcProtocolAdapter implements IrcProtocol {
 
     private void write(String s) {
         if (connection.isConnected()) {
-            log.i(s);
+            Log.i("irkksome", s);
             try {
                 connection.write(s + LINE_BREAK);
             } catch (IOException e) {
@@ -187,11 +187,10 @@ public class IrcProtocolAdapter implements IrcProtocol {
                     for (String s : writeWaitList) {
                         write(s);
                     }
-                    listener.serverConnected();
+                    listener.serverConnectionEstablished();
                     start();
                 } catch (IOException e) {
-                    e.printStackTrace();
-                    listener.serverDisconnected();
+                    listener.couldNotEstablish(e.getMessage());
                 }
             }
         }).start();

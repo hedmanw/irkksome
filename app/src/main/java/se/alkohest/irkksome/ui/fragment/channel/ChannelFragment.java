@@ -1,36 +1,32 @@
 package se.alkohest.irkksome.ui.fragment.channel;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
-import se.alkohest.irkksome.model.entity.IrcUser;
-import se.alkohest.irkksome.model.impl.IrcChatMessageEB;
-import se.alkohest.irkksome.ui.ChatActivity;
+import se.alkohest.irkksome.ui.fragment.HilightContainedFragment;
+import se.alkohest.irkksome.ui.widget.ChatRecylerView;
+import se.alkohest.irkksome.util.DateFormatUtil;
 
-public class ChannelFragment extends Fragment {
-    private static ArrayAdapter<ChannelChatItem> arrayAdapter;
-    private static List<ChannelChatItem> messageList;
+public class ChannelFragment extends HilightContainedFragment {
+    public static final String FRAGMENT_TAG = "channel";
     private static IrcChannel ircChannel;
-    private static ListView messageListView;
+    private ChatRecylerView chatRecylerView;
     private static OnMessageSendListener activity;
+    private EditText messageEditText;
 
     public static ChannelFragment newInstance(IrcChannel ircChannel) {
         ChannelFragment fragment = new ChannelFragment();
@@ -51,22 +47,15 @@ public class ChannelFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        messageList = new ArrayList<>(ircChannel.getMessages().size());
-        for (IrcMessage message : ircChannel.getMessages()) {
-            if (message instanceof IrcChatMessageEB) {
-                messageList.add(new MessageItem((IrcChatMessageEB) message));
-            }
-        }
         ChannelFragment.activity = (OnMessageSendListener) activity;
-        ChannelFragment.arrayAdapter = new ChannelArrayAdapter(activity.getApplicationContext(), messageList);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_channel, container, false);
-        messageListView = (ListView) inflatedView.findViewById(R.id.listView);
-        messageListView.setAdapter(arrayAdapter);
-        final EditText messageEditText = ((EditText) inflatedView.findViewById(R.id.input_field));
+
+        messageEditText = ((EditText) inflatedView.findViewById(R.id.input_field));
+        messageEditText.setHint("Send message to " + ircChannel.getName());
         messageEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int keyCode, KeyEvent keyEvent) {
@@ -77,43 +66,102 @@ public class ChannelFragment extends Fragment {
                 return false;
             }
         });
+
+        chatRecylerView = (ChatRecylerView) inflatedView.findViewById(R.id.recycler_view);
+        chatRecylerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        chatRecylerView.setAdapter(new ChatItemAdapter());
+
+        chatRecylerView.setOnSizeChangedListener(new ChatRecylerView.OnSizeChangedListener() {
+            @Override
+            public void onSizeChanged(int newWidth, int newHeight, int oldWidth, int oldHeight) {
+                if (oldHeight > newHeight) {
+                    instantScrollToBottom();
+                }
+            }
+        });
+
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(messageEditText, 0);
         messageEditText.requestFocus();
-        scrollToBottom();
+        smooothScrollToBottom();
+
         return inflatedView;
     }
 
-    public static void scrollWhenAtBottom() {
-        if (!hasBacklog()) {
-            scrollToBottom();
+    public void changeChannel(IrcChannel channel) {
+        ircChannel = channel;
+        chatRecylerView.getAdapter().notifyDataSetChanged();
+    }
+
+    private boolean hasBacklog() {
+        return false;
+    }
+
+    public void smooothScrollToBottom() {
+        if (chatRecylerView.getAdapter().getItemCount() > 0) {
+            chatRecylerView.smoothScrollToPosition(chatRecylerView.getAdapter().getItemCount()-1);
         }
     }
 
-    private static boolean hasBacklog() {
-        return messageListView.getLastVisiblePosition() < arrayAdapter.getCount()-1;
-    }
-
-    public static void scrollToBottom() {
-        if (arrayAdapter != null) {
-            messageListView.setSelection(arrayAdapter.getCount() - 1);
+    public void instantScrollToBottom() {
+        if (chatRecylerView.getAdapter().getItemCount() > 0) {
+            chatRecylerView.scrollToPosition(chatRecylerView.getAdapter().getItemCount()-1);
         }
     }
 
-    public static void receiveMessage(IrcMessage message) {
-        if (arrayAdapter != null) {
-            arrayAdapter.add(new MessageItem((IrcChatMessageEB) message));
-            scrollToBottom();
-        }
-    }
-
-    public static void putInfoMessage(IrcMessage message, int color) {
-        if (arrayAdapter != null) {
-            arrayAdapter.add(new InfoItem(message, color));
-        }
+    public void receiveMessage() {
+        chatRecylerView.getAdapter().notifyDataSetChanged();
+        smooothScrollToBottom();
     }
 
     public interface OnMessageSendListener {
         public void sendMessage(View view);
+    }
+
+    private class ChatItemAdapter extends RecyclerView.Adapter<ChatItemHolder> {
+        @Override
+        public ChatItemHolder onCreateViewHolder(ViewGroup parent, int pos) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_message, parent, false);
+            return new ChatItemHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ChatItemHolder holder, int pos) {
+            IrcMessage ircMessage = ircChannel.getMessages().get(pos);
+            holder.bindMessage(ircMessage);
+        }
+
+        @Override
+        public int getItemCount() {
+            return ircChannel.getMessages().size();
+        }
+    }
+
+    private class ChatItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private final TextView timestamp;
+        private final TextView author;
+        private final TextView messageTextView;
+        private IrcMessage ircMessage;
+
+        public ChatItemHolder(View itemView) {
+            super(itemView);
+            itemView.setOnClickListener(this);
+            timestamp = (TextView) itemView.findViewById(R.id.chat_message_timestamp);
+            author = (TextView) itemView.findViewById(R.id.chat_message_author);
+            messageTextView = (TextView) itemView.findViewById(R.id.chat_message_messagecontent);
+        }
+
+        public void bindMessage(IrcMessage chatItem) {
+            ircMessage = chatItem;
+            timestamp.setText(DateFormatUtil.getTimeDay(ircMessage.getTimestamp()) + " ");
+            author.setText(ircMessage.getAuthor().getName() + ": ");
+            author.setTextColor(ircMessage.getAuthor().getColor());
+            messageTextView.setText(ircMessage.getMessage());
+        }
+
+        @Override
+        public void onClick(View view) {
+            messageEditText.append(ircMessage.getAuthor().getName() + ": ");
+        }
     }
 }

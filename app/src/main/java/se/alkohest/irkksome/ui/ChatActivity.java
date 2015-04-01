@@ -3,36 +3,30 @@ package se.alkohest.irkksome.ui;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
-import se.alkohest.irkksome.irc.Log;
-import se.alkohest.irkksome.model.api.Server;
 import se.alkohest.irkksome.model.api.ServerManager;
-import se.alkohest.irkksome.model.api.UnreadEntity;
 import se.alkohest.irkksome.model.entity.IrcChannel;
-import se.alkohest.irkksome.model.entity.IrkksomeConnection;
+import se.alkohest.irkksome.ui.connection.NewConnectionActivity;
+import se.alkohest.irkksome.ui.fragment.server.ServerListFragment;
 import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
-import se.alkohest.irkksome.ui.fragment.connection.AbstractConnectionFragment;
-import se.alkohest.irkksome.ui.fragment.connection.ConnectionItem;
-import se.alkohest.irkksome.ui.fragment.connection.ConnectionsListFragment;
 
-public class ChatActivity extends Activity implements ConnectionsListFragment.OnConnectionSelectedListener, AbstractConnectionFragment.OnConnectPressedListener, ChannelFragment.OnMessageSendListener {
-    private static final Log LOG = Log.getInstance(ChatActivity.class);
+public class ChatActivity extends Activity implements ChannelFragment.OnMessageSendListener {
     private static ServerManager serverManager = ServerManager.INSTANCE;
-    private ExpandableListView connectionsList;
+    private ListView connectionsList;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
 
@@ -40,68 +34,79 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_drawers);
-        ConnectionListAdapter.setInstance(this, serverManager.getServers());
-        connectionsList = (ExpandableListView) findViewById(R.id.left_drawer_list);
+        CallbackHandler.setInstance(this);
+        HilightHandler.setInstance(this, serverManager.getUnreadStack());
+        connectionsList = (ListView) findViewById(R.id.left_drawer_list);
 
         if (savedInstanceState == null) {
 //            serverManager.loadPersisted(); Either load from DB, or make connections static. Can we ensure all connections are kept alive?
-            if (serverManager.getServers().isEmpty()) { // No sessions are running, cold start
+            if (serverManager.getServers().isEmpty()) { // No sessions are running, cold start => "Fresh startup"
+
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                ConnectionsListFragment connectFragment = ConnectionsListFragment.newInstance();
-                fragmentTransaction.add(R.id.fragment_container, connectFragment, ConnectionsListFragment.TAG);
+                ServerListFragment emptinessFragment = new ServerListFragment();
+                fragmentTransaction.add(R.id.fragment_container, emptinessFragment);
                 fragmentTransaction.commit();
+
+                final Intent intent = new Intent(this, NewConnectionActivity.class);
+                intent.putExtra(NewConnectionActivity.REQUEST_CODE, NewConnectionActivity.FRESH_STARTUP_CONNECTION);
+                startActivityForResult(intent, NewConnectionActivity.FRESH_STARTUP_CONNECTION);
             }
             else { // Back stack was emptied with sessions running, resume them (eller?)
-                serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
+                serverManager.getActiveServer().setListener(CallbackHandler.getInstance());
                 serverManager.getActiveServer().showServer();
             }
         }
         else { // Device was tilted
             // This might require us to loop through all servers and set new CallbackHandlers
             if (serverManager.getActiveServer() != null) {
-                serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
+                serverManager.getActiveServer().setListener(CallbackHandler.getInstance());
+                if (serverManager.getActiveServer().getActiveChannel() == null) {
+                    serverManager.getActiveServer().showServer();
+                }
+                else {
+                    serverManager.getActiveServer().setActiveChannel(serverManager.getActiveServer().getActiveChannel());
+                }
             }
+        }
+        if (serverManager.getActiveServer() == null) {
+            ChannelsAdapter.setInstance(this, null);
+        }
+        else {
+            ChannelsAdapter.setInstance(this, serverManager.getActiveServer().getBackingBean());
+            TextView serverName = (TextView) findViewById(R.id.drawer_label_server);
+            serverName.setText(serverManager.getActiveServer().getBackingBean().getServerName());
         }
 
         ChatActivityStatic.onCreate(this);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow_right, GravityCompat.END);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                final View inputField = findViewById(R.id.input_field);
+                if (serverManager.getActiveServer() != null &&
+                        serverManager.getActiveServer().getActiveChannel() != null &&
+                        inputField != null) {
+                    inputField.requestFocus();
+                }
+            }
+        };
         drawerLayout.setDrawerListener(drawerToggle);
         final View leftDrawer = findViewById(R.id.left_drawer);
 
         connectionsList.setEmptyView(findViewById(android.R.id.empty));
-        final ConnectionListAdapter listAdapter = ConnectionListAdapter.getInstance();
-        connectionsList.setAdapter(listAdapter);
-        for (int i = 0, serversSize = serverManager.getServers().size(); i < serversSize; i++) {
-            connectionsList.expandGroup(i);
-        }
-        connectionsList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+        connectionsList.setAdapter(ChannelsAdapter.getInstance());
+
+        connectionsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPos, int childPos, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 drawerLayout.closeDrawer(leftDrawer);
-                final Server selectedServer = listAdapter.getGroup(groupPos);
-                if (selectedServer != serverManager.getActiveServer()) {
-                    serverManager.setActiveServer(selectedServer);
-                }
-                IrcChannel channel = listAdapter.getChild(groupPos, childPos);
-                serverManager.getUnreadStack().remove(channel, serverManager.getActiveServer().getBackingBean());
+                IrcChannel channel = ChannelsAdapter.getInstance().getItem(position);
+                serverManager.getUnreadStack().remove(serverManager.getActiveServer().getBackingBean(), channel);
                 serverManager.getActiveServer().setActiveChannel(channel);
-                return true;
-            }
-        });
-        connectionsList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPos, long id) {
-                drawerLayout.closeDrawer(leftDrawer);
-                final Server selectedServer = listAdapter.getGroup(groupPos);
-                if (selectedServer != serverManager.getActiveServer()) {
-                    serverManager.setActiveServer(selectedServer);
-                }
-                serverManager.getActiveServer().showServer();
-                return true;
             }
         });
 
@@ -111,6 +116,30 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 final String nick = ((TextView) view.findViewById(R.id.nick)).getText().toString();
                 startQuery(nick);
+            }
+        });
+
+        findViewById(R.id.drawer_label_server).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawer(leftDrawer);
+                serverManager.getActiveServer().showServer();
+            }
+        });
+
+        findViewById(R.id.drawer_label_all_servers).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.closeDrawer(leftDrawer);
+
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, new ServerListFragment());
+                fragmentTransaction.commit();
+
+                serverManager.clearActiveChannel();
+                connectionsList.setItemChecked(connectionsList.getCheckedItemPosition(), false);
+                connectionsList.setSelection(0);
             }
         });
     }
@@ -154,20 +183,10 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
                 ChatActivityStatic.showNickChangeDialog(this, serverManager.getActiveServer());
                 break;
             case R.id.action_drop_server:
-                serverManager.getActiveServer().disconnect();
+                serverManager.shutDownServer(serverManager.getActiveServer());
                 break;
         }
         return true;
-    }
-
-    public void showHilight(View view) {
-        if (serverManager.getUnreadStack().hasUnread()) {
-            UnreadEntity entity = serverManager.getUnreadStack().pop();
-            if (serverManager.getActiveServer() != entity.getServer()) {
-                serverManager.setActiveServer(entity.getServer());
-            }
-            serverManager.getActiveServer().setActiveChannel(entity.getChannel());
-        }
     }
 
     public void sendMessage(View view) {
@@ -184,20 +203,12 @@ public class ChatActivity extends Activity implements ConnectionsListFragment.On
     }
 
     @Override
-    public void onConnectionSelected(ConnectionItem connectionItem) {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        AbstractConnectionFragment connectFragment = connectionItem.getConnectionFragment();
-        fragmentTransaction.replace(R.id.fragment_container, connectFragment);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-    @Override
-    public void onConnectPressed(IrkksomeConnection irkksomeConnection) {
-        serverManager.setActiveServer(serverManager.addServer(irkksomeConnection));
-        serverManager.getActiveServer().setListener(new CallbackHandler(this, serverManager.getUnreadStack()));
-        connectionsList.expandGroup(serverManager.getServers().indexOf(serverManager.getActiveServer()));
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == NewConnectionActivity.FRESH_STARTUP_CONNECTION) {
+            if (resultCode == Activity.RESULT_CANCELED) {
+                finish();
+            }
+        }
     }
 }
