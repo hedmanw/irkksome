@@ -3,9 +3,7 @@ package se.alkohest.irkksome.model.impl;
 import java.util.Date;
 
 import se.alkohest.irkksome.model.entity.IrcMessage;
-import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
-import se.alkohest.irkksome.orm.OneToOne;
 import se.emilsjolander.sprinkles.annotations.Column;
 import se.emilsjolander.sprinkles.annotations.Table;
 
@@ -21,9 +19,8 @@ public class IrcMessageEB extends AbstractBean implements IrcMessage {
     @Column("timestamp")
     private Date timestamp;
 
-    @Column("author_id")
-    @OneToOne(IrcUserEB.class)
-    private IrcUser author;
+    @Column("author")
+    private String author;
 
     private MessageTypeEnum messageType;
 
@@ -48,12 +45,12 @@ public class IrcMessageEB extends AbstractBean implements IrcMessage {
     }
 
     @Override
-    public IrcUser getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
     @Override
-    public void setAuthor(IrcUser author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 
@@ -68,6 +65,6 @@ public class IrcMessageEB extends AbstractBean implements IrcMessage {
     }
 
     public String toString() {
-        return messageType + ":" + author.getName() + ": " + message;
+        return messageType + ":" + author + ": " + message;
     }
 }

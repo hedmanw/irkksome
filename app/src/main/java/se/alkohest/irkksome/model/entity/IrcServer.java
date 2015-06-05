@@ -15,13 +15,13 @@ public interface IrcServer extends BeanEntity {
 
     public void setServerName(String string);
 
-    public void setSelf(IrcUser user);
+    public void setSelf(String user);
 
-    public IrcUser getSelf();
+    public String getSelf();
 
-    public Set<IrcUser> getKnownUsers();
+    public Set<String> getKnownUsers();
 
-    public void setKnownUsers(Set<IrcUser> users);
+    public void setKnownUsers(Set<String> users);
 
     public void setLastMessageTime(Date time);
 

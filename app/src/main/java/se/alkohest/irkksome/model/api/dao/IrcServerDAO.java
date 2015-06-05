@@ -18,12 +18,12 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB> {
     public IrcServer create() {
         IrcServer ircServer = new IrcServerEB();
         ircServer.setConnectedChannels(new ArrayList<IrcChannel>());
-        ircServer.setKnownUsers(new HashSet<IrcUser>());
+        ircServer.setKnownUsers(new HashSet<String>());
         ircServer.setLastMessageTime(new Date(0));
         return ircServer;
     }
 
-    public void addUser(IrcServer ircServer, IrcUser user) {
+    public void addUser(IrcServer ircServer, String user) {
         ircServer.getKnownUsers().add(user);
     }
 
@@ -38,22 +38,21 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB> {
         return channel;
     }
 
-    public IrcUser getUser(IrcServer ircServer, String nick) {
-        for (IrcUser u : ircServer.getKnownUsers()) {
-            if (userDAO.compare(u, nick)) {
-                return u;
+    public String getUser(IrcServer ircServer, String nick) {
+        for (String userName : ircServer.getKnownUsers()) {
+            if (userName.equalsIgnoreCase(nick)) {
+                return userName;
             }
         }
-        IrcUser user = userDAO.create(nick);
-        ircServer.getKnownUsers().add(user);
-        return user;
+        ircServer.getKnownUsers().add(nick);
+        return nick;
     }
 
     public void removeChannel(IrcServer ircServer, IrcChannel channel) {
         ircServer.getConnectedChannels().remove(channel);
     }
 
-    public void removeUser(IrcServer ircServer, IrcUser user) {
+    public void removeUser(IrcServer ircServer, String user) {
         ircServer.getKnownUsers().remove(user);
     }
 

@@ -49,7 +49,7 @@ public class ServerInfoFragment extends HilightContainedFragment {
             TextView nickname = (TextView) inflatedView.findViewById(R.id.server_info_nickname);
             TextView motdView = (TextView) inflatedView.findViewById(R.id.server_motd);
             hostname.setText(server.getBackingBean().getServerName());
-            nickname.setText(server.getBackingBean().getSelf().getName());
+            nickname.setText(server.getBackingBean().getSelf());
             if (motd.length() > 20) {
                 motdView.setText(motd.substring(0, 20) + "[...]");
             }

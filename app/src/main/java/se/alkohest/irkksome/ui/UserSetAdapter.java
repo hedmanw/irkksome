@@ -15,16 +15,16 @@ import se.alkohest.irkksome.model.entity.IrcUser;
  * Created by oed on 7/21/14.
  */
 public class UserSetAdapter extends UserAdapter {
-    private Set<IrcUser> set;
+    private Set<String> set;
 
-    public UserSetAdapter(Set<IrcUser> set) {
+    public UserSetAdapter(Set<String> set) {
         this.set = set;
         updateList();
     }
 
     private void updateList() {
         list = new ArrayList<>();
-        for (IrcUser u : set) {
+        for (String u : set) {
             list.add(u);
         }
     }
@@ -55,7 +55,7 @@ public class UserSetAdapter extends UserAdapter {
             result = convertView;
         }
 
-        ((TextView) result.findViewById(R.id.nick)).setText(list.get(position).getName());
+        ((TextView) result.findViewById(R.id.nick)).setText(list.get(position));
         return result;
     }
 }

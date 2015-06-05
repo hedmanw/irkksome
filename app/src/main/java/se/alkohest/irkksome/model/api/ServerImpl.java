@@ -122,7 +122,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
-    public java.util.Set<IrcUser> getUsers() {
+    public java.util.Set<String> getUsers() {
         return ircServer.getKnownUsers();
     }
 
@@ -143,7 +143,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void startQuery(String nick) {
-        IrcUser user = serverDAO.getUser(ircServer, nick);
+        String user = serverDAO.getUser(ircServer, nick);
         IrcChannel query = serverDAO.getChannel(ircServer, nick);
         channelDAO.addUser(query, user, "");
         listener.setActiveChannel(query);
@@ -181,8 +181,8 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void nickChanged(String oldNick, String newNick, Date time) {
-        if (userDAO.compare(ircServer.getSelf(), oldNick)) {
-            ircServer.getSelf().setName(newNick);
+        if (ircServer.getSelf().equalsIgnoreCase(oldNick)) {
+            ircServer.setSelf(newNick);
             final IrcMessage message = messageDAO.create(IrcMessage.MessageTypeEnum.NICKCHANGE, ircServer.getSelf(), "You are now known as " + newNick, time);
             for (IrcChannel channel : ircServer.getConnectedChannels()) {
                 channelDAO.addMessage(channel, message);
@@ -191,7 +191,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
                 }
             }
         } else {
-            IrcUser user = serverDAO.getUser(ircServer, oldNick);
+            String user = serverDAO.getUser(ircServer, oldNick);
             final IrcMessage message = messageDAO.create(IrcMessage.MessageTypeEnum.NICKCHANGE, user, oldNick + " is now known as " + newNick, time);
             updateChannelsWithUser(user, message, newNick);
             listener.updateUserList();
@@ -199,13 +199,12 @@ public class ServerImpl implements Server, IrcProtocolListener {
         ircServer.setLastMessageTime(time);
     }
 
-    private void updateChannelsWithUser(IrcUser user, IrcMessage message, String newNick) {
+    private void updateChannelsWithUser(String user, IrcMessage message, String newNick) {
         boolean refreshUI = false;
         final List<IrcChannel> connectedChannels = ircServer.getConnectedChannels();
         for (IrcChannel channel : connectedChannels) {
             if (channelDAO.hasUser(channel, user)) {
                 channelDAO.removeUser(channel, user);
-                user.setName(newNick);
                 channelDAO.addUser(channel, user, "");
                 channelDAO.addMessage(channel, message);
                 if (getActiveChannel() == channel) {
@@ -227,7 +226,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
                 flag = String.valueOf(userName.charAt(0));
                 userName = userName.substring(1);
             }
-            IrcUser user = serverDAO.getUser(ircServer, userName);
+            String user = serverDAO.getUser(ircServer, userName);
             channelDAO.addUser(channel, user, flag);
             serverDAO.addUser(ircServer, user);
         }
@@ -252,11 +251,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public void userJoined(String channelName, String nick, Date time) {
         IrcChannel channel = serverDAO.getChannel(ircServer, channelName);
-        if (userDAO.compare(ircServer.getSelf(), nick)) {
+        if (ircServer.getSelf().equalsIgnoreCase(nick)) {
             listener.setActiveChannel(channel);
             activeChannel = channel;
         } else {
-            IrcUser user = serverDAO.getUser(ircServer, nick);
+            String user = serverDAO.getUser(ircServer, nick);
             channelDAO.addUser(channel, user, "");
             final IrcMessage message = messageDAO.create(IrcMessage.MessageTypeEnum.JOIN, user, nick + " joined the channel.", time);
             channelDAO.addMessage(channel, message);
@@ -271,8 +270,8 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public void userParted(String channelName, String nick, Date time) {
         IrcChannel channel = serverDAO.getChannel(ircServer, channelName);
-        if (!userDAO.compare(ircServer.getSelf(), nick)) {
-            IrcUser user = serverDAO.getUser(ircServer, nick);
+        if (!ircServer.getSelf().equalsIgnoreCase(nick)) {
+            String user = serverDAO.getUser(ircServer, nick);
             channelDAO.removeUser(channel, user);
             IrcMessage message = messageDAO.create(IrcMessage.MessageTypeEnum.PART, user, nick + " left the channel.", time);
             channelDAO.addMessage(channel, message);
@@ -288,7 +287,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void userQuit(String nick, String quitMessage, Date time) {
-        IrcUser user = serverDAO.getUser(ircServer, nick);
+        String user = serverDAO.getUser(ircServer, nick);
         serverDAO.removeUser(ircServer, user);
 
         final IrcMessage message = messageDAO.create(IrcMessage.MessageTypeEnum.QUIT, user, nick + " quit. (" + quitMessage + ")", time);
@@ -308,12 +307,12 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void channelMessageReceived(String channel, String user, String message, Date time) {
-        IrcUser ircUser = serverDAO.getUser(ircServer, user);
+        String ircUser = serverDAO.getUser(ircServer, user);
         IrcMessage ircMessage = messageDAO.create(IrcMessage.MessageTypeEnum.RECEIVED, ircUser, message, time);
         IrcChannel ircChannel;
 
         HilightLevel level;
-        if (ircServer.getSelf().getName().equals(channel)) {
+        if (ircServer.getSelf().equals(channel)) {
             ircChannel = serverDAO.getChannel(ircServer, user);
             level = HilightLevel.NICKNAME;
         } else {

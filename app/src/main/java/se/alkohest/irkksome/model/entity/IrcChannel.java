@@ -14,9 +14,9 @@ public interface IrcChannel extends BeanEntity {
 
     public String getName();
 
-    public Map<IrcUser, String> getUsers();
+    public Map<String, String> getUsers();
 
-    public void setUsers(Map<IrcUser, String> users);
+    public void setUsers(Map<String, String> users);
 
     public List<IrcMessage> getMessages();
 

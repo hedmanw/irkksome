@@ -7,7 +7,7 @@ import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.model.impl.IrcMessageEB;
 
 public class IrcMessageDAO {
-    public IrcMessage create(IrcMessage.MessageTypeEnum messageType, IrcUser author, String message, Date timestamp) {
+    public IrcMessage create(IrcMessage.MessageTypeEnum messageType, String author, String message, Date timestamp) {
         IrcMessage ircMessage = new IrcMessageEB();
         ircMessage.setAuthor(author);
         ircMessage.setMessage(message);

@@ -10,8 +10,6 @@ import se.emilsjolander.sprinkles.annotations.Table;
 public class IrcUserEB extends AbstractBean implements IrcUser {
     @Column("name")
     private String name;
-    @Column("color")
-    private int color;
 
     @Override
     public String getName() {
@@ -21,16 +19,6 @@ public class IrcUserEB extends AbstractBean implements IrcUser {
     @Override
     public void setName(String name) {
         this.name = name;
-        generateColor();
-    }
-
-    @Override
-    public int getColor() {
-        return color;
-    }
-
-    private void generateColor() {
-        color = ColorProvider.getInstance().getColor(name.hashCode());
     }
 
     @Override

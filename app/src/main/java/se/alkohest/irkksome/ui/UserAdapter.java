@@ -10,7 +10,7 @@ import se.alkohest.irkksome.model.entity.IrcUser;
  * Created by oed on 7/21/14.
  */
 public abstract class UserAdapter extends BaseAdapter {
-    protected List<IrcUser> list;
+    protected List<String> list;
 
     @Override
     public int getCount() {

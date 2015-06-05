@@ -19,7 +19,7 @@ public class IrcChannelEB extends AbstractBean implements IrcChannel {
     private String topic = "";
     @Column("name")
     private String name;
-    private Map<IrcUser, String> users;
+    private Map<String, String> users;
     @OneToMany(IrcMessageEB.class)
     private List<IrcMessage> messages;
 
@@ -44,12 +44,12 @@ public class IrcChannelEB extends AbstractBean implements IrcChannel {
     }
 
     @Override
-    public Map<IrcUser, String> getUsers() {
+    public Map<String, String> getUsers() {
         return users;
     }
 
     @Override
-    public void setUsers(Map<IrcUser, String> users) {
+    public void setUsers(Map<String, String> users) {
         this.users = users;
     }
 

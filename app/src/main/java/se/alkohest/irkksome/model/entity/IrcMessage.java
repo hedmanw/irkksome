@@ -17,9 +17,9 @@ public interface IrcMessage extends BeanEntity {
 
     public void setTimestamp(Date timestamp);
 
-    public IrcUser getAuthor();
+    public String getAuthor();
 
-    public void setAuthor(IrcUser author);
+    public void setAuthor(String author);
 
     public MessageTypeEnum getMessageType();
 

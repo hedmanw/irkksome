@@ -11,10 +11,6 @@ public class IrcUserDAO extends GenericDAO<IrcUserEB> {
         return ircUser;
     }
 
-    public boolean compare(IrcUser user, String nick) {
-        return user.getName().toLowerCase().equals(nick.toLowerCase());
-    }
-
     protected Class<IrcUserEB> getEntityBean() {
         return IrcUserEB.class;
     }

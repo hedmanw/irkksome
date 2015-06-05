@@ -15,24 +15,24 @@ import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcUser;
 
 public class UserMapAdapter extends UserAdapter {
-    private Map<IrcUser, String> map;
+    private Map<String, String> map;
 
-    public UserMapAdapter(Map<IrcUser, String> map) {
+    public UserMapAdapter(Map<String, String> map) {
         this.map = map;
         updateList();
     }
 
     private void updateList() {
         list = new ArrayList<>();
-        for (IrcUser u : map.keySet()) {
+        for (String u : map.keySet()) {
             list.add(u);
         }
     }
 
     @Override
-    public Map.Entry<IrcUser, String> getItem(int position) {
-        IrcUser key = list.get(position);
-        for (Map.Entry<IrcUser, String> e : map.entrySet()) {
+    public Map.Entry<String, String> getItem(int position) {
+        String key = list.get(position);
+        for (Map.Entry<String, String> e : map.entrySet()) {
             if (e.getKey().equals(key)) {
                 return e;
             }
@@ -62,9 +62,9 @@ public class UserMapAdapter extends UserAdapter {
             result = convertView;
         }
 
-        IrcUser key = list.get(position);
+        String key = list.get(position);
         ((TextView) result.findViewById(R.id.flag)).setText(map.get(key));
-        ((TextView) result.findViewById(R.id.nick)).setText(key.getName());
+        ((TextView) result.findViewById(R.id.nick)).setText(key);
 
         return result;
     }

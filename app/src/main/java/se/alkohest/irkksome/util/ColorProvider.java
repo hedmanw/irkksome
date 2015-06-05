@@ -1,7 +1,10 @@
 package se.alkohest.irkksome.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ColorProvider {
-    private static int[] colors = {
+    private static final int[] COLORS = {
             0xfff44336,
             0xffe91e63,
             0xff9c27b0,
@@ -19,14 +22,27 @@ public class ColorProvider {
             0xffff5722,
     };
 
-    private static ColorProvider INSTANCE = new ColorProvider();
+    private static final ColorProvider INSTANCE = new ColorProvider();
+    private static final Map<String, Integer> NICK_COLORS = new HashMap<>(100);
 
     public static ColorProvider getInstance() {
         return INSTANCE;
     }
 
+    public int getColor(String name) {
+        final Integer color = NICK_COLORS.get(name);
+        if (color != null) {
+            return color;
+        }
+        else {
+            final int newColor = getColor(name.hashCode());
+            NICK_COLORS.put(name, newColor);
+            return newColor;
+        }
+    }
+
     public int getColor(int hash) {
         int positiveHash = Math.abs(hash);
-        return colors[positiveHash%colors.length];
+        return COLORS[positiveHash% COLORS.length];
     }
 }

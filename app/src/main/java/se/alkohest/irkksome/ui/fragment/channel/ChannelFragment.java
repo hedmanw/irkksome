@@ -19,6 +19,7 @@ import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.ui.fragment.HilightContainedFragment;
 import se.alkohest.irkksome.ui.widget.ChatRecylerView;
+import se.alkohest.irkksome.util.ColorProvider;
 import se.alkohest.irkksome.util.DateFormatUtil;
 
 public class ChannelFragment extends HilightContainedFragment {
@@ -154,14 +155,14 @@ public class ChannelFragment extends HilightContainedFragment {
         public void bindMessage(IrcMessage chatItem) {
             ircMessage = chatItem;
             timestamp.setText(DateFormatUtil.getTimeDay(ircMessage.getTimestamp()) + " ");
-            author.setText(ircMessage.getAuthor().getName() + ": ");
-            author.setTextColor(ircMessage.getAuthor().getColor());
+            author.setText(ircMessage.getAuthor() + ": ");
+            author.setTextColor(ColorProvider.getInstance().getColor(ircMessage.getAuthor()));
             messageTextView.setText(ircMessage.getMessage());
         }
 
         @Override
         public void onClick(View view) {
-            messageEditText.append(ircMessage.getAuthor().getName() + ": ");
+            messageEditText.append(ircMessage.getAuthor() + ": ");
         }
     }
 }

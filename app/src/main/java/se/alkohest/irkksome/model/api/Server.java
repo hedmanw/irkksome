@@ -2,7 +2,6 @@ package se.alkohest.irkksome.model.api;
 
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
-import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
 
 public interface Server {
@@ -12,7 +11,7 @@ public interface Server {
 
     public void sendMessage(IrcChannel channel, String message);
 
-    public java.util.Set<IrcUser> getUsers();
+    public java.util.Set<String> getUsers();
 
     public IrcServer getBackingBean();
 

@@ -6,10 +6,8 @@ import java.util.Set;
 
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
-import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
 import se.alkohest.irkksome.orm.OneToMany;
-import se.alkohest.irkksome.orm.OneToOne;
 import se.emilsjolander.sprinkles.annotations.Column;
 import se.emilsjolander.sprinkles.annotations.Table;
 
@@ -21,11 +19,9 @@ public class IrcServerEB extends AbstractBean implements IrcServer {
     @OneToMany(IrcChannelEB.class)
     private List<IrcChannel> connectedChannels;
 
-    private Set<IrcUser> knownUsers;
+    private Set<String> knownUsers;
 
-    @Column("self")
-    @OneToOne(IrcUserEB.class)
-    private IrcUser self;
+    private String self;
 
     private Date lastMessageTime;
 
@@ -40,22 +36,22 @@ public class IrcServerEB extends AbstractBean implements IrcServer {
     }
 
     @Override
-    public void setSelf(IrcUser user) {
+    public void setSelf(String user) {
         self = user;
     }
 
     @Override
-    public IrcUser getSelf() {
+    public String getSelf() {
         return self;
     }
 
     @Override
-    public Set<IrcUser> getKnownUsers() {
+    public Set<String> getKnownUsers() {
         return knownUsers;
     }
 
     @Override
-    public void setKnownUsers(Set<IrcUser> users) {
+    public void setKnownUsers(Set<String> users) {
         knownUsers = users;
     }
 
@@ -81,6 +77,6 @@ public class IrcServerEB extends AbstractBean implements IrcServer {
 
     @Override
     public String toString() {
-        return serverName + ":" + self.getName() + ":" + connectedChannels.get(0).getName();
+        return serverName + ":" + self + ":" + connectedChannels.get(0).getName();
     }
 }

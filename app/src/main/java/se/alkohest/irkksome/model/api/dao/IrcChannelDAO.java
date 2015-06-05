@@ -5,7 +5,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
-import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.model.impl.IrcChannelEB;
 
 public class IrcChannelDAO {
@@ -14,7 +13,7 @@ public class IrcChannelDAO {
         IrcChannel ircChannel = new IrcChannelEB();
         ircChannel.setName(name);
         ircChannel.setMessages(new ArrayList<IrcMessage>());
-        ircChannel.setUsers(new ConcurrentHashMap<IrcUser, String>());
+        ircChannel.setUsers(new ConcurrentHashMap<String, String>());
         return ircChannel;
     }
 
@@ -26,17 +25,15 @@ public class IrcChannelDAO {
         return c.getName().toLowerCase().equals(channelName.toLowerCase());
     }
 
-    public void addUser(IrcChannel channel, IrcUser user, String flag) {
+    public void addUser(IrcChannel channel, String user, String flag) {
         channel.getUsers().put(user, flag);
     }
 
-    public boolean hasUser(IrcChannel channel, IrcUser user) {
-
-        final boolean b = channel.getUsers().keySet().contains(user);
-        return b;
+    public boolean hasUser(IrcChannel channel, String user) {
+        return channel.getUsers().keySet().contains(user);
     }
 
-    public boolean removeUser(IrcChannel channel, IrcUser user) {
+    public boolean removeUser(IrcChannel channel, String user) {
         return channel.getUsers().remove(user) != null;
     }
 }
