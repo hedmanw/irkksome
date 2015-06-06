@@ -94,12 +94,8 @@ public class ChannelFragment extends HilightContainedFragment {
         chatRecylerView.getAdapter().notifyDataSetChanged();
     }
 
-    private boolean hasBacklog() {
-        return false;
-    }
-
     public void smooothScrollToBottom() {
-        if (chatRecylerView.getAdapter().getItemCount() > 0) {
+        if (chatRecylerView.getAdapter().getItemCount() > 0 && chatRecylerView.isAtBottom()) {
             chatRecylerView.smoothScrollToPosition(chatRecylerView.getAdapter().getItemCount()-1);
         }
     }
