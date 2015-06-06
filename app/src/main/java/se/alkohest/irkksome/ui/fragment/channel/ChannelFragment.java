@@ -134,7 +134,7 @@ public class ChannelFragment extends HilightContainedFragment {
         }
     }
 
-    private class ChatItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class ChatItemHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         private final TextView timestamp;
         private final TextView author;
         private final TextView messageTextView;
@@ -142,7 +142,7 @@ public class ChannelFragment extends HilightContainedFragment {
 
         public ChatItemHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
             timestamp = (TextView) itemView.findViewById(R.id.chat_message_timestamp);
             author = (TextView) itemView.findViewById(R.id.chat_message_author);
             messageTextView = (TextView) itemView.findViewById(R.id.chat_message_messagecontent);
@@ -157,8 +157,9 @@ public class ChannelFragment extends HilightContainedFragment {
         }
 
         @Override
-        public void onClick(View view) {
+        public boolean onLongClick(View view) {
             messageEditText.append(ircMessage.getAuthor() + ": ");
+            return true;
         }
     }
 }

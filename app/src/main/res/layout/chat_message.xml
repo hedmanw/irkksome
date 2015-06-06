@@ -20,5 +20,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/chat_message_messagecontent"
+        android:autoLink="web"
         android:textColor="@color/black"/>
 </LinearLayout>
