@@ -1,4 +1,4 @@
-package se.alkohest.irkksome.ui.fragment.server;
+package se.alkohest.irkksome.ui.interaction.server;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import android.widget.ListView;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.ui.connection.NewConnectionActivity;
-import se.alkohest.irkksome.ui.fragment.HilightContainedFragment;
+import se.alkohest.irkksome.ui.interaction.HilightContainedFragment;
 
 /**
  * Created by wilhelm 2014-11-18.

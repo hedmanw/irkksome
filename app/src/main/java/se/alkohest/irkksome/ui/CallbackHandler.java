@@ -15,9 +15,9 @@ import se.alkohest.irkksome.model.api.ServerCallback;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
-import se.alkohest.irkksome.ui.fragment.server.ServerInfoFragment;
-import se.alkohest.irkksome.ui.fragment.server.ServerListFragment;
-import se.alkohest.irkksome.ui.fragment.channel.ChannelFragment;
+import se.alkohest.irkksome.ui.interaction.server.ServerInfoFragment;
+import se.alkohest.irkksome.ui.interaction.server.ServerListFragment;
+import se.alkohest.irkksome.ui.interaction.channel.ChannelFragment;
 
 public class CallbackHandler implements ServerCallback {
     private static CallbackHandler instance;
@@ -149,7 +149,7 @@ public class CallbackHandler implements ServerCallback {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                getChannelFragment().receiveMessage();
+                getChannelFragment().messageReceived();
             }
         });
     }

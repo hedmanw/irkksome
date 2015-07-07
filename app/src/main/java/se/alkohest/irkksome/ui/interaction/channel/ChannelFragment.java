@@ -1,4 +1,4 @@
-package se.alkohest.irkksome.ui.fragment.channel;
+package se.alkohest.irkksome.ui.interaction.channel;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,17 +17,18 @@ import android.widget.TextView;
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
-import se.alkohest.irkksome.ui.fragment.HilightContainedFragment;
+import se.alkohest.irkksome.ui.interaction.HilightContainedFragment;
 import se.alkohest.irkksome.ui.widget.ChatRecylerView;
 import se.alkohest.irkksome.util.ColorProvider;
 import se.alkohest.irkksome.util.DateFormatUtil;
 
-public class ChannelFragment extends HilightContainedFragment {
+public class ChannelFragment extends HilightContainedFragment implements ChannelView {
     public static final String FRAGMENT_TAG = "channel";
     private static IrcChannel ircChannel;
     private ChatRecylerView chatRecylerView;
     private static OnMessageSendListener activity;
     private EditText messageEditText;
+    private ChannelPresenter presenter;
 
     public static ChannelFragment newInstance(IrcChannel ircChannel) {
         ChannelFragment fragment = new ChannelFragment();
@@ -36,7 +37,7 @@ public class ChannelFragment extends HilightContainedFragment {
     }
 
     public ChannelFragment() {
-
+        presenter = new ChannelPresenterImpl(this);
     }
 
     @Override
@@ -94,19 +95,22 @@ public class ChannelFragment extends HilightContainedFragment {
         chatRecylerView.getAdapter().notifyDataSetChanged();
     }
 
+    @Override
     public void smooothScrollToBottom() {
         if (chatRecylerView.getAdapter().getItemCount() > 0 && chatRecylerView.isAtBottom()) {
             chatRecylerView.smoothScrollToPosition(chatRecylerView.getAdapter().getItemCount()-1);
         }
     }
 
+    @Override
     public void instantScrollToBottom() {
         if (chatRecylerView.getAdapter().getItemCount() > 0) {
             chatRecylerView.scrollToPosition(chatRecylerView.getAdapter().getItemCount()-1);
         }
     }
 
-    public void receiveMessage() {
+    @Override
+    public void messageReceived() {
         chatRecylerView.getAdapter().notifyDataSetChanged();
         smooothScrollToBottom();
     }

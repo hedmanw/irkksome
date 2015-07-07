@@ -1,4 +1,4 @@
-package se.alkohest.irkksome.ui.fragment;
+package se.alkohest.irkksome.ui.interaction;
 
 import android.app.Fragment;
 import android.graphics.Outline;
