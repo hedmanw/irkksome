@@ -1,6 +1,5 @@
 package se.alkohest.irkksome.ui.interaction.channel;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,7 +25,6 @@ public class ChannelFragment extends HilightContainedFragment implements Channel
     public static final String FRAGMENT_TAG = "channel";
     private static IrcChannel ircChannel;
     private ChatRecylerView chatRecylerView;
-    private static OnMessageSendListener activity;
     private EditText messageEditText;
     private ChannelPresenter presenter;
 
@@ -47,12 +45,6 @@ public class ChannelFragment extends HilightContainedFragment implements Channel
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        ChannelFragment.activity = (OnMessageSendListener) activity;
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_channel, container, false);
 
@@ -62,7 +54,7 @@ public class ChannelFragment extends HilightContainedFragment implements Channel
             @Override
             public boolean onEditorAction(TextView textView, int keyCode, KeyEvent keyEvent) {
                 if (keyCode == EditorInfo.IME_ACTION_SEND) {
-                    activity.sendMessage(null);
+                    sendMessage();
                     return true;
                 }
                 return false;
@@ -105,7 +97,7 @@ public class ChannelFragment extends HilightContainedFragment implements Channel
     @Override
     public void instantScrollToBottom() {
         if (chatRecylerView.getAdapter().getItemCount() > 0) {
-            chatRecylerView.scrollToPosition(chatRecylerView.getAdapter().getItemCount()-1);
+            chatRecylerView.scrollToPosition(chatRecylerView.getAdapter().getItemCount() - 1);
         }
     }
 
@@ -115,8 +107,13 @@ public class ChannelFragment extends HilightContainedFragment implements Channel
         smooothScrollToBottom();
     }
 
-    public interface OnMessageSendListener {
-        public void sendMessage(View view);
+    public void sendMessage() {
+        EditText editText = (EditText) getActivity().findViewById(R.id.input_field);
+        String text = editText.getText().toString();
+        presenter.sendMessage(text);
+        if (!text.isEmpty()) {
+            editText.getText().clear();
+        }
     }
 
     private class ChatItemAdapter extends RecyclerView.Adapter<ChatItemHolder> {

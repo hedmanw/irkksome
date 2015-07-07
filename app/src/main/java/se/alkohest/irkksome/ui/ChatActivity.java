@@ -24,7 +24,7 @@ import se.alkohest.irkksome.ui.connection.NewConnectionActivity;
 import se.alkohest.irkksome.ui.interaction.server.ServerListFragment;
 import se.alkohest.irkksome.ui.interaction.channel.ChannelFragment;
 
-public class ChatActivity extends Activity implements ChannelFragment.OnMessageSendListener {
+public class ChatActivity extends Activity {
     private static ServerManager serverManager = ServerManager.INSTANCE;
     private ListView connectionsList;
     private DrawerLayout drawerLayout;
@@ -187,14 +187,6 @@ public class ChatActivity extends Activity implements ChannelFragment.OnMessageS
                 break;
         }
         return true;
-    }
-
-    public void sendMessage(View view) {
-        EditText editText = (EditText) findViewById(R.id.input_field);
-        if (!editText.getText().toString().isEmpty()) {
-            serverManager.getActiveServer().sendMessage(serverManager.getActiveServer().getActiveChannel(), editText.getText().toString());
-            editText.getText().clear();
-        }
     }
 
     public void startQuery(String nickname) {
