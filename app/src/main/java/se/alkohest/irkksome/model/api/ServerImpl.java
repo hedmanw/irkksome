@@ -251,10 +251,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
     @Override
     public void userJoined(String channelName, String nick, Date time) {
         IrcChannel channel = serverDAO.getChannel(ircServer, channelName);
-        if (ircServer.getSelf().equalsIgnoreCase(nick)) {
+        if (ircServer.getSelf().equalsIgnoreCase(nick) && !ircProtocol.isBacklogReplaying()) {
             listener.setActiveChannel(channel);
             activeChannel = channel;
-        } else {
+        }
+        else {
             String user = serverDAO.getUser(ircServer, nick);
             channelDAO.addUser(channel, user, "");
             final IrcMessage message = messageDAO.create(IrcMessage.MessageTypeEnum.JOIN, user, nick + " joined the channel.", time);

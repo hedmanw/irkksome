@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import se.alkohest.irkksome.R;
+import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.ui.interaction.HilightContainedFragment;
@@ -84,6 +85,7 @@ public class ChannelFragment extends HilightContainedFragment implements Channel
 
     public void changeChannel(IrcChannel channel) {
         ircChannel = channel;
+        messageEditText.setHint("Send message to " + ircChannel.getName());
         chatRecylerView.getAdapter().notifyDataSetChanged();
     }
 
