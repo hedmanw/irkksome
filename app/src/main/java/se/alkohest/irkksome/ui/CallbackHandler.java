@@ -15,6 +15,7 @@ import se.alkohest.irkksome.model.api.ServerCallback;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
+import se.alkohest.irkksome.ui.interaction.channel.ChannelPresenter;
 import se.alkohest.irkksome.ui.interaction.server.ServerInfoFragment;
 import se.alkohest.irkksome.ui.interaction.server.ServerListFragment;
 import se.alkohest.irkksome.ui.interaction.channel.ChannelFragment;
@@ -25,6 +26,7 @@ public class CallbackHandler implements ServerCallback {
     private UserAdapter userAdapter;
     private final Activity context;
     private final FragmentManager fragmentManager;
+    private ChannelPresenter channelPresenter;
 
     public static CallbackHandler getInstance() {
         if (instance == null) {
@@ -114,24 +116,32 @@ public class CallbackHandler implements ServerCallback {
         });
     }
 
+    // TODO: If we start to experience that channelPresenter is null at runtime, we should rething our message passing
+    // I've considered the scenario where we have the UI thread and the (a) server thread running.
+    // The channel presenter will be registered by the UI thread that instantiates the fragment,
+    // thus, if subsequent calls to this handler occurs before the channel presenter has been registered,
+    // their queued runnables will be blocked until the original call has finished (and the variable is set).
+    // Another error prone scenario would be that the presenter could have an illegal reference to its view.
+    // I have not taken this into account, because I find that we should aim to reduce all these stateful couplings.
+    // Actually, on second thought, the reference of the presenter will continue to be valid for the duration of its usefulness.
+    // It should hold that it can never be activated in an illegal state. (But still.)
     @Override
     public void setActiveChannel(final IrcChannel channel) {
-        userAdapter = new UserMapAdapter(channel.getUsers());
+        userAdapter = new UserMapAdapter(channel.getUsers()); // TODO: Yeah, about that.
 
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 context.setTitle(channel.getName());
-                ChannelFragment channelFragment = getChannelFragment();
-                if (channelFragment == null) {
+                if (channelPresenter == null) {
                     final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.fragment_container, ChannelFragment.newInstance(channel), ChannelFragment.FRAGMENT_TAG);
                     fragmentTransaction.commit();
                 }
                 else {
-                    channelFragment.changeChannel(channel);
+                    channelPresenter.changeChannel(channel);
                     HilightHandler.getInstance().updateHilightButton();
-                    channelFragment.smooothScrollToBottom();
+                    channelPresenter.smooothScrollToBottom();
                 }
 
                 ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(userAdapter);
@@ -149,7 +159,7 @@ public class CallbackHandler implements ServerCallback {
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                getChannelFragment().messageReceived();
+                channelPresenter.messageReceived();
             }
         });
     }
@@ -164,7 +174,7 @@ public class CallbackHandler implements ServerCallback {
         });
     }
 
-    private ChannelFragment getChannelFragment() {
-        return (ChannelFragment) fragmentManager.findFragmentByTag(ChannelFragment.FRAGMENT_TAG);
+    public void registerChannelPresenter(ChannelPresenter presenter) {
+        this.channelPresenter = presenter;
     }
 }
