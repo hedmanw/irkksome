@@ -38,6 +38,9 @@ public class IrcServerDAO extends GenericDAO<IrcServerEB> {
         return channel;
     }
 
+    // TODO: What in the name of Linus "Pingvinpojken" Torvalds is going on here?
+    // We call a getter, either return one of the arguments, OR, we mutate a collection (quick recap: it's a getter) AND return one of the arguments.
+    // This is...this should be submitted to the call for papers of a major conference, I think this could really be some groundbreaking stuff.
     public String getUser(IrcServer ircServer, String nick) {
         for (String userName : ircServer.getKnownUsers()) {
             if (userName.equalsIgnoreCase(nick)) {

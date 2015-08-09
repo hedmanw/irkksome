@@ -104,10 +104,9 @@ public class ServerImpl implements Server, IrcProtocolListener {
         serverDAO.removeChannel(ircServer, channel);
         List<IrcChannel> channels = ircServer.getConnectedChannels();
         if (channels.size() != 0) {
-            activeChannel = channels.get(channels.size() - 1);
-            listener.setActiveChannel(activeChannel);
+            setActiveChannel(channels.get(channels.size() - 1));
         } else {
-            activeChannel = null;
+            setActiveChannel(null);
             listener.showServerInfo(this);
         }
     }
@@ -132,7 +131,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
     }
 
     @Override
-    public void setActiveChannel(IrcChannel ircChannel) { // TODO: why are no internal methods using this?
+    public void setActiveChannel(IrcChannel ircChannel) {
         if (activeChannel != ircChannel) {
             if (ircChannel != null) {
                 listener.setActiveChannel(ircChannel);
@@ -146,14 +145,13 @@ public class ServerImpl implements Server, IrcProtocolListener {
         String user = serverDAO.getUser(ircServer, nick);
         IrcChannel query = serverDAO.getChannel(ircServer, nick);
         channelDAO.addUser(query, user, "");
-        listener.setActiveChannel(query);
-        activeChannel = query;
+        setActiveChannel(query);
     }
 
     @Override
     public void showServer() {
         listener.showServerInfo(this);
-        activeChannel = null;
+        setActiveChannel(null);
     }
 
     //    ---------------------------------------------------------
@@ -255,8 +253,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
         // If so, we need to add an event that sends all channels once all backlog has been sent,
         // But I'm fairly certain that the channels are sent immediately by irssi proxy, and then we send the backlog, and then the whole circus commences.
         if (ircServer.getSelf().equalsIgnoreCase(nick) && !ircProtocol.isBacklogReplaying()) {
-            listener.setActiveChannel(channel);
-            activeChannel = channel;
+            setActiveChannel(channel);
         }
         else {
             String user = serverDAO.getUser(ircServer, nick);
