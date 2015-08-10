@@ -14,9 +14,11 @@ public class IrssiProxyBacklogHandler implements BacklogHandler {
     public static final String IRKKSOME = "irkksome";
 
     private boolean backlogReplaying;
+    private boolean passMessageEvents;
 
     public IrssiProxyBacklogHandler() {
         backlogReplaying = false;
+        passMessageEvents = false;
     }
 
     @Override
@@ -28,6 +30,7 @@ public class IrssiProxyBacklogHandler implements BacklogHandler {
                     break;
                 case STOP:
                     backlogReplaying = false;
+                    passMessageEvents = true;
                     break;
             }
         } else if (backlogReplaying && parts[0].startsWith(IRKKSOME)) {
@@ -44,6 +47,11 @@ public class IrssiProxyBacklogHandler implements BacklogHandler {
 
     public boolean isBacklogReplaying() {
         return backlogReplaying;
+    }
+
+    @Override
+    public boolean shouldPassMessageEvents() {
+        return passMessageEvents;
     }
 
     @Override

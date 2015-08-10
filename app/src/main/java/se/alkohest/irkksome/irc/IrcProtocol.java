@@ -93,4 +93,6 @@ public interface IrcProtocol {
     public void setListener(IrcProtocolListener listener);
 
     public boolean isBacklogReplaying();
+
+    boolean shouldPassMessageEvents();
 }

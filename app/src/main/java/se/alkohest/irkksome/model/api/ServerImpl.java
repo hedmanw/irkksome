@@ -252,8 +252,10 @@ public class ServerImpl implements Server, IrcProtocolListener {
         // If we start getting no channels after connecting to irssi, this is what's up.
         // If so, we need to add an event that sends all channels once all backlog has been sent,
         // But I'm fairly certain that the channels are sent immediately by irssi proxy, and then we send the backlog, and then the whole circus commences.
-        if (ircServer.getSelf().equalsIgnoreCase(nick) && !ircProtocol.isBacklogReplaying()) {
-            setActiveChannel(channel);
+        if (ircServer.getSelf().equalsIgnoreCase(nick)) {
+            if (ircProtocol.shouldPassMessageEvents()) {
+                setActiveChannel(channel);
+            }
         }
         else {
             String user = serverDAO.getUser(ircServer, nick);

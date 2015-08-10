@@ -303,6 +303,11 @@ public class IrcProtocolAdapter implements IrcProtocol {
     }
 
     @Override
+    public boolean shouldPassMessageEvents() {
+        return backlogHandler.shouldPassMessageEvents();
+    }
+
+    @Override
     public void setListener(IrcProtocolListener listener) {
         this.listener = listener;
     }

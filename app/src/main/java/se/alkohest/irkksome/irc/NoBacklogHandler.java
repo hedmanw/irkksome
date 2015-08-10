@@ -17,6 +17,11 @@ public class NoBacklogHandler implements BacklogHandler {
     }
 
     @Override
+    public boolean shouldPassMessageEvents() {
+        return true;
+    }
+
+    @Override
     public String getBacklogRequest(long unixTime) {
         return "";
     }

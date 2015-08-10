@@ -11,5 +11,7 @@ public interface BacklogHandler {
 
     public boolean isBacklogReplaying();
 
+    public boolean shouldPassMessageEvents();
+
     public String getBacklogRequest(long unixTime);
 }
