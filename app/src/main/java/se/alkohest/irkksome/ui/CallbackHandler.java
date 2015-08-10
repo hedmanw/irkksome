@@ -20,6 +20,7 @@ import se.alkohest.irkksome.ui.interaction.server.ServerInfoFragment;
 import se.alkohest.irkksome.ui.interaction.server.ServerListFragment;
 import se.alkohest.irkksome.ui.interaction.channel.ChannelFragment;
 
+// TODO: Change the navigation between fragments to a state machine that encapsulates the necessary logic
 public class CallbackHandler implements ServerCallback {
     private static CallbackHandler instance;
     private final ListView connectionListView;
@@ -116,24 +117,15 @@ public class CallbackHandler implements ServerCallback {
         });
     }
 
-    // TODO: If we start to experience that channelPresenter is null at runtime, we should rething our message passing
-    // I've considered the scenario where we have the UI thread and the (a) server thread running.
-    // The channel presenter will be registered by the UI thread that instantiates the fragment,
-    // thus, if subsequent calls to this handler occurs before the channel presenter has been registered,
-    // their queued runnables will be blocked until the original call has finished (and the variable is set).
-    // Another error prone scenario would be that the presenter could have an illegal reference to its view.
-    // I have not taken this into account, because I find that we should aim to reduce all these stateful couplings.
-    // Actually, on second thought, the reference of the presenter will continue to be valid for the duration of its usefulness.
-    // It should hold that it can never be activated in an illegal state. (But still.)
     @Override
     public void setActiveChannel(final IrcChannel channel) {
-        userAdapter = new UserMapAdapter(channel.getUsers()); // TODO: Yeah, about that.
+        userAdapter = new UserMapAdapter(channel.getUsers());
 
         context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 context.setTitle(channel.getName());
-                if (channelPresenter == null) {
+                if (fragmentManager.findFragmentByTag(ChannelFragment.FRAGMENT_TAG) == null) {
                     final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.fragment_container, ChannelFragment.newInstance(channel), ChannelFragment.FRAGMENT_TAG);
                     fragmentTransaction.commit();
