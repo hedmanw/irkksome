@@ -1,22 +1,21 @@
 irkksome ![asdf](app/src/main/res/drawable-mdpi/ic_launcher.png)
 ========
 
-Android Material Design IRC client with irssi proxy support.
-
-[![Stories in Ready](https://badge.waffle.io/ircsex/irkksome.svg?label=ready&title=Ready for impl)](http://waffle.io/ircsex/irkksome)
+Android Material Design IRC client with irssi proxy support. No longer actively developed.
 
 ##What's this?
 Irkksome is made for irssi users who want to connect to their irssi session with a native Android client. No more terminal emulation on a small touch device!
 In irkksome, you can connect to an existing irssi session. There's no need to use Irssi ConnectBot anymore! Set up irssi proxy and hook up our magical irssi script, and you will have rich access to your irssi session from your phone or tablet.
 Check out the [wiki](https://github.com/ircSEX/irkksome/wiki/How-to-connect-to-irssi-proxy) for more info.
 
-##Specifics
-- Android SDK - API 21 - compile and min sdk.
+##Features
 - Material design.
 - Connect to your existing (screen, tmux) irssi session while on your Android device.
+- Public key authentication to your irssi host machine.
 
 ##Contact
-Want to contribute or have questions? Meet us at [`#irkksome` on irc.chalmers.it](ircs://irc.chalmers.it:9999/irkksome) 
+Want to contribute or have questions? We're available on [`#irkksome` on irc.chalmers.it](ircs://irc.chalmers.it:9999/irkksome)
+Even though we don't actively develop this application, we'd be thrilled to hear from you!
 
 ##Contributing
 Fork away!
