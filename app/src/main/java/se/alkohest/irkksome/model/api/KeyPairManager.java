@@ -20,7 +20,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
-import se.alkohest.irkksome.util.KeyEncodingUtil;
+import se.alkohest.irkk.util.KeyEncodingUtil;
 
 /**
  * Test keys can be generated with

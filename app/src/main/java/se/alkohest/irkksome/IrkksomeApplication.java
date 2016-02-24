@@ -7,10 +7,10 @@ import android.util.Log;
 import java.io.IOException;
 import java.security.KeyPair;
 
+import se.alkohest.irkk.util.KeyProvider;
 import se.alkohest.irkksome.model.api.KeyPairManager;
 import se.alkohest.irkksome.model.entity.SSHConnection;
 import se.alkohest.irkksome.orm.typeserializer.SSHConnectionTypeSerializer;
-import se.alkohest.irkksome.util.KeyProvider;
 import se.emilsjolander.sprinkles.Migration;
 import se.emilsjolander.sprinkles.Sprinkles;
 

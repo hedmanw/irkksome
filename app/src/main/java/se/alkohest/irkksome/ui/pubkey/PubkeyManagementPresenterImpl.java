@@ -6,12 +6,13 @@ import android.os.AsyncTask;
 import java.io.IOException;
 import java.security.KeyPair;
 
-import se.alkohest.irkksome.irc.ConnectionIOException;
-import se.alkohest.irkksome.irc.SSHKeyUploader;
+import se.alkohest.irkk.entity.SSHConnectionImpl;
+import se.alkohest.irkk.irc.ConnectionIOException;
+import se.alkohest.irkk.irc.SSHKeyUploader;
+import se.alkohest.irkk.util.KeyProvider;
 import se.alkohest.irkksome.model.api.KeyPairManager;
 import se.alkohest.irkksome.model.api.dao.SSHConnectionDAO;
 import se.alkohest.irkksome.model.entity.SSHConnection;
-import se.alkohest.irkksome.util.KeyProvider;
 
 public class PubkeyManagementPresenterImpl implements PubkeyManagementPresenter {
     private SSHConnectionDAO sshConnectionDAO = new SSHConnectionDAO();
@@ -63,7 +64,7 @@ public class PubkeyManagementPresenterImpl implements PubkeyManagementPresenter 
             SSHConnection host = hosts[0];
             host.setUseKeyPair(false);
 
-            SSHKeyUploader sshKeyUploader = new SSHKeyUploader(host);
+            SSHKeyUploader sshKeyUploader = new SSHKeyUploader(new SSHConnectionImpl(host.getSshHost(), host.getSshUser(), host.getSshPassword(), host.getSshPort(), host.isUseKeyPair()));
             try {
                 sshKeyUploader.establishAndUpload();
             } catch (ConnectionIOException e) {

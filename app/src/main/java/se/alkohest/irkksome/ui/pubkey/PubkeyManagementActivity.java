@@ -13,15 +13,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.security.KeyPair;
-
+import se.alkohest.irkk.util.KeyProvider;
 import se.alkohest.irkksome.R;
-import se.alkohest.irkksome.model.api.KeyPairManager;
 import se.alkohest.irkksome.model.entity.SSHConnection;
 import se.alkohest.irkksome.ui.pubkey.fragment.PubkeyDisabledFragment;
 import se.alkohest.irkksome.ui.pubkey.fragment.PubkeyEnabledFragment;
-import se.alkohest.irkksome.util.KeyProvider;
 
 
 public class PubkeyManagementActivity extends Activity implements PubkeyManagementView, PubkeyDisabledFragment.CreatePubkeyPressListener, PubkeyEnabledFragment.PubkeyManagementListener {

@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import se.alkohest.irkksome.irc.IrcProtocol;
-import se.alkohest.irkksome.irc.IrcProtocolFactory;
-import se.alkohest.irkksome.irc.IrcProtocolListener;
-import se.alkohest.irkksome.irc.IrcProtocolStrings;
+import se.alkohest.irkk.IrcProtocolFactory;
+import se.alkohest.irkk.entity.BaseConnectionImpl;
+import se.alkohest.irkk.entity.SSHConnectionImpl;
+import se.alkohest.irkk.irc.IrcProtocol;
+import se.alkohest.irkk.irc.IrcProtocolListener;
+import se.alkohest.irkk.irc.IrcProtocolStrings;
 import se.alkohest.irkksome.model.api.dao.IrcChannelDAO;
 import se.alkohest.irkksome.model.api.dao.IrcMessageDAO;
 import se.alkohest.irkksome.model.api.dao.IrcServerDAO;
@@ -15,8 +17,8 @@ import se.alkohest.irkksome.model.api.dao.IrcUserDAO;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
-import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.model.entity.IrkksomeConnection;
+import se.alkohest.irkksome.model.entity.SSHConnection;
 import se.alkohest.irkksome.model.enumerations.HilightLevel;
 
 public class ServerImpl implements Server, IrcProtocolListener {
@@ -38,7 +40,17 @@ public class ServerImpl implements Server, IrcProtocolListener {
     public ServerImpl(IrcServer ircServer, IrkksomeConnection data) {
         this.connectionData = data;
         this.ircServer = ircServer;
-        ircProtocol = IrcProtocolFactory.getIrcProtocol(data);
+
+        BaseConnectionImpl baseConnection; // TODO: unfuck this
+        if (data.isUseSSH()) {
+            baseConnection = new BaseConnectionImpl(data.getHost(), data.getPort());
+        }
+        else {
+            SSHConnection sshConnection = data.getSSHConnection();
+            baseConnection = new BaseConnectionImpl(data.getHost(), data.getPort(), new SSHConnectionImpl(sshConnection.getSshHost(), sshConnection.getSshUser(), sshConnection.getSshPassword(), sshConnection.getSshPort(), sshConnection.isUseKeyPair()));
+        }
+
+        ircProtocol = IrcProtocolFactory.getIrcProtocol(baseConnection);
         ircProtocol.setListener(this);
         ircProtocol.connect(data.getNickname(), data.getUsername(), data.getRealname(), data.getPassword());
         hilightManager = new HilightManager();
