@@ -37,9 +37,8 @@ public class ChatRecylerView extends RecyclerView {
 
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
-        View bottomChild = getChildAt(getChildCount() - 1);
-        int diff = (bottomChild.getBottom() - (getHeight() + getScrollY()));
-        atBottom = diff <= 0;
+        //Positive parameter (1) checks if scrolling down is possible
+        atBottom = !canScrollVertically(1);
         super.onScrollChanged(l, t, oldl, oldt);
     }
 
