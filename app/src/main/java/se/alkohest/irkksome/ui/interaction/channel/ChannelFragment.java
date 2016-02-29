@@ -222,7 +222,7 @@ public class ChannelFragment extends HilightContainedFragment implements Channel
             int oldNickColor = ColorProvider.getInstance().getColor(oldNick);
             int newNickColor = ColorProvider.getInstance().getColor(newNick);
             return "<b><font color='" + oldNickColor + "'>" + oldNick + "</font></b>" +
-                    middleMessage + "<b>I/<font color='" + newNickColor + "'>" + newNick + "</font></b>";
+                    middleMessage + "<b><font color='" + newNickColor + "'>" + newNick + "</font></b>";
         }
     }
 
