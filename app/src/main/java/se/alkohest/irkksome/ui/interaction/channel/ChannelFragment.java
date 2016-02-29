@@ -1,7 +1,6 @@
 package se.alkohest.irkksome.ui.interaction.channel;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -79,9 +78,20 @@ public class ChannelFragment extends HilightContainedFragment implements Channel
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.showSoftInput(messageEditText, 0);
         messageEditText.requestFocus();
-        smooothScrollToBottom();
 
         return inflatedView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        chatRecylerView.post(new Runnable() {
+            @Override
+            public void run() {
+                forceSmoothScrollToBottom();
+            }
+        });
     }
 
     public void changeChannel(IrcChannel channel) {
@@ -91,9 +101,9 @@ public class ChannelFragment extends HilightContainedFragment implements Channel
     }
 
     @Override
-    public void smooothScrollToBottom() {
-        if (chatRecylerView.getAdapter().getItemCount() > 0 && chatRecylerView.isAtBottom()) {
-            chatRecylerView.smoothScrollToPosition(chatRecylerView.getAdapter().getItemCount()-1);
+    public void forceSmoothScrollToBottom() {
+        if (chatRecylerView.getAdapter().getItemCount() > 0) {
+            chatRecylerView.smoothScrollToPosition(chatRecylerView.getAdapter().getItemCount() - 1);
         }
     }
 
@@ -107,7 +117,9 @@ public class ChannelFragment extends HilightContainedFragment implements Channel
     @Override
     public void messageReceived() {
         chatRecylerView.getAdapter().notifyDataSetChanged();
-        smooothScrollToBottom();
+        if (chatRecylerView.isAtBottom()) {
+            forceSmoothScrollToBottom();
+        }
     }
 
     public void sendMessage() {

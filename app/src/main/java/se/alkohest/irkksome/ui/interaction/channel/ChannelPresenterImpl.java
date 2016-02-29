@@ -20,7 +20,7 @@ public class ChannelPresenterImpl implements ChannelPresenter {
 
     @Override
     public void smooothScrollToBottom() {
-        view.smooothScrollToBottom();
+        view.forceSmoothScrollToBottom();
     }
 
     @Override
