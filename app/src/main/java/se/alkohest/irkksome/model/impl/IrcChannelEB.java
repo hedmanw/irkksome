@@ -5,7 +5,6 @@ import java.util.Map;
 
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
-import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.orm.AbstractBean;
 import se.alkohest.irkksome.orm.OneToMany;
 import se.emilsjolander.sprinkles.annotations.Column;

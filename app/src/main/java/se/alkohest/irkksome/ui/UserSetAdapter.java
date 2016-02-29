@@ -6,14 +6,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 import se.alkohest.irkksome.R;
-import se.alkohest.irkksome.model.entity.IrcUser;
 
-/**
- * Created by oed on 7/21/14.
- */
 public class UserSetAdapter extends UserAdapter {
     private Set<String> set;
 

@@ -3,7 +3,6 @@ package se.alkohest.irkksome.model.api.dao;
 import java.util.Date;
 
 import se.alkohest.irkksome.model.entity.IrcMessage;
-import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.model.impl.IrcMessageEB;
 
 public class IrcMessageDAO {

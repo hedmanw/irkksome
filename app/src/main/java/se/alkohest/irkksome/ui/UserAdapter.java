@@ -4,11 +4,6 @@ import android.widget.BaseAdapter;
 
 import java.util.List;
 
-import se.alkohest.irkksome.model.entity.IrcUser;
-
-/**
- * Created by oed on 7/21/14.
- */
 public abstract class UserAdapter extends BaseAdapter {
     protected List<String> list;
 

@@ -1,8 +1,5 @@
 package se.alkohest.irkksome.ui;
 
-/**
- * Created by oed on 7/21/14.
- */
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import se.alkohest.irkksome.R;
-import se.alkohest.irkksome.model.entity.IrcUser;
 
+// TODO: Migrate usage of this to UserSetAdapter by including channel status flags in some way
 public class UserMapAdapter extends UserAdapter {
     private Map<String, String> map;
 
