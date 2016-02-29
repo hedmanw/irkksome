@@ -7,6 +7,8 @@ import android.widget.Button;
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.api.UnreadStack;
+import se.alkohest.irkksome.model.entity.IrcChannel;
+import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.enumerations.HilightLevel;
 
 public class HilightHandler {
@@ -60,5 +62,9 @@ public class HilightHandler {
                 number.setVisibility(View.GONE);
             }
         }
+    }
+
+    public String getHilightLevel(IrcServer ircServer, IrcChannel channel) {
+        return unreadStack.peekPriorityForChannel(ircServer, channel).ordinal() + "";
     }
 }

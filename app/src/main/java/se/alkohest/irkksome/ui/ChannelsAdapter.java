@@ -57,7 +57,8 @@ public class ChannelsAdapter extends BaseAdapter {
         }
 
         TextView textView = (TextView) convertView.findViewById(R.id.drawer_label_channel);
-        textView.setText(getItem(position).getName());
+        IrcChannel channel = getItem(position);
+        textView.setText(channel.getName() + " " + HilightHandler.getInstance().getHilightLevel(server, channel));
 
         return convertView;
     }

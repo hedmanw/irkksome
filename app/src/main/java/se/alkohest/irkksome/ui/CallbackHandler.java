@@ -107,6 +107,7 @@ public class CallbackHandler implements ServerCallback {
             @Override
             public void run() {
                 HilightHandler.getInstance().updateHilightButton();
+                ChannelsAdapter.getInstance().notifyDataSetInvalidated();
             }
         });
     }

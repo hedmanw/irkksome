@@ -51,6 +51,11 @@ public class UnreadStack {
         }
     }
 
+    public HilightLevel peekPriorityForChannel(IrcServer ircServer, IrcChannel channel) {
+        UnreadEntity entity = new UnreadEntity(channel, ircServer);
+        return hilights.peekChannel(entity);
+    }
+
     private class HilightStack extends Stack<UnreadEntity> {
         private final HilightStack child;
         private final HilightLevel level;
@@ -150,6 +155,20 @@ public class UnreadStack {
                 child.remove(object);
             }
             return super.remove(object);
+        }
+
+        public HilightLevel peekChannel(UnreadEntity sought) {
+            if (contains(sought)) {
+                return level;
+            }
+            else {
+                if (child != null) {
+                    return child.peekChannel(sought);
+                }
+                else {
+                    return HilightLevel.NONE;
+                }
+            }
         }
     }
 
