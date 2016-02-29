@@ -1,5 +1,7 @@
 package se.alkohest.irkksome.model.api;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,11 +45,11 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
         BaseConnectionImpl baseConnection; // TODO: unfuck this
         if (data.isUseSSH()) {
-            baseConnection = new BaseConnectionImpl(data.getHost(), data.getPort());
-        }
-        else {
             SSHConnection sshConnection = data.getSSHConnection();
             baseConnection = new BaseConnectionImpl(data.getHost(), data.getPort(), new SSHConnectionImpl(sshConnection.getSshHost(), sshConnection.getSshUser(), sshConnection.getSshPassword(), sshConnection.getSshPort(), sshConnection.isUseKeyPair()));
+        }
+        else {
+            baseConnection = new BaseConnectionImpl(data.getHost(), data.getPort());
         }
 
         ircProtocol = IrcProtocolFactory.getIrcProtocol(baseConnection);
@@ -375,6 +377,7 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void couldNotEstablish(String techMessage) {
+        Log.e("irkksome", techMessage);
         for (ServerConnectionListener connectionListener : connectionListeners) {
             connectionListener.connectionDropped(this);
         }

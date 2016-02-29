@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.security.KeyPair;
 
 import se.alkohest.irkk.util.KeyProvider;
+import se.alkohest.irkk.util.Logger;
 import se.alkohest.irkksome.model.api.KeyPairManager;
 import se.alkohest.irkksome.model.entity.SSHConnection;
 import se.alkohest.irkksome.orm.typeserializer.SSHConnectionTypeSerializer;
@@ -22,6 +23,12 @@ public class IrkksomeApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Logger.setEventListener(new Logger.EventListener() {
+            @Override
+            public void log(String tag, String message) {
+                Log.i(tag, message);
+            }
+        });
         final String createIrkksomeConnection = "CREATE TABLE Connection(id INTEGER PRIMARY KEY AUTOINCREMENT, host TEXT NOT NULL, port INTEGER NOT NULL, nickname TEXT NOT NULL, username TEXT, realname TEXT, irssiPassword TEXT, useSSL INTEGER NOT NULL, lastUsed INTEGER NOT NULL, sshConnectionData INTEGER NOT NULL);";
         final String createSSHConnection = "CREATE TABLE sshConnection(id INTEGER PRIMARY KEY AUTOINCREMENT, sshHost TEXT, sshUser TEXT, sshPort INTEGER NOT NULL, useKeyPair INTEGER NOT NULL);";
         Sprinkles sprinkles = Sprinkles.init(getApplicationContext());
