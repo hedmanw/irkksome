@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,8 +20,7 @@ import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.ui.connection.NewConnectionActivity;
-import se.alkohest.irkksome.ui.interaction.server.ServerListFragment;
-import se.alkohest.irkksome.ui.interaction.channel.ChannelFragment;
+import se.alkohest.irkksome.ui.interaction.server.ServerSplashFragment;
 
 public class ChatActivity extends Activity {
     private static ServerManager serverManager = ServerManager.INSTANCE;
@@ -44,7 +42,7 @@ public class ChatActivity extends Activity {
 
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                ServerListFragment emptinessFragment = new ServerListFragment();
+                ServerSplashFragment emptinessFragment = new ServerSplashFragment();
                 fragmentTransaction.add(R.id.fragment_container, emptinessFragment);
                 fragmentTransaction.commit();
 
@@ -124,22 +122,6 @@ public class ChatActivity extends Activity {
             public void onClick(View v) {
                 drawerLayout.closeDrawer(leftDrawer);
                 serverManager.getActiveServer().showServer();
-            }
-        });
-
-        findViewById(R.id.drawer_label_all_servers).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.closeDrawer(leftDrawer);
-
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, new ServerListFragment());
-                fragmentTransaction.commit();
-
-                serverManager.clearActiveChannel();
-                connectionsList.setItemChecked(connectionsList.getCheckedItemPosition(), false);
-                connectionsList.setSelection(0);
             }
         });
     }

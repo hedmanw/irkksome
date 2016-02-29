@@ -20,10 +20,6 @@
             android:background="#EEE">
         <Button
             style="@style/list_item_button"
-            android:text="All servers"
-            android:id="@+id/drawer_label_all_servers"/>
-        <Button
-            style="@style/list_item_button"
             android:id="@+id/drawer_label_server"/>
         <View
             android:layout_width="match_parent"

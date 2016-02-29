@@ -1,5 +1,6 @@
 package se.alkohest.irkksome.ui.interaction.server;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,17 +16,11 @@ import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.ui.connection.NewConnectionActivity;
 import se.alkohest.irkksome.ui.interaction.HilightContainedFragment;
 
-/**
- * Created by wilhelm 2014-11-18.
- */
-public class ServerListFragment extends HilightContainedFragment {
+public class ServerSplashFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_server_list, container, false);
-        ListView listView = (ListView) inflatedView.findViewById(android.R.id.list);
-        listView.setAdapter(new ConnectedServersAdapter(getActivity()));
-        listView.setEmptyView(inflatedView.findViewById(android.R.id.empty));
         Button newConnections = (Button) inflatedView.findViewById(R.id.button_new_connections);
         newConnections.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,7 +37,7 @@ public class ServerListFragment extends HilightContainedFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        getActivity().setTitle("All connected servers");
+        getActivity().setTitle("Splash screen");
     }
 
     @Override

@@ -17,7 +17,7 @@ import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.ui.interaction.channel.ChannelPresenter;
 import se.alkohest.irkksome.ui.interaction.server.ServerInfoFragment;
-import se.alkohest.irkksome.ui.interaction.server.ServerListFragment;
+import se.alkohest.irkksome.ui.interaction.server.ServerSplashFragment;
 import se.alkohest.irkksome.ui.interaction.channel.ChannelFragment;
 
 // TODO: Change the navigation between fragments to a state machine that encapsulates the necessary logic
@@ -84,7 +84,7 @@ public class CallbackHandler implements ServerCallback {
                 } else {
                     final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     context.findViewById(R.id.drawer_label_server).setVisibility(View.GONE);
-                    fragmentTransaction.replace(R.id.fragment_container, new ServerListFragment());
+                    fragmentTransaction.replace(R.id.fragment_container, new ServerSplashFragment());
                     fragmentTransaction.commit();
                     ChannelsAdapter.getInstance().notifyDataSetChanged();
                     ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(null);
