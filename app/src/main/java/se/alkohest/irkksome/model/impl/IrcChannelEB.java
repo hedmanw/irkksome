@@ -1,7 +1,5 @@
 package se.alkohest.irkksome.model.impl;
 
-import android.content.ContentValues;
-
 import java.util.List;
 import java.util.Map;
 

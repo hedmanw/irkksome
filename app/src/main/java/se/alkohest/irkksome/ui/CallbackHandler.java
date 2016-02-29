@@ -78,21 +78,15 @@ public class CallbackHandler implements ServerCallback {
 
             @Override
             public void run() {
-                // TODO - should go to another connected server if present
-                if (false) {
-                    // Show some other stuff
-                } else {
-                    final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    context.findViewById(R.id.drawer_label_server).setVisibility(View.GONE);
-                    fragmentTransaction.replace(R.id.fragment_container, new ServerSplashFragment());
-                    fragmentTransaction.commit();
-                    ChannelsAdapter.getInstance().notifyDataSetChanged();
-                    ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(null);
-                    ((ListView) context.findViewById(R.id.left_drawer_list)).setAdapter(null);
-                }
+                final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                context.findViewById(R.id.drawer_label_server).setVisibility(View.GONE);
+                fragmentTransaction.replace(R.id.fragment_container, new ServerSplashFragment());
+                fragmentTransaction.commit();
+                ChannelsAdapter.getInstance().notifyDataSetChanged();
+                ((ListView) context.findViewById(R.id.right_drawer_list)).setAdapter(null);
+                ((ListView) context.findViewById(R.id.left_drawer_list)).setAdapter(null);
             }
         });
-
     }
 
     @Override

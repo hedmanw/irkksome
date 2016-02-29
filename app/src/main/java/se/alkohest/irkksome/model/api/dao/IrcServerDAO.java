@@ -7,13 +7,11 @@ import java.util.List;
 
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
-import se.alkohest.irkksome.model.entity.IrcUser;
 import se.alkohest.irkksome.model.impl.IrcServerEB;
 import se.alkohest.irkksome.orm.GenericDAO;
 
 public class IrcServerDAO extends GenericDAO<IrcServerEB> {
     private IrcChannelDAO channelDAO = new IrcChannelDAO();
-    private IrcUserDAO userDAO = new IrcUserDAO();
 
     public IrcServer create() {
         IrcServer ircServer = new IrcServerEB();

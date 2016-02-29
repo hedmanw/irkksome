@@ -15,7 +15,6 @@ import se.alkohest.irkk.irc.IrcProtocolStrings;
 import se.alkohest.irkksome.model.api.dao.IrcChannelDAO;
 import se.alkohest.irkksome.model.api.dao.IrcMessageDAO;
 import se.alkohest.irkksome.model.api.dao.IrcServerDAO;
-import se.alkohest.irkksome.model.api.dao.IrcUserDAO;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcMessage;
 import se.alkohest.irkksome.model.entity.IrcServer;
@@ -31,7 +30,6 @@ public class ServerImpl implements Server, IrcProtocolListener {
     private IrcChannelDAO channelDAO = new IrcChannelDAO();
     private IrcMessageDAO messageDAO = new IrcMessageDAO();
     private IrcServerDAO serverDAO = new IrcServerDAO();
-    private IrcUserDAO userDAO = new IrcUserDAO();
     private ServerCallback listener;
     private String motd = "";
 
