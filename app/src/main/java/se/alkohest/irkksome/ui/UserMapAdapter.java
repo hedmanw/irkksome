@@ -10,7 +10,7 @@ import java.util.Map;
 
 import se.alkohest.irkksome.R;
 
-// TODO: Migrate usage of this to UserSetAdapter by including channel status flags in some way
+// TODO: Migrate usage of this to UserSetAdapter by including channel status flags in some wayn
 public class UserMapAdapter extends UserAdapter {
     private Map<String, String> map;
 
