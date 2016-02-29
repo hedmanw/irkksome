@@ -91,7 +91,6 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void disconnect() {
-        // TODO - fix custom message
         ircProtocol.disconnect("irkksome <3");
     }
 
@@ -182,7 +181,6 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void serverRegistered(String server, String nick) {
-        // TODO - this should maybe check if your nick has changed and change it instead of creating new
         ircServer.setServerName(server);
         ircServer.setSelf(serverDAO.getUser(ircServer, nick));
         showServer();
@@ -385,7 +383,6 @@ public class ServerImpl implements Server, IrcProtocolListener {
 
     @Override
     public void serverDisconnected() {
-        // TODO - this method should try to reconnect if its appropriate?
         for (ServerConnectionListener connectionListener : connectionListeners) {
             connectionListener.connectionDropped(this);
         }
