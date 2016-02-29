@@ -69,7 +69,7 @@ public class ChannelFragment extends HilightContainedFragment implements Channel
         chatRecylerView.setOnSizeChangedListener(new ChatRecylerView.OnSizeChangedListener() {
             @Override
             public void onSizeChanged(int newWidth, int newHeight, int oldWidth, int oldHeight) {
-                if (oldHeight > newHeight) {
+                if (oldHeight > newHeight && chatRecylerView.isAtBottom()) {
                     instantScrollToBottom();
                 }
             }
