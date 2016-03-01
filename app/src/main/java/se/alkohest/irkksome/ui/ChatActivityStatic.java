@@ -10,10 +10,6 @@ import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.Server;
 
 public class ChatActivityStatic {
-    public static void onCreate(Activity activity) {
-        activity.getActionBar().setDisplayHomeAsUpEnabled(true);
-        activity.getActionBar().setHomeButtonEnabled(true);
-    }
 
     public static void showNickChangeDialog(Context context, final Server activeServer) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

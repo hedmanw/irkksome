@@ -1,8 +1,8 @@
 package se.alkohest.irkksome.ui;
 
 import android.app.Activity;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.widget.Button;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.ServerManager;
@@ -10,6 +10,7 @@ import se.alkohest.irkksome.model.api.UnreadStack;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.model.entity.IrcServer;
 import se.alkohest.irkksome.model.enumerations.HilightLevel;
+import se.alkohest.irkksome.ui.widget.HilightButton;
 
 public class HilightHandler {
     private static HilightHandler instance;
@@ -44,22 +45,24 @@ public class HilightHandler {
     }
 
     public void updateHilightButton() {
-        Button number = (Button) context.findViewById(R.id.hilight_button);
-        if (number != null) {
+        HilightButton hilightButton = (HilightButton) context.findViewById(R.id.hilight_button);
+        if (hilightButton != null) {
             // TODO: optimize
             final HilightLevel level = unreadStack.peekPriority();
             if (level == HilightLevel.NICKNAME) {
-                number.setVisibility(View.VISIBLE);
-                number.setText(unreadStack.stackSize() + "");
-                number.setBackground(context.getDrawable(R.drawable.highlightbadge_background_highlight));
+                hilightButton.setCounter(unreadStack.stackSize());
+                hilightButton.setBackground(context.getDrawable(R.drawable.highlightbadge_background_highlight));
+                hilightButton.setTextColor(ContextCompat.getColor(context, R.color.white));
             }
             else if (level == HilightLevel.UNREAD) {
-                number.setVisibility(View.VISIBLE);
-                number.setText(unreadStack.stackSize() + "");
-                number.setBackground(context.getDrawable(R.drawable.highlightbadge_background));
+                hilightButton.setCounter(unreadStack.stackSize());
+                hilightButton.setBackground(context.getDrawable(R.drawable.highlightbadge_background));
+                hilightButton.setTextColor(ContextCompat.getColor(context, R.color.text_color_secondary));
             }
             else {
-                number.setVisibility(View.GONE);
+                hilightButton.setCounter(unreadStack.stackSize());
+                hilightButton.setBackground(context.getDrawable(R.drawable.highlightbadge_background_inactive));
+                hilightButton.setTextColor(ContextCompat.getColor(context, R.color.text_color_black_hint));
             }
         }
     }

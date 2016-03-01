@@ -1,5 +1,6 @@
 package se.alkohest.irkksome.ui;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -15,14 +16,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.api.ServerManager;
 import se.alkohest.irkksome.model.entity.IrcChannel;
 import se.alkohest.irkksome.ui.connection.NewConnectionActivity;
 import se.alkohest.irkksome.ui.interaction.server.ServerSplashFragment;
+import se.alkohest.irkksome.ui.widget.HilightButton;
 
-public class ChatActivity extends Activity {
+public class ChatActivity extends BaseActivity {
     private static ServerManager serverManager = ServerManager.INSTANCE;
     private ListView connectionsList;
     private DrawerLayout drawerLayout;
@@ -35,6 +38,20 @@ public class ChatActivity extends Activity {
         CallbackHandler.setInstance(this);
         HilightHandler.setInstance(this, serverManager.getUnreadStack());
         connectionsList = (ListView) findViewById(R.id.left_drawer_list);
+
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        HilightButton hilightButton = (HilightButton) findViewById(R.id.hilight_button);
+        hilightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HilightHandler.getInstance().showHilight();
+            }
+        });
+        HilightHandler.getInstance().updateHilightButton();
 
         if (savedInstanceState == null) {
 //            serverManager.loadPersisted(); Either load from DB, or make connections static. Can we ensure all connections are kept alive?
@@ -76,7 +93,6 @@ public class ChatActivity extends Activity {
             serverName.setText(serverManager.getActiveServer().getBackingBean().getServerName());
         }
 
-        ChatActivityStatic.onCreate(this);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         drawerLayout.setDrawerShadow(R.drawable.drawer_shadow_right, GravityCompat.END);

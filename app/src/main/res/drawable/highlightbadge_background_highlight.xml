@@ -5,8 +5,12 @@
 
     <item>
         <shape xmlns:android="http://schemas.android.com/apk/res/android"
-            android:shape="oval">
+            android:shape="rectangle">
             <solid android:color="@color/secondary" />
+            <corners android:radius="2dp" />
+            <stroke
+                android:color="@color/white"
+                android:width="1px" />
         </shape>
     </item>
 </ripple>

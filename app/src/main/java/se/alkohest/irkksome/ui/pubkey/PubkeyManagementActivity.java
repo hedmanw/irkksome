@@ -1,5 +1,6 @@
 package se.alkohest.irkksome.ui.pubkey;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -16,11 +17,12 @@ import android.widget.Toast;
 import se.alkohest.irkk.util.KeyProvider;
 import se.alkohest.irkksome.R;
 import se.alkohest.irkksome.model.entity.SSHConnection;
+import se.alkohest.irkksome.ui.BaseActivity;
 import se.alkohest.irkksome.ui.pubkey.fragment.PubkeyDisabledFragment;
 import se.alkohest.irkksome.ui.pubkey.fragment.PubkeyEnabledFragment;
 
 
-public class PubkeyManagementActivity extends Activity implements PubkeyManagementView, PubkeyDisabledFragment.CreatePubkeyPressListener, PubkeyEnabledFragment.PubkeyManagementListener {
+public class PubkeyManagementActivity extends BaseActivity implements PubkeyManagementView, PubkeyDisabledFragment.CreatePubkeyPressListener, PubkeyEnabledFragment.PubkeyManagementListener {
     public static final String SSH_CONNECTION_PK = "sshConnectionPK";
     public static final String SSH_CONNECTION_PASSWORD= "sshConnectionPassword";
     private PubkeyManagementPresenter presenter;
@@ -29,8 +31,11 @@ public class PubkeyManagementActivity extends Activity implements PubkeyManageme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_container);
-        getActionBar().setHomeButtonEnabled(true);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

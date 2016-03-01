@@ -11,10 +11,6 @@
         android:id="@+id/recycler_view"
         android:layout_alignParentTop="true"
         android:layout_above="@android:id/inputArea"/>
-    <Button
-        style="@style/hilight_button"
-        android:layout_above="@android:id/inputArea"
-        android:id="@+id/hilight_button"/>
 
     <RelativeLayout
         android:layout_width="fill_parent"

@@ -6,11 +6,12 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 
 import se.alkohest.irkksome.R;
+import se.alkohest.irkksome.ui.BaseActivity;
 
 /**
  * Created by wilhelm 2014-11-18.
  */
-public class NewConnectionActivity extends Activity implements ConnectionsListFragment.OnConnectionSelectedListener {
+public class NewConnectionActivity extends BaseActivity implements ConnectionsListFragment.OnConnectionSelectedListener {
     public static final int MAKE_CONNECTION = 11;
     public static final int FRESH_STARTUP_CONNECTION = 1;
     public static final String REQUEST_CODE = "requestCode";
